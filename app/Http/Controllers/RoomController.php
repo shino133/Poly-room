@@ -2,29 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-
+use App\Models\Room;
 use Illuminate\Http\Request;
 
-use App\Http\Resources\UserCrud;
+use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class RoomController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $data = User::query()->paginate(10);
+        $data = Room::query()->paginate(5);
 
-        $list = [
-            'users' => UserCrud::collection($data),
-            'success' => session('success')
-        ];
-
-        return response()->json($list);
+        return response()->json($data);
 
     }
 
@@ -49,12 +42,14 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::find($id);
-        if ($user) {
-            return new UserCrud($user);
-        } else {
-            return response()->json(['error' => 'User not found'], 404);
+        //
+        $room = Room::find($id);
+
+        if(!$room){
+            return response()->json(['message' => 'Room not found'], 404);
         }
+
+        return response()->json($room);
     }
 
     /**
@@ -63,18 +58,19 @@ class UserController extends Controller
     public function edit(string $id)
     {
         //
-        $user = User::find($id);
-        if ($user) {
-            return new UserCrud($user);
-        } else {
-            return response()->json(['error' => 'User not found'], 404);
+        $room = Room::find($id);
+
+        if(!$room){
+            return response()->json(['message' => 'Room not found'], 404);
         }
+
+        return response()->json($room);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Room $room)
     {
         //
     }
@@ -82,7 +78,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Room $room)
     {
         //
     }
