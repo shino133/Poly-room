@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Room extends Model
+class RoomChild extends Model
 {
     use HasFactory;
 
-    protected $table = 'rooms';
+    protected $table = 'rooms_child';
 
     protected $fillable = [
-        'code', 'room_child_id', 'status'
+        'type'
     ];
 }
