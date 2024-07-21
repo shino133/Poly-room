@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomChildController;
+use App\Http\Controllers\Admin\BookingController;
+
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,10 +24,19 @@ Route::prefix('admin')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
 
         Route::apiResource('user', UserController::class);
-        Route::apiResource('room', RoomController::class);
+        // Route::apiResource('room', RoomController::class);
         Route::apiResource('room-child', RoomChildController::class);
+
+        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+        Route::post('/booked', [BookingController::class, 'status'])->name('booking.status');
     });
+    
 
     Route::post('/signup', [AuthController::class, 'signup']);
     Route::post('/login', [AuthController::class, 'login']);
+
+});
+
+Route::prefix('client')->group(function () {
+    Route::post('/booking', [BookingController::class, 'book'])->name('booking.book');
 });
