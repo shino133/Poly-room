@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\RoomChild;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,7 @@ class RoomChildController extends Controller
      */
     public function index()
     {
-        //
-        $list = RoomChild::query()->paginate(10);
-
-        return response()->json($list);
+        return response()->json(RoomChild::paginate(10));
     }
 
 
@@ -33,14 +31,14 @@ class RoomChildController extends Controller
 
             $result = RoomChild::create($validate);
 
-            if (!$result) {
-                return response()->json(['message' => 'Create Failed'], 500);
-            }
-
-            return response()->json(['message' => 'Create Successfully'], 201);
+            $response = $result
+                ? response()->json(['message' => 'Create Successfully'], 201)
+                : response()->json(['message' => 'Create Failed'], 500);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+            $response = response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
         }
+
+        return $response;
     }
 
 
@@ -51,11 +49,11 @@ class RoomChildController extends Controller
     {
         $child = RoomChild::find($id);
 
-        if (!$child) {
-            return response()->json(['error' => 'Room not found'], 404);
-        }
+        $response = $child
+            ? response()->json($child)
+            : response()->json(['error' => 'Room not found'], 404);
 
-        return response()->json($child);
+        return $response;
     }
 
 
