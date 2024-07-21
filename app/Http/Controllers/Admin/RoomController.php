@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RoomCrud;
 use App\Models\Room;
 
 use Illuminate\Http\Request;
@@ -15,10 +16,8 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
         $data = Room::query()->paginate(10);
-
-        return response()->json($data);
+        return response()->json(RoomCrud::collection($data));
     }
 
     /**
@@ -26,18 +25,16 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'code' => 'required|string|max:255',
+            'room_child_id' => 'required|int|max:11',
+            'status' => 'required|string|max:255',
+        ]);
+
         DB::beginTransaction();
         try {
-            $validatedData = $request->validate([
-                'code' => 'required|string|max:255',
-                'room_child_id' => 'required|int|max:11',
-                'status' => 'required|string|max:255',
-            ]);
-
             $room = Room::create($validatedData);
-
             DB::commit();
-
             return response()->json(['message' => 'Room created successfully'], 201);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -45,13 +42,11 @@ class RoomController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
         $room = Room::find($id);
 
         if (!$room) {
@@ -66,7 +61,6 @@ class RoomController extends Controller
      */
     public function edit(string $id)
     {
-        //
         $room = Room::find($id);
 
         if (!$room) {
@@ -81,6 +75,12 @@ class RoomController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $validatedData = $request->validate([
+            'code' => 'required|string|max:255',
+            'room_child_id' => 'required|int|max:11',
+            'status' => 'required|string|max:255',
+        ]);
+
         DB::beginTransaction();
         try {
             $room = Room::find($id);
@@ -90,16 +90,8 @@ class RoomController extends Controller
                 return response()->json(['error' => 'Room not found'], 404);
             }
 
-            $validatedData = $request->validate([
-                'code' => 'required|string|max:255',
-                'room_child_id' => 'required|int|max:11',
-                'status' => 'required|string|max:255',
-            ]);
-
             $room->update($validatedData);
-
             DB::commit();
-
             return response()->json(['message' => 'Room updated successfully'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -107,28 +99,23 @@ class RoomController extends Controller
         }
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
         DB::beginTransaction();
-
         try {
-
             $room = Room::find($id);
 
             if (!$room) {
+                DB::rollBack();
                 return response()->json(['error' => 'Room not found'], 404);
             }
 
             $room->delete();
-
             DB::commit();
-
-            return response()->json(['success' => 'Room deleted successfully'], 200);
+            return response()->json(['message' => 'Room deleted successfully'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
