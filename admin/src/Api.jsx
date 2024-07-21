@@ -1,7 +1,7 @@
-import * as Api from './ApiByAxios';
+import * as Api from "./services/api/ApiByAxios";
 
 // Get Data
-export const getSurveyData = (role) => Api.getRequest(role, "/survey");
+export const getRoomData = (role) => Api.getRequest(role, "/room");
 export const getDashboardData = (role) => Api.getRequest(role, "/dashboard");
 export const getUserData = (role) => Api.getRequest(role, "/user");
 export const getMyData = (role) => Api.getRequest(role, "/me");

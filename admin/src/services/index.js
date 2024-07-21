@@ -1,5 +1,5 @@
 // Export from ApiByAxios
-export * from "./api/Api";
+export * from "../Api";
 
 // Export from ClassServicer
 export * from "./styles/ClassServicer";
