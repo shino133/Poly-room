@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(300)->create();
 
+        $this->call(StatusSeeder::class);
+
         $this->call(RoomChildSeeder::class);
 
         // User::factory()->create([

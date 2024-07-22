@@ -28,7 +28,7 @@ class BookingFactory extends Factory
             'user_id' => fake()->numberBetween(1, 300),
             'start_at' => $startDate,
             'end_at' => $endDate,
-            'status' => fake()->randomElement(['Pending', 'Confirmed', 'Cancelled']),
+            'status' => fake()->randomElement([1, 2, 3]),
             'note' => fake()->sentence(),
         ];
     }
