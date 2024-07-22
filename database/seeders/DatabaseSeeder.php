@@ -2,11 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Booking;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\Room;
+use App\Models\RoomChild;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,7 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(100)->create();
+        User::factory(300)->create();
+
+        $this->call(RoomChildSeeder::class);
 
         // User::factory()->create([
         //     'name' => 'Test User',
@@ -23,5 +27,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Room::factory(20)->create();
+
+        Booking::factory(1000)->create();
     }
 }
