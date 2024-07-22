@@ -16,7 +16,9 @@ class RoomCrud extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'code' => $this->code,
+            'room_child_id' => $this->room_child_id,
+            'status' => $this->status,
         ];
     }
 }

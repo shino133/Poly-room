@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Http\Resources\UserCrud;
 
 use Illuminate\Http\Request;
-
-use App\Http\Resources\UserCrud;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -85,5 +86,24 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+        DB::beginTransaction();
+        try {
+
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            $user->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'User deleted successfully'], 200);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+        }
     }
 }

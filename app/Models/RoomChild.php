@@ -10,4 +10,8 @@ class RoomChild extends Model
     use HasFactory;
 
     protected $table = 'rooms_child';
+
+    protected $fillable = [
+        'type'
+    ];
 }
