@@ -28,7 +28,7 @@ class BookingController extends Controller
             $validated = $res->validate([
                 'room_id' => 'required|exists:rooms,id',
                 'time_start' => 'required|date',
-                'time_end' => 'required|date|after:time_start',
+                'time_end' => 'required|date|after:start_at',
             ]);
 
             $validated['user_id'] = Auth::id();
