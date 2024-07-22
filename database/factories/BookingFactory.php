@@ -20,16 +20,15 @@ class BookingFactory extends Factory
         $endDate = fake()->dateTimeBetween($startDate, (clone $startDate)->modify('+3 hours'));
 
         // time_created should be a few days before time_start, e.g., between 10 and 15 days
-        $createdDate = fake()->dateTimeBetween('-2 months', $startDate->format('Y-m-d'));
+        // $createdDate = fake()->dateTimeBetween('-2 months', $startDate->format('Y-m-d'));
 
         return [
             //
             'room_id' => fake()->numberBetween(1, 20),
             'user_id' => fake()->numberBetween(1, 300),
-            'time_start' => $startDate,
-            'time_end' => $endDate,
-            'time_created' => $createdDate,
-            'status' => fake()->randomElement(['Pending', 'Confirmed', 'Cancelled']),
+            'start_at' => $startDate,
+            'end_at' => $endDate,
+            'status' => fake()->randomElement([1, 2, 3]),
             'note' => fake()->sentence(),
         ];
     }
