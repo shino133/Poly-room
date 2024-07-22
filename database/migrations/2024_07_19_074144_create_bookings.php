@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("room_id")->nullable();
             $table->unsignedBigInteger("user_id")->nullable();
-            $table->dateTime("time_start");
-            $table->dateTime("time_end");
-            $table->dateTime("time_created")->useCurrent();
+            $table->dateTime("start_at");
+            $table->dateTime("end_at");
             $table->string("status");
             $table->text("note");
             $table->timestamps();
