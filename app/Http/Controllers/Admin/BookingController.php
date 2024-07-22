@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-
 use App\Http\Resources\BookingCrud;
-
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\Booking;
-use Illuminate\Http\Request;
+use App\Http\Requests\BookRequest;
+use App\Http\Requests\BookingStatusRequest;
+use App\Http\Services\ControlHelper;
 
 class BookingController extends Controller
 {
@@ -17,46 +16,43 @@ class BookingController extends Controller
     {
         $list = Booking::query()
             ->where('status', 'pending')
-            ->paginate(10);
+            ->orderBy('created_at', 'DESC')
+            ->paginate(20);
 
         return response()->json(BookingCrud::collection($list));
     }
 
-    public function book(Request $res)
+    public function book(BookRequest $res)
     {
         try {
-            $validated = $res->validate([
-                'room_id' => 'required|exists:rooms,id',
-                'time_start' => 'required|date',
-                'time_end' => 'required|date|after:time_start',
-            ]);
+            $validated = $res->validated();
 
-            $validated['user_id'] = Auth::id();
+            $validated['user_id'] = 22;
+            // Auth::id();
             $validated['status'] = 'pending';
 
-            $booking = Booking::create($validated);
+            Booking::create($validated);
 
-            return response()->json(['message' => 'Room booked successfully, please wait for confirmation'], 201);
+            $response = response()->json(['message' => 'Room booked Successfully'], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+            $response = ControlHelper::handleExc($e);
         }
+
+        return $response;
     }
 
-    public function status(Request $res)
+    public function status(BookingStatusRequest $res)
     {
         try {
-            $validated = $res->validate([
-                'id' => 'required|exists:bookings,id',
-                'status' => 'required|in:pending,approved,rejected',
-            ]);
-
+            $validated = $res->validated();
             $booking = Booking::findOrFail($validated['id']);
             $booking->status = $validated['status'];
             $booking->save();
-
-            return response()->json(['message' => 'Successful booking confirmation'], 200);
+            $response = response()->json(['message' => 'Successful booking confirmation'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+            $response = ControlHelper::handleExc($e);
         }
+
+        return $response;
     }
 }

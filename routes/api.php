@@ -23,18 +23,17 @@ Route::prefix('admin')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
 
-        Route::apiResource('user', UserController::class);
-        // Route::apiResource('room', RoomController::class);
-        Route::apiResource('room-child', RoomChildController::class);
-
-        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
         Route::post('/booked', [BookingController::class, 'status'])->name('booking.status');
+        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+
+        Route::apiResource('/user', UserController::class);
+        Route::apiResource('/room', RoomController::class);
+        Route::apiResource('/room-type', RoomChildController::class);
     });
-    
+
 
     Route::post('/signup', [AuthController::class, 'signup']);
     Route::post('/login', [AuthController::class, 'login']);
-
 });
 
 Route::prefix('client')->group(function () {

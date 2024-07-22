@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoomCrud;
 use App\Models\Room;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Http\Services\ControlHelper;
+use App\Http\Requests\RoomRequest;
 
 class RoomController extends Controller
 {
@@ -16,30 +15,23 @@ class RoomController extends Controller
      */
     public function index()
     {
-        $data = Room::query()->paginate(10);
-        return response()->json(RoomCrud::collection($data));
+        return response()->json(RoomCrud::collection(Room::paginate(20)));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RoomRequest $request)
     {
-        $validatedData = $request->validate([
-            'code' => 'required|string|max:255',
-            'room_child_id' => 'required|int|max:11',
-            'status' => 'required|string|max:255',
-        ]);
-
-        DB::beginTransaction();
         try {
-            $room = Room::create($validatedData);
-            DB::commit();
-            return response()->json(['message' => 'Room created successfully'], 201);
+            Room::create($request->validated());
+
+            $res = response()->json(['message' => 'Room created successfully'], 201);
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+            $res = ControlHelper::handleExc($e);
         }
+
+        return $res;
     }
 
     /**
@@ -47,56 +39,28 @@ class RoomController extends Controller
      */
     public function show(string $id)
     {
-        $room = Room::find($id);
-
-        if (!$room) {
-            return response()->json(['error' => 'Room not found'], 404);
+        try {
+            $room = Room::findOrFail($id);
+            return response()->json($room);
+        } catch (\Exception $e) {
+            return ControlHelper::handleExc($e);
         }
-
-        return response()->json($room);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $room = Room::find($id);
-
-        if (!$room) {
-            return response()->json(['error' => 'Room not found'], 404);
-        }
-
-        return response()->json($room);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RoomRequest $request, string $id)
     {
-        $validatedData = $request->validate([
-            'code' => 'required|string|max:255',
-            'room_child_id' => 'required|int|max:11',
-            'status' => 'required|string|max:255',
-        ]);
-
-        DB::beginTransaction();
         try {
-            $room = Room::find($id);
-
-            if (!$room) {
-                DB::rollBack();
-                return response()->json(['error' => 'Room not found'], 404);
-            }
-
-            $room->update($validatedData);
-            DB::commit();
-            return response()->json(['message' => 'Room updated successfully'], 200);
+            $room = Room::findOrFail($id);
+            $room->update($request->validated());
+            $res = response()->json(['message' => 'Room updated successfully'], 200);
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+            $res = ControlHelper::handleExc($e);
         }
+
+        return $res;
     }
 
     /**
@@ -104,21 +68,14 @@ class RoomController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::beginTransaction();
         try {
-            $room = Room::find($id);
-
-            if (!$room) {
-                DB::rollBack();
-                return response()->json(['error' => 'Room not found'], 404);
-            }
-
+            $room = Room::findOrFail($id);
             $room->delete();
-            DB::commit();
-            return response()->json(['message' => 'Room deleted successfully'], 200);
+            $res = response()->json(['message' => 'Room deleted successfully'], 200);
         } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+            $res = ControlHelper::handleExc($e);
         }
+
+        return $res;
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Services;
 
 use App\Http\Controllers\Controller;
-use File;
+use Illuminate\Support\Facades\File;
 // use Illuminate\Http\Request;
-use Str;
+use Illuminate\Support\Str;
 
 class ControlHelper extends Controller
 {
@@ -53,5 +53,10 @@ class ControlHelper extends Controller
         file_put_contents($relativePath, $image);
 
         return $relativePath;
+    }
+
+    public static function handleExc(\Exception $e)
+    {
+        return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
     }
 }

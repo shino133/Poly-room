@@ -16,13 +16,15 @@ class BookingCrud extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'room_id' => $this->room_id,
-            'user_id' => $this->user_id,
+            'room' => $this->room->code,
+            'created_by' => [
+                'username' => $this->user->name,
+                'email' => $this->user->email
+            ],
             'time_start' => (new Carbon($this->time_start))->format('Y-m-d H:i:s'),
             'time_end' => (new Carbon($this->time_end))->format('Y-m-d H:i:s'),
             'status' => $this->status,
-            'time_created' => (new Carbon($this->time_created))->format('Y-m-d H:i:s'),
+            'created_at' => (new Carbon($this->created_at))->format('Y-m-d H:i:s'),
             'note' => $this->note,
         ];
     }
