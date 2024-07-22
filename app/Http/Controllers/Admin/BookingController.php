@@ -9,15 +9,21 @@ use App\Models\Booking;
 use App\Http\Requests\BookRequest;
 use App\Http\Requests\BookingStatusRequest;
 use App\Http\Services\ControlHelper;
+use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $res)
     {
-        $list = Booking::query()
-            ->where('status', 'pending')
-            ->orderBy('created_at', 'DESC')
-            ->paginate(20);
+        $query = Booking::query();
+
+
+        if ($res->has('status')) {
+            $search = $res->input('status');
+            $query->where('status', 'like', '%' . $search . '%');
+        }
+
+        $list = $query->orderBy('created_at', 'DESC')->paginate(20);
 
         return response()->json(BookingCrud::collection($list));
     }
@@ -27,9 +33,8 @@ class BookingController extends Controller
         try {
             $validated = $res->validated();
 
-            $validated['user_id'] = 22;
-            // Auth::id();
-            $validated['status'] = 'pending';
+            $validated['user_id'] = Auth::id();
+            $validated['status'] = '0';
 
             Booking::create($validated);
 

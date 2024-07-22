@@ -24,11 +24,11 @@ Route::prefix('admin')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
 
         Route::post('/booked', [BookingController::class, 'status'])->name('booking.status');
-        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
 
         Route::apiResource('/user', UserController::class);
         Route::apiResource('/room', RoomController::class);
         Route::apiResource('/room-type', RoomChildController::class);
+        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
     });
 
 
