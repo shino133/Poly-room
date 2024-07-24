@@ -1,8 +1,8 @@
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { login } from "../services";
-import { useStateContext } from "../contexts/Support";
+import { login } from "../Api";
+import { useStateContext } from "./layouts/Support";
 
 export default function Login() {
   const { setCurrentUser, setUserToken, setUserRole } = useStateContext();

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useStateContext } from "../contexts/ProviderContext";
+import { useStateContext } from "./Support"; 
 
 export default function GuestLayout() {
   const { userToken } = useStateContext();
@@ -19,7 +19,6 @@ export default function GuestLayout() {
               alt="Your Company"
             />
           </div>
-
           <Outlet />
         </div>
       </div>

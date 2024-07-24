@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import axiosClient from "../axios.js";
-import { useStateContext } from "../contexts/ProviderContext.jsx";
+import { useStateContext } from "./layouts/Support.jsx"; 
+import { signup } from "../Api.jsx";
 
 export default function Signup() {
   const { setCurrentUser, setUserToken } = useStateContext();
@@ -12,22 +12,29 @@ export default function Signup() {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState({ __html: "" });
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
     setError({ __html: "" });
 
-    axiosClient
-      .post("/signup", {
+    try {
+      if (password !== passwordConfirmation) {
+        setError({
+          __html: "Password and Password Confirmation do not match.",
+        });
+        return;
+      }
+
+      const { data } = await signup({
         name: fullName,
         email,
         password,
         password_confirmation: passwordConfirmation,
-      })
-      .then(({ data }) => {
-        setCurrentUser(data.user);
-        setUserToken(data.token);
-      })
-      .catch((error) => {
+      });
+
+      setCurrentUser(data.user);
+      setUserToken(data.token);
+    } catch {
+      (error) => {
         if (error.response) {
           const finalErrors = Object.values(error.response.data.errors).reduce(
             (accum, next) => [...accum, ...next],
@@ -37,7 +44,8 @@ export default function Signup() {
           setError({ __html: finalErrors.join("<br>") });
         }
         console.error(error);
-      });
+      };
+    }
   };
 
   return (
