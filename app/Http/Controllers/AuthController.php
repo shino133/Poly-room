@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\SignupRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserCrud;
 
 class AuthController extends Controller
 {
@@ -39,7 +40,7 @@ class AuthController extends Controller
                 'error' => 'The Provided credentials are not correct'
             ], 422);
         }
-        $user = Auth::user();
+        $user = new UserCrud(Auth::user());
         $token = $user->createToken('main')->plainTextToken;
 
         return response([
