@@ -20,6 +20,7 @@ class RoomService implements CRUDSVInterface{
     public function update($id, array $data){
         $room = Room::find($id);
         $room->update($data);
+        $room->save();
         return $room;
     }
 

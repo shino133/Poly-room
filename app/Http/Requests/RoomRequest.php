@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class RoomRequest extends FormRequest
+class RoomRequest extends ValidationRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +21,10 @@ class RoomRequest extends FormRequest
     {
         return [
             'code' => 'required|string|max:255',
-            'room_child_id' => 'required|int|max:11',
+            'room_child_id' => 'required|max:11',
             'status' => 'required|string|max:255',
         ];
     }
+    
+    
 }
