@@ -8,7 +8,7 @@ use App\Services\CRUDSVInterface;
 
 class RoomService implements CRUDSVInterface{
     public function getAll($filters = []){
-        return Room::paginate(5);
+        return Room::paginate(20);
     }
 
     public function getById($id){
