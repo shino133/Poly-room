@@ -1,9 +1,9 @@
 import { axiosInstance } from "./AxiosCustom";
 
 // Get data
-export const getRequest = async (role, endpoint , data = null) => {
+export const getRequest = async (endpoint , params = {}) => {
   try {
-    const res = await axiosInstance(role).get(endpoint , data);
+    const res = await axiosInstance().get(endpoint , params);
     return res.data;
   } catch (error) {
     return error;
@@ -12,9 +12,9 @@ export const getRequest = async (role, endpoint , data = null) => {
 
 
 // Post Data with optional data
-export const postRequest = async (role, endpoint, data = null) => {
+export const postRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance(role).post(endpoint, data);
+    const res = await axiosInstance().post(endpoint, params);
     return res.data;
   } catch (error) {
     return error;
@@ -22,9 +22,9 @@ export const postRequest = async (role, endpoint, data = null) => {
 };
 
 // Put Data with optional data
-export const putRequest = async (role, endpoint, data = null) => {
+export const putRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance(role).put(endpoint, data);
+    const res = await axiosInstance().put(endpoint, params);
     return res.data;
   } catch (error) {
     return error;
@@ -32,9 +32,9 @@ export const putRequest = async (role, endpoint, data = null) => {
 };
 
 // Delete Data with optional data
-export const deleteRequest = async (role, endpoint, data = null) => {
+export const deleteRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance(role).delete(endpoint, data);
+    const res = await axiosInstance().delete(endpoint, params);
     return res.data;
   } catch (error) {
     return error;
