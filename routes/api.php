@@ -39,3 +39,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('client')->group(function () {
     Route::post('/booking', [BookingController::class, 'book'])->name('booking.book');
 });
+
+Route::get('/', function(){
+    return view('error');
+});
