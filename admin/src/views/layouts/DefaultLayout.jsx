@@ -3,17 +3,11 @@ import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Navigate, NavLink, Outlet } from "react-router-dom";
-import { useStateContext } from "admin/src/contexts/Support";
-import { getMyData, classNames } from "admin/src/services";
-import { Toast } from "admin/src/components";
-import { logout } from "admin/src/Api";
-
-const navigation = [
-  { name: "Dashboard", to: "/" },
-  { name: "Surveys", to: "/surveys" },
-  { name: "Users", to: "/users" },
-  { name: "Setting", to: "/setting" },
-];
+import { useStateContext } from "./Support"; 
+import { getMyData, logout } from "../../Api";
+import { classNames } from "../../services";
+import { Toast } from "../../components";
+import { navigation } from "../constants";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, userRole, setCurrentUser, setUserToken } =
@@ -24,16 +18,16 @@ export default function DefaultLayout() {
     return <Navigate to="login" />;
   }
 
-  const onLogout = (ev) => {
+  const onLogout = async (ev) => {
     ev.preventDefault();
 
-    logout(userRole);
+    await logout(userRole);
     setCurrentUser({});
     setUserToken(null);
   };
 
   useEffect(() => {
-    const userInfo = getMyData()
+    const userInfo = getMyData();
     setCurrentUser(userInfo);
   }, [setCurrentUser, userRole]);
 
