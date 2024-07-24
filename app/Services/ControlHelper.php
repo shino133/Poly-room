@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 // use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class ControlHelper extends Controller
+class ControlHelper
 {
     /**
      * Save image in local file system and return saved image path

@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Services;
+
+use App\Models\RoomChild;
+
+class RoomChildService implements CRUDSVInterface
+{
+    public function getAll($filters = [])
+    {
+        return RoomChild::paginate(10);
+    }
+    public function getById($id)
+    {
+        return RoomChild::findOrFail($id);
+    }
+    public function create(array $data)
+    {
+        return RoomChild::create($data);
+    }
+    public function update($id, array $data)
+    {
+        $roomChild = RoomChild::findOrFail($id);
+        $roomChild->update($data);
+        $roomChild->save();
+        return $roomChild;
+    }
+    public function delete($id)
+    {
+        return RoomChild::destroy($id);
+    }
+}
