@@ -7,9 +7,11 @@ use App\Http\Requests\RoomTypeRequest;
 use App\Services\ControlHelper;
 use App\Services\ServiceFactory;
 use App\Http\Resources\RoomChildResource;
+use App\Traits\Paginates;
 
 class RoomChildController extends Controller
 {
+    use Paginates;
     protected $roomChildService;
 
     public function __construct(ServiceFactory $serviceFactory)
@@ -20,8 +22,9 @@ class RoomChildController extends Controller
 
     public function index()
     {
-        $child = RoomChildResource::collection($this->roomChildService->getAll());
-        return response()->json($child);
+        $child = $this->roomChildService->getAll();
+        $formattedRooms = RoomChildResource::collection($child->items());
+        return $this->formatResponse($formattedRooms, $child);
     }
 
 

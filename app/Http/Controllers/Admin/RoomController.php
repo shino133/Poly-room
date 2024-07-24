@@ -8,8 +8,11 @@ use App\Services\ControlHelper;
 use App\Http\Requests\RoomRequest;
 use App\Services\ServiceFactory;
 
+use App\Traits\Paginates;
+
 class RoomController extends Controller
 {
+    use Paginates;
     protected $roomService;
 
     public function __construct(ServiceFactory $serviceFactory)
@@ -20,13 +23,14 @@ class RoomController extends Controller
 
     public function index()
     {
-        $room = RoomCrud::collection($this->roomService->getAll());
-        return response()->json($room);
+        $rooms = $this->roomService->getAll();
+
+        $formattedRooms = RoomCrud::collection($rooms->items());
+
+        return $this->formatResponse($formattedRooms, $rooms);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    
     public function store(RoomRequest $request)
     {
         try {
@@ -39,9 +43,7 @@ class RoomController extends Controller
         return $res;
     }
 
-    /**
-     * Display the specified resource.
-     */
+   
     public function show(string $id)
     {
         try {
@@ -52,24 +54,21 @@ class RoomController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     public function update(RoomRequest $request, string $id)
     {
         try {
             $this->roomService->update($id, $request->validated());
-            $res = response()->json(['message' => 'Room updated successfully'], 200);
-        } catch (\Exception $e) {
+            $res = response()->json(['message' => 'Room updated successfully', 'status' => 'success'], 200);
+        }
+        catch (\Exception $e) { 
             $res = ControlHelper::handleExc($e);
         }
 
         return $res;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    
     public function destroy(string $id)
     {
         try {

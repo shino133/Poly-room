@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class BookingStatusRequest extends FormRequest
+class BookingStatusRequest extends ValidationRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,4 +24,6 @@ class BookingStatusRequest extends FormRequest
             'status' => 'required|in:pending,approved,rejected',
         ];
     }
+
+    
 }

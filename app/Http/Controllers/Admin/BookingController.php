@@ -11,10 +11,11 @@ use App\Services\ControlHelper;
 use Illuminate\Http\Request;
 use App\Services\ServiceFactory;
 use App\Enums\BookingStatus;
+use App\Traits\Paginates;
 
 class BookingController extends Controller
 {
-
+    use Paginates;
     protected $bookingService;
 
     public function __construct(ServiceFactory $serviceFactory)
@@ -26,9 +27,12 @@ class BookingController extends Controller
     public function index(Request $res)
     {
         $filters = $res->only(['status']);
-        $list = $this->bookingService->getAll($filters);
 
-        return response()->json(BookingCrud::collection($list));
+        $booking = $this->bookingService->getAll($filters);
+
+        $formattedRooms = BookingCrud::collection($booking->items());
+
+        return $this->formatResponse($formattedRooms, $booking);
     }
 
     public function book(BookRequest $res)

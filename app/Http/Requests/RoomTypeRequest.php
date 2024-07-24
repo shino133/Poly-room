@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class RoomTypeRequest extends FormRequest
+class RoomTypeRequest extends ValidationRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,4 +23,5 @@ class RoomTypeRequest extends FormRequest
             'type' => 'required|string|max:255',
         ];
     }
+    
 }

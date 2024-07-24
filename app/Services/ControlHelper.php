@@ -53,9 +53,12 @@ class ControlHelper
 
         return $relativePath;
     }
-
+    
+    // return json error
     public static function handleExc(\Exception $e)
     {
         return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
     }
+
+
 }
