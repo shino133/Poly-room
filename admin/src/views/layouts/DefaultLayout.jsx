@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "../../contexts/Support";
 import { getMyData, logoutRequest } from "../../Api";
@@ -10,6 +10,10 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DehazeIcon from "@mui/icons-material/Dehaze";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Sidebar } from "../../components";
+import { useSidebar } from "../../contexts/SidebarContext";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, setCurrentUser, setUserToken } =
@@ -20,6 +24,15 @@ export default function DefaultLayout() {
     return <Navigate to="login" />;
   }
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const onLogout = (ev) => {
     ev.preventDefault();
 
@@ -28,6 +41,8 @@ export default function DefaultLayout() {
       setUserToken(null);
     });
   };
+
+  const { isOpen, toggleSidebar } = useSidebar();
 
   useEffect(() => {
     const userInfo = getMyData();
@@ -46,7 +61,7 @@ export default function DefaultLayout() {
             />
           </div>
           <div className="input-container flex-1 max-w-[600px]">
-            <div className="menu-left">
+            <div className="menu-left" onClick={toggleSidebar}>
               <DehazeIcon className="icon-first cursor-pointer" />
             </div>
             <div className="line"></div>
@@ -65,11 +80,24 @@ export default function DefaultLayout() {
             <AccountCircleIcon
               className="cursor-pointer"
               style={{ fontSize: 30 }}
+              onClick={handleClick}
             />
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={(ev) => onLogout(ev)}>Logout</MenuItem>
+            </Menu>
           </div>
         </div>
-        <Outlet />
-
+        <Sidebar />
+        <div className={`main-content ${!isOpen ? "expanded" : ""}`}>
+          <Outlet />
+        </div>
         <Toast />
       </div>
     </>
