@@ -11,7 +11,7 @@ import { navigation } from "../Constants";
 import { AppLogo } from "../../assets";
 
 export default function DefaultLayout() {
-  const { currentUser, userToken, userRole, setCurrentUser, setUserToken } =
+  const { currentUser, userToken, setCurrentUser, setUserToken } =
     useAuthContext();
 
   //WHEN: Don't have Token and is not Admin => go Login
@@ -31,7 +31,7 @@ export default function DefaultLayout() {
   useEffect(() => {
     const userInfo = getMyData();
     setCurrentUser(userInfo);
-  }, [setCurrentUser, userRole]);
+  }, [setCurrentUser]);
 
   return (
     <>
