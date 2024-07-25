@@ -1,4 +1,4 @@
-import AppLogo from "../../public/FPT.svg";
+import AppLogo from "./logo/FPT.svg"
 
 export {
   AppLogo

@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useStateContext } from "./Support"; 
+import { useAuthContext } from "../../contexts/Support";
+import { AppLogo } from "../../assets";
 
 export default function GuestLayout() {
-  const { userToken } = useStateContext();
+  const { userToken } = useAuthContext();
 
   if (userToken) {
     return <Navigate to="/" />;
@@ -15,7 +16,7 @@ export default function GuestLayout() {
           <div>
             <img
               className="mx-auto h-[20vh] w-auto"
-              src="/peng_survey.svg"
+              src={AppLogo}
               alt="Your Company"
             />
           </div>

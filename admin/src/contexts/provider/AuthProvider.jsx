@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../AuthContext";
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [toast, setToast] = useState({ message: "", show: false });
 
   const setUserToken = (token) => {
-    token //WHEN: token is already exits
+    token //WHEN: token is already exists
       ? localStorage.setItem("TOKEN", token)
       : localStorage.removeItem("TOKEN");
     _setUserToken(token);

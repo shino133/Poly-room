@@ -1,7 +1,7 @@
-import { useStateContext } from "../views/layouts/Support";
+import { useAuthContext } from "../contexts/Support";
 
 export default function Toast() {
-  const { toast } = useStateContext();
+  const { toast } = useAuthContext();
 
   return (
     <>
