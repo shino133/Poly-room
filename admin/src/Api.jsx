@@ -35,7 +35,7 @@ export const loginRequest = async (params) => {
 };
 
 export const logoutRequest = () => {
-  return Api.getRequest("/logout");
+  return Api.postRequest("/logout");
 };
 export const signupRequest = (params) => {
   return Api.postRequest("/signup", params);

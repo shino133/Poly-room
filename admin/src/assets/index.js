@@ -1,5 +1,3 @@
-import AppLogo from "./logo/FPT.svg"
+import AppLogo from "./logo/logo.svg";
 
-export {
-  AppLogo
-}
+export { AppLogo };
