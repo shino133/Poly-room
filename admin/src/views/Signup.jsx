@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import { useStateContext } from "./layouts/Support.jsx"; 
-import { signup } from "../Api.jsx";
+import { useAuthContext } from "../contexts/Support";
+import { signupRequest } from "../Api.jsx";
+// import { postRequest } from "../services/index.js";
 
 export default function Signup() {
-  const { setCurrentUser, setUserToken } = useStateContext();
+  const { setCurrentUser, setUserToken } = useAuthContext();
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailInput, setEmail] = useState("");
+  const [passwordInput, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState({ __html: "" });
 
@@ -16,25 +17,24 @@ export default function Signup() {
     ev.preventDefault();
     setError({ __html: "" });
 
-    try {
-      if (password !== passwordConfirmation) {
-        setError({
-          __html: "Password and Password Confirmation do not match.",
-        });
-        return;
-      }
-
-      const { data } = await signup({
-        name: fullName,
-        email,
-        password,
-        password_confirmation: passwordConfirmation,
+    if (passwordInput !== passwordConfirmation) {
+      setError({
+        __html: "Vui lòng nhập lại đúng mật khẩu.",
       });
+      return;
+    }
 
-      setCurrentUser(data.user);
-      setUserToken(data.token);
-    } catch {
-      (error) => {
+    signupRequest({
+      name: fullName,
+      email: emailInput,
+      password: passwordInput,
+      password_confirmation: passwordConfirmation,
+    })
+      .then(({ data }) => {
+        setCurrentUser(data.user);
+        setUserToken(data.token);
+      })
+      .catch((error) => {
         if (error.response) {
           const finalErrors = Object.values(error.response.data.errors).reduce(
             (accum, next) => [...accum, ...next],
@@ -44,8 +44,7 @@ export default function Signup() {
           setError({ __html: finalErrors.join("<br>") });
         }
         console.error(error);
-      };
-    }
+      });
   };
 
   return (
@@ -103,7 +102,7 @@ export default function Signup() {
               type="email"
               autoComplete="email"
               required
-              value={email}
+              value={emailInput}
               onChange={(ev) => setEmail(ev.target.value)}
               className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               placeholder="Email address"
@@ -119,7 +118,7 @@ export default function Signup() {
               type="password"
               autoComplete="current-password"
               required
-              value={password}
+              value={passwordInput}
               onChange={(ev) => setPassword(ev.target.value)}
               className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
               placeholder="Password"

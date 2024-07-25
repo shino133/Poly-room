@@ -1,36 +1,41 @@
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { login } from "../Api";
-import { useStateContext } from "./layouts/Support";
+import { loginRequest } from "../Api";
+import { useAuthContext } from "../contexts/Support";
 
 export default function Login() {
-  const { setCurrentUser, setUserToken, setUserRole } = useStateContext();
+  const { setCurrentUser, setUserToken, setUserRole } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ __html: "" });
 
-  const onSubmit = async (ev) => {
+  const onSubmit = (ev) => {
     ev.preventDefault();
     setError({ __html: "" });
 
-    try {
-      const { data } = await login({ email, password });
-      setCurrentUser(data.user);
-      setUserToken(data.token);
-      setUserRole(data.user.role);
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.errors) {
-        const finalErrors = Object.values(error.response.data.errors).reduce(
-          (accum, next) => [...accum, ...next],
-          []
-        );
-        setError({ __html: finalErrors.join("<br>") });
-      } else {
-        setError({ __html: "An unexpected error occurred." });
-      }
-      console.error(error);
-    }
+    loginRequest({ email, password })
+      .then(({ data }) => {
+        setCurrentUser(data.user);
+        setUserToken(data.token);
+        setUserRole(data.user.role);
+      })
+      .catch((error) => {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.errors
+        ) {
+          const finalErrors = Object.values(error.response.data.errors).reduce(
+            (accum, next) => [...accum, ...next],
+            []
+          );
+          setError({ __html: finalErrors.join("<br>") });
+        } else {
+          setError({ __html: "An unexpected error occurred." });
+        }
+        console.error(error);
+      });
   };
 
   return (

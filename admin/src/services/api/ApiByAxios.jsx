@@ -1,9 +1,9 @@
-import { axiosInstance } from "./AxiosCustom";
+import axiosInstance from "./AxiosCustom";
 
 // Get data
 export const getRequest = async (endpoint , params = {}) => {
   try {
-    const res = await axiosInstance().get(endpoint , params);
+    const res = await axiosInstance.get(endpoint , params);
     return res.data;
   } catch (error) {
     return error;
@@ -14,8 +14,7 @@ export const getRequest = async (endpoint , params = {}) => {
 // Post Data with optional data
 export const postRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance().post(endpoint, params);
-    return res.data;
+    return await axiosInstance.post(endpoint, params);
   } catch (error) {
     return error;
   }
@@ -24,7 +23,7 @@ export const postRequest = async (endpoint, params = {}) => {
 // Put Data with optional data
 export const putRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance().put(endpoint, params);
+    const res = await axiosInstance.put(endpoint, params);
     return res.data;
   } catch (error) {
     return error;
@@ -34,7 +33,7 @@ export const putRequest = async (endpoint, params = {}) => {
 // Delete Data with optional data
 export const deleteRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance().delete(endpoint, params);
+    const res = await axiosInstance.delete(endpoint, params);
     return res.data;
   } catch (error) {
     return error;

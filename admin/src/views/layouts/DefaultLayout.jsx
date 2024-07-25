@@ -3,27 +3,29 @@ import { Fragment, useEffect } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Navigate, NavLink, Outlet } from "react-router-dom";
-import { useStateContext } from "./Support"; 
-import { getMyData, logout } from "../../Api";
+import { useAuthContext } from "../../contexts/Support";
+import { getMyData, logoutRequest } from "../../Api";
 import { classNames } from "../../services";
 import { Toast } from "../../components";
-import { navigation } from "../constants";
+import { navigation } from "../Constants";
+import { AppLogo } from "../../assets";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, userRole, setCurrentUser, setUserToken } =
-    useStateContext();
+    useAuthContext();
 
   //WHEN: Don't have Token and is not Admin => go Login
   if (!userToken) {
     return <Navigate to="login" />;
   }
 
-  const onLogout = async (ev) => {
+  const onLogout = (ev) => {
     ev.preventDefault();
 
-    await logout(userRole);
-    setCurrentUser({});
-    setUserToken(null);
+    logoutRequest().then(() => {
+      setCurrentUser({});
+      setUserToken(null);
+    });
   };
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function DefaultLayout() {
                     <div className="h-[80%] flex-shrink-0 bg-white rounded-full transition-all duration-3000 ease-in-out hover:p-1 cursor-pointer">
                       <img
                         className="h-full w-full"
-                        src="/peng_survey.svg"
+                        src={AppLogo}
                         alt="Your Company"
                       />
                     </div>
