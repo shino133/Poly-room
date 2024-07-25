@@ -1,15 +1,13 @@
 import axiosInstance from "./AxiosCustom";
 
 // Get data
-export const getRequest = async (endpoint , params = {}) => {
+export const getRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance.get(endpoint , params);
-    return res.data;
+    return await axiosInstance.get(endpoint, params);
   } catch (error) {
     return error;
   }
 };
-
 
 // Post Data with optional data
 export const postRequest = async (endpoint, params = {}) => {
@@ -23,8 +21,7 @@ export const postRequest = async (endpoint, params = {}) => {
 // Put Data with optional data
 export const putRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance.put(endpoint, params);
-    return res.data;
+    return await axiosInstance.put(endpoint, params);
   } catch (error) {
     return error;
   }
@@ -33,8 +30,7 @@ export const putRequest = async (endpoint, params = {}) => {
 // Delete Data with optional data
 export const deleteRequest = async (endpoint, params = {}) => {
   try {
-    const res = await axiosInstance.delete(endpoint, params);
-    return res.data;
+    return await axiosInstance.delete(endpoint, params);
   } catch (error) {
     return error;
   }
