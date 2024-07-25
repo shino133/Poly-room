@@ -14,6 +14,10 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Sidebar } from "../../components";
 import { useSidebar } from "../../contexts/SidebarContext";
+import { FPTLogo } from "../../assets";
+import { FaPhoneAlt } from "react-icons/fa";
+import { CiMail } from "react-icons/ci";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, setCurrentUser, setUserToken } =
@@ -94,10 +98,47 @@ export default function DefaultLayout() {
             </Menu>
           </div>
         </div>
-        <Sidebar />
-        <div className={`main-content ${!isOpen ? "expanded" : ""}`}>
-          <Outlet />
+        <div className="flex flex-row">
+          <Sidebar />
+          <div className={`flex-1 main-content ${!isOpen ? "expanded" : ""}`}>
+            <Outlet />
+          </div>
         </div>
+        <hr className="mt-4 mx-4 border-[#ccc]" />
+        <div className="flex flex-row justify-around mb-6 mt-6">
+          <div>
+            <img src={FPTLogo} alt="FPT Polytechnic" />
+            <div className="line"></div>
+            <a href="#">Về chúng tôi</a>
+          </div>
+          <div className="flex flex-col ml-4">
+            <h3 className="font-bold">Phòng</h3>
+            <div className="line"></div>
+            <a href="#">Phòng họp</a>
+            <a href="#">Phòng học</a>
+            <a href="#">Phòng chức năng</a>
+          </div>
+          <div className="flex flex-col ml-4">
+            <h3 className="font-bold">Link</h3>
+            <div className="line"></div>
+            <a href="#">Tài khoản</a>
+            <a href="#">Trợ giúp</a>
+          </div>
+          <div className="flex flex-col mr-4">
+            <h3 className="font-bold">Liên hệ</h3>
+            <div className="line"></div>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <FaPhoneAlt /> +84 1900xxx
+            </a>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <CiMail /> example@edu.vn
+            </a>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <FaLocationDot /> FPT Hà Nam
+            </a>
+          </div>
+        </div>
+        <center className="mb-8">© 2024 Copyright - FPT Polytechnic</center>
         <Toast />
       </div>
     </>
