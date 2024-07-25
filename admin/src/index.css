@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input {
+    --tw-ring-shadow: 0 0 #000 !important;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 10px 40px 10px 70px; /* Add padding-right for the icon */
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    font-size: 16px;
+}
+
+.input-container .icon {
+    position: absolute;
+    right: 20px; /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    pointer-events: none; /* Prevent the icon from interfering with input */
+}
+
+.input-container .icon-first {
+    position: absolute;
+    left: 20px; /* Adjust as needed */
+    display: flex;
+    align-items: center;
+}
+
+.line {
+    width: 1px;
+    height: 44px;
+    background-color: #ccc;
+    position: absolute;
+    left: 60px; /* Adjust as needed */
+    display: flex;
+    align-items: center;
+    pointer-events: none; /* Prevent the icon from interfering with input */
+}
