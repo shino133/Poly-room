@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Services\CRUDSVInterface;
-use App\Http\Resources\BookingCrud;
 use App\Models\Booking;
 
 class BookingService implements CRUDSVInterface{

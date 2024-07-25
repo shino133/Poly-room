@@ -29,6 +29,7 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/room', RoomController::class);
         Route::apiResource('/room-type', RoomChildController::class);
         Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+        Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
     });
 
 
