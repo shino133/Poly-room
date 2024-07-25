@@ -13,7 +13,7 @@ class Booking extends Model
     protected $table = 'bookings';
 
     protected $fillable = [
-        'room_id', 'user_id', 'time_start', 'time_end', 'status', 'note'
+        'room_id', 'user_id', 'start_at', 'end_at', 'status', 'note'
     ];
 
     // Một booking thuộc về một user
