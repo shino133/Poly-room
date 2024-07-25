@@ -10,13 +10,11 @@ axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem("TOKEN") || "";
   config.headers.Authorization = `Bearer ${token}`;
 
-  console.log("Request:", config);
   return config;
 });
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    console.log("Response:", response);
     return response;
   },
   (error) => {
