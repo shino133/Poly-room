@@ -43,7 +43,7 @@ export default function DefaultLayout() {
                     <div className="h-[80%] flex-shrink-0 bg-white rounded-full transition-all duration-3000 ease-in-out hover:p-1 cursor-pointer">
                       <img
                         className="h-full w-full"
-                        src="/peng_survey.svg"
+                        src="/FPT.svg"
                         alt="Your Company"
                       />
                     </div>

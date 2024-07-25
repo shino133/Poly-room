@@ -15,7 +15,7 @@ export default function GuestLayout() {
           <div>
             <img
               className="mx-auto h-[20vh] w-auto"
-              src="/peng_survey.svg"
+              src="/FPT.svg"
               alt="Your Company"
             />
           </div>
