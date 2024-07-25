@@ -46,12 +46,14 @@ export default function DefaultLayout() {
             />
           </div>
           <div className="input-container flex-1 max-w-[600px]">
-            <DehazeIcon className="icon-first cursor-pointer" />
+            <div className="menu-left">
+              <DehazeIcon className="icon-first cursor-pointer" />
+            </div>
             <div className="line"></div>
             <input type="text" placeholder={"Search..."} />
             <SearchIcon className="icon" />
           </div>
-          <div className="flex items-center space-x-7 justify-end flex-1 mr-4">
+          <div className="flex items-center space-x-7 justify-end flex-1 mr-6">
             <NotificationsNoneIcon
               className="cursor-pointer"
               style={{ fontSize: 30 }}

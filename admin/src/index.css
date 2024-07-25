@@ -14,10 +14,14 @@ input {
 
 .input-container input {
     width: 100%;
-    padding: 10px 40px 10px 70px; /* Add padding-right for the icon */
+    padding: 10px 40px 10px 10px; /* Add padding-right for the icon */
     border: 1px solid #ccc;
     border-radius: 30px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     font-size: 16px;
+    margin-left: 60px;
+    z-index: 1;
 }
 
 .input-container .icon {
@@ -26,22 +30,21 @@ input {
     display: flex;
     align-items: center;
     pointer-events: none; /* Prevent the icon from interfering with input */
+    z-index: 2;
 }
 
-.input-container .icon-first {
+.menu-left {
     position: absolute;
-    left: 20px; /* Adjust as needed */
+    left: 1px;
     display: flex;
     align-items: center;
-}
-
-.line {
-    width: 1px;
-    height: 44px;
-    background-color: #ccc;
-    position: absolute;
-    left: 60px; /* Adjust as needed */
-    display: flex;
-    align-items: center;
-    pointer-events: none; /* Prevent the icon from interfering with input */
+    border: 1px solid #ccc;
+    height: 46px;
+    width: 60px;
+    justify-content: center;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-right: 0;
+    cursor: pointer;
+    background-color: #f0f0f0;
 }
