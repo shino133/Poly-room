@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // Hàm tạo một instance của axios với cấu hình tùy chỉnh
-const axiosInstance = (role) => {
-  role = role || 'client';
+export const axiosInstance = () => {
+  const role = import.meta.env.VITE_API_ROLE || "";
   const instance = axios.create({
     baseURL: `${import.meta.env.VITE_API_BASE_URL}/api/${role}`,
   });
@@ -39,5 +39,3 @@ const axiosInstance = (role) => {
 
   return instance;
 };
-
-export default axiosInstance;
