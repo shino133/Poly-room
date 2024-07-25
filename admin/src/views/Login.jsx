@@ -10,32 +10,18 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ __html: "" });
 
-  const onSubmit = (ev) => {
+  const onSubmit = async (ev) => {
     ev.preventDefault();
     setError({ __html: "" });
 
-    loginRequest({ email, password })
-      .then(({ data }) => {
-        setCurrentUser(data.user);
-        setUserToken(data.token);
-        setUserRole(data.user.role);
-      })
-      .catch((error) => {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.errors
-        ) {
-          const finalErrors = Object.values(error.response.data.errors).reduce(
-            (accum, next) => [...accum, ...next],
-            []
-          );
-          setError({ __html: finalErrors.join("<br>") });
-        } else {
-          setError({ __html: "An unexpected error occurred." });
-        }
-        console.error(error);
-      });
+    try {
+      const data = await loginRequest({ email, password });
+      setCurrentUser(data.user);
+      setUserToken(data.token);
+      setUserRole(data.user.role);
+    } catch (error) {
+      setError({ __html: error.message });
+    }
   };
 
   return (
@@ -61,7 +47,7 @@ export default function Login() {
 
       {error.__html && (
         <div
-          className="bg-red-500 rounded py-2 px-3 text-white"
+          className="bg-red-500 rounded py-2 px-3 mt-5 text-white"
           dangerouslySetInnerHTML={error}
         ></div>
       )}
