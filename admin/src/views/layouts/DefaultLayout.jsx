@@ -106,10 +106,12 @@ export default function DefaultLayout() {
         </div>
         <hr className="mt-4 mx-4 border-[#ccc]" />
         <div className="flex flex-row justify-around mb-6 mt-6">
-          <div>
+          <div className="flex flex-col">
             <img src={FPTLogo} alt="FPT Polytechnic" />
             <div className="line"></div>
             <a href="#">Về chúng tôi</a>
+            <a href="#">Blog</a>
+            <a href="#">Việc làm</a>
           </div>
           <div className="flex flex-col ml-4">
             <h3 className="font-bold">Phòng</h3>
