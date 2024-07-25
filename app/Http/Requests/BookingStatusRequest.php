@@ -21,7 +21,7 @@ class BookingStatusRequest extends ValidationRequest
     {
         return [
             'id' => 'required|exists:bookings,id',
-            'status' => 'required|in:pending,approved,rejected',
+            'status' => 'required|in:1,2,3',
         ];
     }
 

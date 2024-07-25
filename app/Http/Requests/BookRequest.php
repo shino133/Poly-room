@@ -21,8 +21,8 @@ class BookRequest extends ValidationRequest
     {
         return [
             'room_id' => 'required|exists:rooms,id',
-            'time_start' => 'required|date',
-            'time_end' => 'required|date|after:time_start',
+            'start_at' => 'required|date',
+            'end_at' => 'required|date|after:time_start',
             'note' => 'nullable|string|max:255',
         ];
     }
