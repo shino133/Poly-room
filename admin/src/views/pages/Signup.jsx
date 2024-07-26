@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import { useAuthContext } from "../contexts/Support";
-import { signupRequest } from "../Api.jsx";
+import { useAuthContext } from "../../contexts/Support";
+import { signupRequest } from "../../Api";
 // import { postRequest } from "../services/index.js";
 
 export default function Signup() {
