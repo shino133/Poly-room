@@ -14,7 +14,7 @@ input {
 
 .input-container input {
     width: 100%;
-    padding: 10px 40px 10px 10px; /* Add padding-right for the icon */
+    padding: 10px 40px 10px 10px; 
     border: 1px solid #ccc;
     border-radius: 30px;
     border-top-left-radius: 0px;
@@ -62,4 +62,29 @@ input {
     height: 2px;
     background-color: #ccc;
     margin: 12px 0;
+}
+
+.loading{
+    position: relative;
+    background-color: #b8b8b8 !important;
+	overflow: hidden;
+	border-radius: 10px;
+}
+
+.loading::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: translateX(0%);
+    background: linear-gradient(to right,rgba(255, 255, 255, 0.5),transparent);
+    animation: loadingauto 1s infinite;
+}
+
+@keyframes loadingauto{
+    100%{
+        transform: translateX(100%);
+    }
 }
