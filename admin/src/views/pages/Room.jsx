@@ -1,4 +1,3 @@
-import { deleteRoom } from "../../Api";
 import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,7 +11,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Skeleton } from "@mui/material";
 import { statusTranslations, roomTypeTranslations } from "../Constants";
 import TablePagination from "@mui/material/TablePagination";
-import { getRoomDataPerPage } from "../../Api";
+import { getRoomDataPerPage, addRoom, deleteRoom } from "../../Api";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -20,19 +19,38 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 
 export default function Room() {
   const [rooms, setRooms] = useState(null);
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
+  const [roomIdToDelete, setRoomIdToDelete] = useState(null);
+  const [snackOpen, setSnackOpen] = React.useState(false);
+  const [addDialogOpen, setAddDialogOpen] = React.useState(false);
+  const [roomType, setRoomType] = React.useState("");
+  const [roomStatus, setRoomStatus] = React.useState("");
+  const [roomCode, setRoomCode] = React.useState("");
+  const [snackMsg, setSnackMsg] = useState("");
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setRoomIdToDelete(null);
   };
 
   useEffect(() => {
@@ -44,7 +62,7 @@ export default function Room() {
       .catch((error) => {
         console.log(error);
       });
-  }, [rowsPerPage, page]);
+  }, [rowsPerPage, page, snackMsg]);
 
   const TableRowsLoader = ({ rowsNum }) => {
     return [...Array(rowsNum)].map((row, index) => (
@@ -77,20 +95,79 @@ export default function Room() {
     setPage(0); // Reset to the first page
   };
 
-  const handleDelete = async (id, type) => {
+  const handleDelete = async () => {
     try {
-      if (type == "dialog") {
-        setOpen(true);
-      } else {
-        await deleteRoom(id);
-        setRooms((prevRooms) => ({
-          ...prevRooms,
-          data: prevRooms.data.filter((room) => room.id !== id),
-        }));
-      }
+      await deleteRoom(roomIdToDelete);
+      setRooms((prevRooms) => ({
+        ...prevRooms,
+        data: prevRooms.data.filter((room) => room.id !== roomIdToDelete),
+      }));
+      handleClose();
+      setSnackMsg("Xóa phòng thành công!");
+      setSnackOpen(true);
     } catch (error) {
       console.error("Failed to delete room:", error);
     }
+  };
+
+  const handleClickOpen = (id) => {
+    setRoomIdToDelete(id);
+    setOpen(true);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseSnack}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  const handleOpenAddDialog = () => {
+    setAddDialogOpen(true);
+  };
+
+  const handleCloseAddDialog = () => {
+    setAddDialogOpen(false);
+  };
+
+  const handleChangeRoomType = (event) => {
+    setRoomType(event.target.value);
+  };
+
+  const handleChangeRoomStatus = (event) => {
+    setRoomStatus(event.target.value);
+  };
+
+  const handleAddRoom = async () => {
+    const data = new FormData();
+    data.append("code", roomCode);
+    data.append("room_child_id", roomType);
+    data.append("status", roomStatus);
+
+    try {
+      const response = await addRoom(data);
+      setSnackMsg("Thêm phòng thành công!");
+      setSnackOpen(true);
+      handleCloseAddDialog();
+      setRoomCode("");
+      setRoomType("");
+      setRoomStatus("");
+    } catch (error) {
+      handleCloseAddDialog();
+      setSnackMsg("Lỗi: " + error);
+      setSnackOpen(true);
+      console.error("Error:", error);
+    }
+  };
+
+  const handleChangeRoomCode = (event) => {
+    setRoomCode(event.target.value);
   };
 
   return (
@@ -110,6 +187,7 @@ export default function Room() {
             alignItems: "center",
             gap: "5px",
           }}
+          onClick={handleOpenAddDialog}
         >
           <span className="mt-[3px]">Thêm phòng</span>
           <AddIcon />
@@ -149,7 +227,7 @@ export default function Room() {
                     <IconButton>
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={() => handleDelete(row.id, "dialog")}>
+                    <IconButton onClick={() => handleClickOpen(row.id)}>
                       <Delete />
                     </IconButton>
                   </TableCell>
@@ -166,6 +244,10 @@ export default function Room() {
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage={"Số phòng mỗi trang"}
+        labelDisplayedRows={({ from, to, count }) => {
+          return "" + from + "-" + to + " của " + count;
+        }}
       />
       <Dialog
         open={open}
@@ -189,6 +271,70 @@ export default function Room() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Dialog
+        fullWidth={true}
+        maxWidth={"sm"}
+        open={addDialogOpen}
+        onClose={handleCloseAddDialog}
+      >
+        <DialogTitle>Thêm phòng</DialogTitle>
+        <DialogContent>
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <TextField
+              value={roomCode}
+              onChange={handleChangeRoomCode}
+              label="Mã phòng"
+              variant="outlined"
+            />
+          </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <InputLabel id="demo-simple-select-label">
+              Thể loại phòng
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={roomType}
+              label="Thể loại phòng"
+              onChange={handleChangeRoomType}
+            >
+              <MenuItem value={1}>Phòng họp</MenuItem>
+              <MenuItem value={2}>Văn phòng</MenuItem>
+              <MenuItem value={4}>Phòng học</MenuItem>
+              <MenuItem value={5}>Phòng tự học</MenuItem>
+              <MenuItem value={-1}>Khác</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <InputLabel id="demo-simple-select-label">Trạng thái</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={roomStatus}
+              label="Trạng thái"
+              onChange={handleChangeRoomStatus}
+            >
+              <MenuItem value={"Available"}>Có sẵn</MenuItem>
+              <MenuItem value={"Occupied"}>Đã có người</MenuItem>
+              <MenuItem value={"Maintenance"}>Bảo trì</MenuItem>
+              <MenuItem value={"Cleaning"}>Đang dọn dẹp</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAddDialog}>Hủy bỏ</Button>
+          <Button onClick={handleAddRoom}>Thêm</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnack}
+        message={snackMsg}
+        action={action}
+      />
     </div>
   );
 }

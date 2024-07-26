@@ -30,6 +30,10 @@ export const deleteRoom = (id) => {
   return Api.deleteRequest(`/room/${id}`);
 };
 
+export const addRoom = (params) => {
+  return Api.postRequest("/room", params);
+};
+
 export const getWeather = async () => {
   const response = await axios.get(
     `https://api.open-meteo.com/v1/forecast?latitude=20.5453&longitude=105.9122&current=temperature`
