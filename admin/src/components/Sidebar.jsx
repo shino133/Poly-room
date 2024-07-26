@@ -69,7 +69,7 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer isOpen={isOpen}>
-      <MenuItem exact="true" to="/" isOpen={isOpen}>
+      <MenuItem to="/" isOpen={isOpen}>
         <IconContainer isOpen={isOpen}>
           <IoGrid />
         </IconContainer>
