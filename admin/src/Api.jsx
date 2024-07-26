@@ -5,14 +5,21 @@ import axios from "axios";
 export const getRoomData = () => {
   return Api.getRequest("/room");
 };
+
 export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };
+
 export const getUserData = () => {
   return Api.getRequest("/user");
 };
+
 export const getMyData = () => {
   return Api.getRequest("/me");
+};
+
+export const getStatistics = () => {
+  return Api.getRequest("/statistic");
 };
 
 export const getWeather = async () => {

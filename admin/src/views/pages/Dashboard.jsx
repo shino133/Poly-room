@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import people from "../../assets/people.svg";
-import { dashboardStats } from "../Constants";
-import { getWeather } from "../../Api";
+import { getWeather, getStatistics } from "../../Api";
 import { FiSun } from "react-icons/fi";
+import { DashboardStats } from "../Constants";
 
 export default function Dashboard() {
   const [weather, setWeather] = useState(null);
@@ -45,26 +45,7 @@ export default function Dashboard() {
           </div>
           <div className="w-1/2 mb-5">
             <div className="flex flex-wrap flex-row -mr-4">
-              {dashboardStats.map((item) => (
-                <div className="px-4 w-1/2">
-                  <div
-                    className="p-5 rounded-3xl text-white mb-6 transition-all duration-300 ease-in-out"
-                    style={{
-                      backgroundColor: item.color,
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.backgroundColor = item.hoverColor)
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.backgroundColor = item.color)
-                    }
-                  >
-                    <p class="mb-4">{item.name}</p>
-                    <p class="text-[30px]">{item.value}</p>
-                    <p>{item.percent}</p>
-                  </div>
-                </div>
-              ))}
+              <DashboardStats />
             </div>
           </div>
         </div>
