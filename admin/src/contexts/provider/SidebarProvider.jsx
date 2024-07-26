@@ -2,7 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { SidebarContext } from "..";
 
-export const SidebarProvider = ({ children }) => {
+const SidebarProvider = ({ children }) => {
   // Add prop validation for 'children'
   const [isOpen, setIsOpen] = useState(true);
 
@@ -20,3 +20,5 @@ export const SidebarProvider = ({ children }) => {
 SidebarProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export default SidebarProvider;

@@ -1,8 +1,9 @@
 import { createContext } from "react";
 
-export const SidebarContext = createContext({
+const SidebarContext = createContext({
   isOpen : true,
   toggleSidebar : () => {},
 });
 
+export default SidebarContext;
 

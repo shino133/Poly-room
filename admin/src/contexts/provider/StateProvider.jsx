@@ -1,7 +1,7 @@
-import { SidebarProvider } from ".."
+import SidebarProvider from "./SidebarProvider"
 import PropTypes from "prop-types";
 
-export const StateProvider = ({ children }) => {
+const StateProvider = ({ children }) => {
   return (
     <SidebarProvider>
       {children}
@@ -12,3 +12,5 @@ export const StateProvider = ({ children }) => {
 StateProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export default StateProvider;

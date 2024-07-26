@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-export const AuthContext = createContext({
+const AuthContext = createContext({
   currentUser: {},
   userToken: null,
   toast: {
@@ -10,3 +10,5 @@ export const AuthContext = createContext({
   setCurrentUser: () => {},
   setUserToken: () => {},
 });
+
+export default AuthContext;
