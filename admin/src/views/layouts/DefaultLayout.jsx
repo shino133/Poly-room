@@ -43,15 +43,11 @@ export default function DefaultLayout() {
     logoutRequest().then(() => {
       setCurrentUser({});
       setUserToken(null);
+      localStorage.clear();
     });
   };
 
   const { isOpen, toggleSidebar } = useSidebar();
-
-  useEffect(() => {
-    const userInfo = getMyData();
-    setCurrentUser(userInfo);
-  }, [setCurrentUser]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { AuthContext } from "../AuthContext";
 
@@ -23,6 +23,11 @@ export const AuthProvider = ({ children }) => {
       setToast({ message: "", show: false });
     }, 5000);
   };
+
+  // Save currentUser to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider
