@@ -14,6 +14,16 @@ export const getMyData = () => {
   return Api.getRequest("/me");
 };
 
+
+// postRequest
+export const bookingRequest=(params)=>{
+  return Api.postRequest("/booking", params);
+}
+
+
+
+
+
 // Authentication
 export const loginRequest = async (params) => {
   try {
