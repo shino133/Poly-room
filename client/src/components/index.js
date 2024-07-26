@@ -1,4 +1,4 @@
 import Toast from "./Toast";
-import Sidebar from "./Header";
+import Header from "./Header";
 
-export { Toast, Sidebar };
+export { Toast, Header };

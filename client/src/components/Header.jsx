@@ -1,21 +1,49 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import logo from "../assets/logo/fpt-poly.png";
 
 function Header() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <>
-      <div className="flex justify-between p-4 items-center">
-        <div>FPT</div>
+    <div className="flex justify-center items-center">
+      <div
+        className={`flex w-4/5 z-50 rounded-lg fixed top-0 justify-between p-4 items-center transition-all duration-300 ${
+          scrolled
+            ? "bg-white text-black border-b-2 border-gray-300"
+            : "bg-black text-white shadow-md shadow-slate-50"
+        }`}
+      >
+        <div className="cursor-pointer">
+          <Link to="/">
+            <img className="max-w-36" src={logo} />
+          </Link>
+        </div>
         <div className="flex">
           <ul className="flex gap-5 font-medium cursor-pointer">
             <li>
-              <Link to={"/"} className="hover:text-blue-500 transition-colors">
+              <Link to="/" className="hover:text-blue-500 transition-colors">
                 Home
               </Link>
             </li>
             <li>
               <Link
-                to={"/booking"}
+                to="/booking"
                 className="hover:text-blue-500 transition-colors"
               >
                 Booking
@@ -28,7 +56,7 @@ function Header() {
         <div className="flex items-center gap-3">
           <a
             href="https://facebook.com"
-            className=" hover:text-blue-800"
+            className="hover:text-blue-800"
             aria-label="Facebook"
           >
             <svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
@@ -37,7 +65,7 @@ function Header() {
           </a>
           <a
             href="https://instagram.com"
-            className=" hover:text-purple-800"
+            className="hover:text-purple-800"
             aria-label="Instagram"
           >
             <svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
@@ -46,20 +74,25 @@ function Header() {
           </a>
           <a
             href="https://tiktok.com"
-            className=" hover:text-gray-800"
+            className="hover:text-gray-800"
             aria-label="TikTok"
           >
             <svg width="25" height="25" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2.5c1.3 0 2.4.1 3.6.3 1.1.2 2.1.6 3 .9.8.4 1.4.9 2 1.6.6.6 1.1 1.4 1.5 2.3.3.8.5 1.6.5 2.5v8.6c0 1.4-.1 2.7-.4 4-1.3 5.1-5.4 9.4-10.5 10.4-1.1.3-2.3.5-3.5.5-3.3 0-6.6-1.4-9.1-3.6-.8-.7-1.5-1.4-2.1-2.3-.4-.5-.7-1.1-1-1.7-.4-.6-.6-1.3-.8-2-.1-.6-.2-1.3-.2-1.9v-6.6c0-.7.1-1.4.3-2.1.2-.8.5-1.5.9-2.2.7-1.2 1.5-2.2 2.5-3 1.1-.9 2.4-1.7 3.7-2.2.7-.2 1.4-.4 2.2-.4zm-1.6 6.4v6.1c.7.1 1.4.1 2.1.1s1.4-.1 2.1-.3v-2.8c-1.6.1-3.1-.5-4.3-1.6zm-1.7 4.4c-.6.5-1.2 1-1.8 1.6-.7.6-1.5 1.1-2.3 1.6-.6.4-1.3.7-2 .8-.7.2-1.5.3-2.2.3-.6 0-1.2-.1-1.8-.2-.6-.2-1.3-.5-1.8-.9-.5-.5-.9-1.1-1.1-1.7-.2-.6-.3-1.2-.3-1.9v-6.6c0-.7.1-1.3.3-1.9.2-.6.6-1.2 1.1-1.7.5-.4 1.1-.7 1.8-.9.7-.2 1.2-.3 1.8-.3s1.2.1 1.8.2c.6.2 1.3.5 1.8.9.6.5 1.1 1 1.6 1.6.5.7.8 1.4 1.1 2.1.3.6.4 1.3.4 2v2.8c-.7.1-1.4.2-2.1.3-.7.1-1.4.1-2.1.1v-2.8c-.7-.6-1.4-1.1-2.1-1.5z" />
             </svg>
           </a>
-          <div className="p-1.5 px-5 cursor-pointer font-medium rounded-xl bg-gray-50 hover:bg-white transition-colors">
-            Log Out
+          <div
+            className={`p-1.5 px-5 cursor-pointer font-medium rounded-xl relative overflow-hidden ${
+              scrolled ? "text-white bg-black" : "text-black bg-gray-50"
+            } group`}
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-gray-200 to-transparent transform -translate-x-full group-hover:translate-x-1/2 transition-transform duration-300"></span>
+            <span className="absolute inset-0 bg-gradient-to-l from-gray-200 to-transparent transform translate-x-full group-hover:-translate-x-1/2 transition-transform duration-300"></span>
+            <span className="relative z-10">Log Out</span>
           </div>
         </div>
-
       </div>
-    </>
+    </div>
   );
 }
 
