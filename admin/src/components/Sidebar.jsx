@@ -10,7 +10,7 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { IoGrid } from "react-icons/io5";
-import { useSidebar } from "../contexts/SidebarContext";
+import { useSidebarContext } from "../contexts/Support";
 
 // Container for the entire sidebar including the toggle button
 const SidebarContainer = styled.div`
@@ -65,7 +65,7 @@ const IconContainer = styled.div`
 `;
 
 const Sidebar = () => {
-  const { isOpen, toggleSidebar } = useSidebar();
+  const { isOpen, toggleSidebar } = useSidebarContext();
 
   return (
     <SidebarContainer isOpen={isOpen}>

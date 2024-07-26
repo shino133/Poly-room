@@ -13,7 +13,7 @@ import DehazeIcon from "@mui/icons-material/Dehaze";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Sidebar } from "../../components";
-import { useSidebar } from "../../contexts/SidebarContext";
+import { useSidebarContext } from "../../contexts/Support";
 import { FPTLogo } from "../../assets";
 import { FaPhoneAlt } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
@@ -47,7 +47,7 @@ export default function DefaultLayout() {
     });
   };
 
-  const { isOpen, toggleSidebar } = useSidebar();
+  const { isOpen, toggleSidebar } = useSidebarContext();
 
   return (
     <>
