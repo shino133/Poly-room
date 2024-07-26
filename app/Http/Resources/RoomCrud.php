@@ -15,6 +15,7 @@ class RoomCrud extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'code' => $this->code,
             'type' => $this->roomChild->type,
             'status' => $this->status,
