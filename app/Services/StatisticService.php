@@ -40,7 +40,6 @@ class StatisticService
             'total_confirmed' => Booking::where('status', '2')->count(),
             'total_cancelled' => Booking::where('status', '3')->count(),
         ];
-
     }
 
     public function countTotal()
@@ -51,5 +50,33 @@ class StatisticService
     public function countToday()
     {
         return Booking::whereDate('created_at', Carbon::today())->count();
+    }
+
+    public function countCurrentMonth()
+    {
+        return Booking::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
+    }
+
+    public function countPreviousMonth()
+    {
+        return Booking::whereMonth('created_at', Carbon::now()->subMonth()->month)
+            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+            ->count();
+    }
+
+    public function getRateByMonth()
+    {
+        $current = $this->countCurrentMonth();
+        $previous = $this->countPreviousMonth();
+
+        if ($previous == 0) {
+            return $current > 0 ? 100 : 0;
+        }
+
+        $rate = (($current - $previous) / $previous) * 100;
+
+        return $rate;
     }
 }
