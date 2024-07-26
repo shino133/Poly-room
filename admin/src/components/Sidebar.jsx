@@ -47,7 +47,6 @@ const MenuItem = styled(NavLink)`
     font-weight: bold; // Bold font weight for active item
     color: #000; // Black text for active item
     background-color: #f0f0f0; // Gray background for active item
-    border-radius: 4px; // Optional: Add rounded corners to active items
   }
 
   &:hover {
