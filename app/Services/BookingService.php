@@ -6,7 +6,7 @@ use App\Models\Booking;
 
 class BookingService implements CRUDSVInterface
 {
-    public function getAll($filters = [], $perPage = 20)
+    public function getAll($filters = [], $perPage)
     {
 
         $query = Booking::query();
