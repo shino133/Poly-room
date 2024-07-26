@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "..";
 
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
   const [userToken, _setUserToken] = useState(
     localStorage.getItem("TOKEN") || ""
@@ -55,3 +55,5 @@ export const AuthProvider = ({ children }) => {
 AuthProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export default AuthProvider;
