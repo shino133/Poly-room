@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FaCube,
   FaPlus,
@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { IoGrid } from "react-icons/io5";
 import { getStatistics } from "../Api";
+import { CountUp } from "countup.js";
 
 export const navigation = [
   { name: "Bảng điều khiển", to: "/", icon: <IoGrid /> },
@@ -51,6 +52,21 @@ const initialDashboardStats = [
   },
 ];
 
+const CountUpComponent = ({ endValue }) => {
+  const countUpRef = useRef(null);
+
+  useEffect(() => {
+    const countUp = new CountUp(countUpRef.current, endValue);
+    if (!countUp.error) {
+      countUp.start();
+    } else {
+      console.error(countUp.error);
+    }
+  }, [endValue]);
+
+  return <span ref={countUpRef}></span>;
+};
+
 export const DashboardStats = () => {
   const [dashboardStats, setDashboardStats] = useState(initialDashboardStats);
 
@@ -63,28 +79,28 @@ export const DashboardStats = () => {
         {
           name: "Lượt đặt hôm nay",
           value: stats.data.today,
-          percent: ` (30 ngày)`,
+          percent: 24,
           color: "#84a5fa",
           hoverColor: "#96b2fb",
         },
         {
           name: "Tổng số lượt đặt",
           value: stats.data.total,
-          percent: ` (30 ngày)`,
+          percent: stats.data.booking_rate_by_month,
           color: "#5050b2",
           hoverColor: "#6d6db2",
         },
         {
           name: "Lượt đặt thành công",
           value: stats.data.detail[0].total_confirmed,
-          percent: ` (30 ngày)`,
+          percent: 78,
           color: "#7978e9",
           hoverColor: "#8b8eec",
         },
         {
           name: "Lượt đặt thất bại",
           value: stats.data.detail[0].total_cancelled,
-          percent: ` (30 ngày)`,
+          percent: 38,
           color: "#f3797e",
           hoverColor: "#ff8f7e",
         },
@@ -109,8 +125,12 @@ export const DashboardStats = () => {
         }
       >
         <p class="mb-4">{item.name}</p>
-        <p class="text-[30px]">{item.value}</p>
-        <p>{item.percent}</p>
+        <p class="text-[30px]">
+          <CountUpComponent endValue={item.value} />
+        </p>
+        <p>
+          <CountUpComponent endValue={item.percent} />% (30 ngày)
+        </p>
       </div>
     </div>
   ));

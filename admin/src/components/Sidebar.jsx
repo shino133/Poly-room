@@ -16,7 +16,7 @@ import { navigation } from "../views/Constants";
 // Container for the entire sidebar including the toggle button
 const SidebarContainer = styled.div`
   width: ${(props) =>
-    props.isOpen ? "250px" : "60px"}; // Width changes based on isOpen state
+    props.isOpen ? "250px" : "62px"}; // Width changes based on isOpen state
   transition: width 0.3s; // Smooth transition for width change
   border: 1px solid #ccc;
   border-radius: 10px;
