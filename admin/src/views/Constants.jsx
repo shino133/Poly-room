@@ -1,8 +1,21 @@
+import {
+  FaCube,
+  FaPlus,
+  FaCalendarAlt,
+  FaHistory,
+  FaChartLine,
+  FaUsers,
+} from "react-icons/fa";
+import { IoGrid } from "react-icons/io5";
+
 export const navigation = [
-  { name: "Dashboard", to: "/" },
-  { name: "Surveys", to: "/surveys" },
-  { name: "Users", to: "/users" },
-  { name: "Setting", to: "/setting" },
+  { name: "Bảng điều khiển", to: "/", icon: <IoGrid /> },
+  { name: "Quản lý phòng", to: "/manage-rooms", icon: <FaCube /> },
+  { name: "Đặt phòng", to: "/book-room", icon: <FaPlus /> },
+  { name: "Lịch trình", to: "/schedule", icon: <FaCalendarAlt /> },
+  { name: "Lịch sử", to: "/history", icon: <FaHistory /> },
+  { name: "Thống kê", to: "/statistics", icon: <FaChartLine /> },
+  { name: "Người dùng", to: "/users", icon: <FaUsers /> },
 ];
 
 export const dashboardStats = [
