@@ -6,6 +6,10 @@ export const getRoomData = () => {
   return Api.getRequest("/room");
 };
 
+export const getRoomDataPerPage = (perPage, page) => {
+  return Api.getRequest(`/room?perPage=${perPage}&page=${page}`);
+};
+
 export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };

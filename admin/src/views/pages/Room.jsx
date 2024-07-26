@@ -1,5 +1,5 @@
 import { getRoomData } from "../../Api";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -12,20 +12,39 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Skeleton } from "@mui/material";
 import { statusTranslations, roomTypeTranslations } from "../Constants";
 import TablePagination from "@mui/material/TablePagination";
+import { getRoomDataPerPage } from "../../Api";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Room() {
   const [rooms, setRooms] = useState(null);
+  const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
-    getRoomData()
+    getRoomDataPerPage(rowsPerPage, page + 1) // Convert to one-based index for API
       .then(({ data }) => {
         setRooms(data);
         console.log("rooms", data);
       })
       .catch((error) => {
-        console.log("error22222", error);
+        console.log(error);
       });
-  }, []);
+  }, [rowsPerPage, page]);
 
   const TableRowsLoader = ({ rowsNum }) => {
     return [...Array(rowsNum)].map((row, index) => (
@@ -49,12 +68,37 @@ export default function Room() {
     ));
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page
+  };
+
   return (
-    <div>
+    <div className="relative">
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
         Quản lý phòng
       </h1>
-
+      <div className="absolute right-4 top-0">
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#504b8e",
+          }}
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "5px",
+          }}
+        >
+          <span className="mt-[3px]">Thêm phòng</span>
+          <AddIcon />
+        </Button>
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -89,7 +133,7 @@ export default function Room() {
                     <IconButton>
                       <Edit />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={handleClickOpen}>
                       <Delete />
                     </IconButton>
                   </TableCell>
@@ -101,12 +145,34 @@ export default function Room() {
       </TableContainer>
       <TablePagination
         component="div"
-        count={100}
+        count={rooms?.pagination.total}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Xóa phòng khỏi hệ thống?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Thao tác này sẽ xóa phòng khỏi hệ thống. Bạn có chắc chắn muốn tiếp
+            tục?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy bỏ</Button>
+          <Button onClick={handleClose} autoFocus>
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
