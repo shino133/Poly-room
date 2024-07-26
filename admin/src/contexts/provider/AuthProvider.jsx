@@ -24,9 +24,14 @@ export const AuthProvider = ({ children }) => {
     }, 5000);
   };
 
-  // Save currentUser to localStorage whenever it changes
+  // Set CURRENT_USER in localStorage only once
   useEffect(() => {
-    localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
+    if (
+      localStorage.getItem("CURRENT_USER") == "{}" ||
+      !localStorage.getItem("CURRENT_USER")
+    ) {
+      localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
+    }
   }, [currentUser]);
 
   return (

@@ -1,12 +1,10 @@
-import { useAuthContext } from "../../contexts/Support";
-
 export default function Dashboard() {
-  const { currentUser } = useAuthContext();
-
   return (
     <>
-      <div>
-        <h1>Welcome back, {currentUser.name}!</h1>
+      <div className="m-4">
+        <h1 className="text-[25px] font-medium">
+          Chào mừng, {JSON.parse(localStorage.getItem("CURRENT_USER")).name}!
+        </h1>
       </div>
     </>
   );

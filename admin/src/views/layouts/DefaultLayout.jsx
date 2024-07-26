@@ -57,7 +57,7 @@ export default function DefaultLayout() {
             <img
               className="h-full cursor-pointer"
               src={AppLogo}
-              alt="Your Company"
+              alt="FPoly Booking"
             />
           </div>
           <div className="input-container flex-1 max-w-[600px]">
@@ -65,7 +65,7 @@ export default function DefaultLayout() {
               <DehazeIcon className="icon-first cursor-pointer" />
             </div>
             <div className="line"></div>
-            <input type="text" placeholder={"Search..."} />
+            <input type="text" placeholder={"Tìm kiếm..."} />
             <SearchIcon className="icon" />
           </div>
           <div className="flex items-center space-x-7 justify-end flex-1 mr-6">
@@ -88,9 +88,9 @@ export default function DefaultLayout() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={(ev) => onLogout(ev)}>Logout</MenuItem>
+              <MenuItem onClick={handleClose}>Trang cá nhân</MenuItem>
+              <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
+              <MenuItem onClick={(ev) => onLogout(ev)}>Đăng xuất</MenuItem>
             </Menu>
           </div>
         </div>
