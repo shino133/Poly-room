@@ -4,7 +4,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomChildController;
 use App\Http\Controllers\Admin\BookingController;
-
+use App\Http\Controllers\Client\UserBookController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,8 @@ Route::prefix('admin')->group(function () {
         Route::apiResource('/room-type', RoomChildController::class);
         Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
         Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
+
+        Route::get('/statistic', [DashboardController::class, 'total']);
     });
 
 
@@ -39,7 +42,7 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('client')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
-        Route::post('/booking', [BookingController::class, 'book'])->name('booking.book');
+        Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
     });
     
     Route::post('/signup', [AuthController::class, 'signup']);
