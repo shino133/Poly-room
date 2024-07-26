@@ -14,7 +14,7 @@ export default function Dashboard() {
       value: 432,
       percent: "22% (30 ngày)",
       color: "#5050b2",
-      hoverColor: "#5c5cb2",
+      hoverColor: "#6d6db2",
     },
     {
       name: "Tổng số cuộc họp",
