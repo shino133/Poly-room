@@ -12,7 +12,7 @@ import { Skeleton } from "@mui/material";
 import {
   statusTranslations,
   roomTypeTranslations,
-  roomType,
+  roomTypeMap,
 } from "../Constants";
 import TablePagination from "@mui/material/TablePagination";
 import { getRoomDataPerPage, addRoom, deleteRoom } from "../../Api";
@@ -173,7 +173,7 @@ export default function Room() {
 
   const handleEditRoom = (room) => {
     setRoomCode(room.code);
-    setRoomType(roomType[room.type]);
+    setRoomType(roomTypeMap[room.type] || room.type);
     setRoomStatus(room.status);
     setIsEditing(true);
     handleOpenAddDialog();

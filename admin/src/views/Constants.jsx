@@ -28,7 +28,7 @@ export const statusTranslations = {
   Cleaning: "Đang dọn dẹp",
 };
 
-export const roomType = {
+export const roomTypeMap = {
   "Conference Room": 1,
   "Office Room": 2,
   "Lecture Room": 4,
