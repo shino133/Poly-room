@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+
 function Header() {
+
   return (
     <>
       <div className="flex justify-between p-4 items-center">
