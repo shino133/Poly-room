@@ -1,7 +1,16 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { DefaultLayout, GuestLayout } from "./views/layouts";
-import { Dashboard, Booking, Login } from "./views/pages";
-import { Signup } from "./views/pages";
+import {
+  Dashboard,
+  Booking,
+  User,
+  Room,
+  History,
+  Schedule,
+  Login,
+  Signup,
+  Statistic,
+} from "./views/pages";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +28,26 @@ const router = createBrowserRouter([
       {
         path: "/book-room",
         element: <Booking />,
+      },
+      {
+        path: "/manage-rooms",
+        element: <Room />,
+      },
+      {
+        path: "/users",
+        element: <User />,
+      },
+      {
+        path: "/history",
+        element: <History />,
+      },
+      {
+        path: "/schedule",
+        element: <Schedule />,
+      },
+      {
+        path: "/statistics",
+        element: <Statistic />,
       },
     ],
   },
