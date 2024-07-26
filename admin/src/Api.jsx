@@ -24,9 +24,9 @@ export const getStatistics = () => {
 
 export const getWeather = async () => {
   const response = await axios.get(
-    "https://api.openweathermap.org/data/2.5/weather?appid=f00c38e0279b7bc85480c3fe775d518c&q=Phu%20Ly&units=metric"
+    `https://api.open-meteo.com/v1/forecast?latitude=20.5453&longitude=105.9122&current=temperature`
   );
-  return response.data.main.temp;
+  return response.data.current.temperature;
 };
 
 // Authentication
