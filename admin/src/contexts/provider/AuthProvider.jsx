@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "..";
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
