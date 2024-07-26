@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { AuthContext } from "..";
 
@@ -23,6 +23,16 @@ const AuthProvider = ({ children }) => {
       setToast({ message: "", show: false });
     }, 5000);
   };
+
+  // Set CURRENT_USER in localStorage only once
+  useEffect(() => {
+    if (
+      localStorage.getItem("CURRENT_USER") == "{}" ||
+      !localStorage.getItem("CURRENT_USER")
+    ) {
+      localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
+    }
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider

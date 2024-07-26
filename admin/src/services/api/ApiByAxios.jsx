@@ -14,7 +14,7 @@ export const postRequest = async (endpoint, params = {}) => {
   try {
     return await axiosInstance.post(endpoint, params);
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 

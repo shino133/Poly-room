@@ -1,17 +1,26 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Fragment, useEffect } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Navigate, NavLink, Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "../../contexts/Support";
 import { getMyData, logoutRequest } from "../../Api";
-import { classNames } from "../../services";
 import { Toast } from "../../components";
-import { navigation } from "../Constants";
 import { AppLogo } from "../../assets";
+import SearchIcon from "@mui/icons-material/Search";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DehazeIcon from "@mui/icons-material/Dehaze";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { Sidebar } from "../../components";
+import { useSidebar } from "../../contexts/SidebarContext";
+import { FPTLogo } from "../../assets";
+import { FaPhoneAlt } from "react-icons/fa";
+import { CiMail } from "react-icons/ci";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function DefaultLayout() {
-  const { currentUser, userToken, userRole, setCurrentUser, setUserToken } =
+  const { currentUser, userToken, setCurrentUser, setUserToken } =
     useAuthContext();
 
   //WHEN: Don't have Token and is not Admin => go Login
@@ -19,164 +28,115 @@ export default function DefaultLayout() {
     return <Navigate to="login" />;
   }
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const onLogout = (ev) => {
     ev.preventDefault();
 
     logoutRequest().then(() => {
       setCurrentUser({});
       setUserToken(null);
+      localStorage.clear();
     });
   };
 
-  useEffect(() => {
-    const userInfo = getMyData();
-    setCurrentUser(userInfo);
-  }, [setCurrentUser, userRole]);
+  const { isOpen, toggleSidebar } = useSidebar();
 
   return (
     <>
       <div className="min-h-full">
-        <Disclosure as="nav" className="bg-gray-800">
-          {({ open }) => (
-            <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                  <div className="flex items-center h-full">
-                    <div className="h-[80%] flex-shrink-0 bg-white rounded-full transition-all duration-3000 ease-in-out hover:p-1 cursor-pointer">
-                      <img
-                        className="h-full w-full"
-                        src={AppLogo}
-                        alt="Your Company"
-                      />
-                    </div>
-                    <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
-                          <NavLink
-                            key={item.name}
-                            to={item.to}
-                            className={({ isActive }) =>
-                              classNames(
-                                isActive
-                                  ? "bg-gray-900 text-white"
-                                  : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                                "px-3 py-2 rounded-md text-sm font-medium"
-                              )
-                            }
-                          >
-                            {item.name}
-                          </NavLink>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="sr-only">Open user menu</span>
-                            <UserIcon className="w-8 h-8 bg-black/25 p-2 rounded-full text-white" />
-                          </Menu.Button>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <Menu.Item>
-                              <a
-                                href="#"
-                                onClick={(ev) => onLogout(ev)}
-                                className={
-                                  "block px-4 py-2 text-sm text-gray-700"
-                                }
-                              >
-                                Sign out
-                              </a>
-                            </Menu.Item>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-                    </div>
-                  </div>
-                  <div className="-mr-2 flex md:hidden">
-                    {/* Mobile menu button */}
-                    <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                      <span className="sr-only">Open main menu</span>
-                      {open ? (
-                        <XMarkIcon
-                          className="block h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Bars3Icon
-                          className="block h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </Disclosure.Button>
-                  </div>
-                </div>
-              </div>
-
-              <Disclosure.Panel className="md:hidden">
-                <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-                  {navigation.map((item) => (
-                    <NavLink
-                      key={item.name}
-                      to={item.to}
-                      className={({ isActive }) =>
-                        classNames(
-                          isActive
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "block px-3 py-2 rounded-md text-base font-medium"
-                        )
-                      }
-                    >
-                      {item.name}
-                    </NavLink>
-                  ))}
-                </div>
-                <div className="border-t border-gray-700 pt-4 pb-3">
-                  <div className="flex items-center px-5">
-                    <div className="flex-shrink-0">
-                      <UserIcon className="w-8 h-8 bg-black/25 p-2 rounded-full text-white" />
-                    </div>
-                    <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">
-                        {currentUser.name}
-                      </div>
-                      <div className="text-sm font-medium leading-none text-gray-400">
-                        {currentUser.email}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-3 space-y-1 px-2">
-                    <Disclosure.Button
-                      as="a"
-                      href="#"
-                      onClick={(ev) => onLogout(ev)}
-                      className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                    >
-                      Sign out
-                    </Disclosure.Button>
-                  </div>
-                </div>
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-
-        <Outlet />
-
+        <div className="flex items-center mt-4 ml-2">
+          <div className="h-12 p-1 mr-16">
+            <img
+              className="h-full cursor-pointer"
+              src={AppLogo}
+              alt="FPoly Booking"
+            />
+          </div>
+          <div className="input-container flex-1 max-w-[600px]">
+            <div className="menu-left" onClick={toggleSidebar}>
+              <DehazeIcon className="icon-first cursor-pointer" />
+            </div>
+            <div className="line"></div>
+            <input type="text" placeholder={"Tìm kiếm..."} />
+            <SearchIcon className="icon" />
+          </div>
+          <div className="flex items-center space-x-7 justify-end flex-1 mr-6">
+            <NotificationsNoneIcon
+              className="cursor-pointer"
+              style={{ fontSize: 30 }}
+            />
+            <MoreHorizIcon
+              className="cursor-pointer"
+              style={{ fontSize: 30 }}
+            />
+            <AccountCircleIcon
+              className="cursor-pointer"
+              style={{ fontSize: 30 }}
+              onClick={handleClick}
+            />
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Trang cá nhân</MenuItem>
+              <MenuItem onClick={handleClose}>Tài khoản</MenuItem>
+              <MenuItem onClick={(ev) => onLogout(ev)}>Đăng xuất</MenuItem>
+            </Menu>
+          </div>
+        </div>
+        <div className="flex flex-row">
+          <Sidebar />
+          <div className={`flex-1 main-content ${!isOpen ? "expanded" : ""}`}>
+            <Outlet />
+          </div>
+        </div>
+        <hr className="mt-4 mx-4 border-[#ccc]" />
+        <div className="flex flex-row justify-around mb-6 mt-6">
+          <div className="flex flex-col">
+            <img src={FPTLogo} alt="FPT Polytechnic" />
+            <div className="line"></div>
+            <a href="#">Về chúng tôi</a>
+            <a href="#">Blog</a>
+            <a href="#">Việc làm</a>
+          </div>
+          <div className="flex flex-col ml-4">
+            <h3 className="font-bold">Phòng</h3>
+            <div className="line"></div>
+            <a href="#">Phòng họp</a>
+            <a href="#">Phòng học</a>
+            <a href="#">Phòng chức năng</a>
+          </div>
+          <div className="flex flex-col ml-4">
+            <h3 className="font-bold">Link</h3>
+            <div className="line"></div>
+            <a href="#">Tài khoản</a>
+            <a href="#">Trợ giúp</a>
+          </div>
+          <div className="flex flex-col mr-4">
+            <h3 className="font-bold">Liên hệ</h3>
+            <div className="line"></div>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <FaPhoneAlt /> +84 1900xxx
+            </a>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <CiMail /> example@edu.vn
+            </a>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <FaLocationDot /> FPT Hà Nam
+            </a>
+          </div>
+        </div>
+        <center className="mb-8">© 2024 Copyright - FPT Polytechnic</center>
         <Toast />
       </div>
     </>

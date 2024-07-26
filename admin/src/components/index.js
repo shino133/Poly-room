@@ -1,5 +1,4 @@
 import Toast from "./Toast";
+import Sidebar from "./Sidebar";
 
-export {
-  Toast
-}
+export { Toast, Sidebar };
