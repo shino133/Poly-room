@@ -15,7 +15,7 @@ import {
   roomTypeMap,
 } from "../Constants";
 import TablePagination from "@mui/material/TablePagination";
-import { getRoomDataPerPage, addRoom, deleteRoom } from "../../Api";
+import { getRoomDataPerPage, addRoom, deleteRoom, editRoom } from "../../Api";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -44,6 +44,7 @@ export default function Room() {
   const [roomCode, setRoomCode] = React.useState("");
   const [snackMsg, setSnackMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [roomIdToUpdate, setRoomIdToUpdate] = useState(null);
 
   const handleCloseSnack = (event, reason) => {
     if (reason === "clickaway") {
@@ -67,7 +68,7 @@ export default function Room() {
       .catch((error) => {
         console.log(error);
       });
-  }, [rowsPerPage, page, snackMsg]);
+  }, [rowsPerPage, page, snackOpen]);
 
   const TableRowsLoader = ({ rowsNum }) => {
     return [...Array(rowsNum)].map((row, index) => (
@@ -134,6 +135,10 @@ export default function Room() {
   );
 
   const handleOpenAddDialog = () => {
+    setIsEditing(false);
+    setRoomCode("");
+    setRoomType("");
+    setRoomStatus("");
     setAddDialogOpen(true);
   };
 
@@ -172,15 +177,48 @@ export default function Room() {
   };
 
   const handleEditRoom = (room) => {
+    setIsEditing(true);
     setRoomCode(room.code);
     setRoomType(roomTypeMap[room.type] || room.type);
     setRoomStatus(room.status);
-    setIsEditing(true);
-    handleOpenAddDialog();
+    setRoomIdToUpdate(room.id);
+    setAddDialogOpen(true);
   };
 
   const handleChangeRoomCode = (event) => {
     setRoomCode(event.target.value);
+  };
+
+  const _editRoom = async () => {
+    const data = {
+      code: roomCode,
+      room_child_id: roomType,
+      status: roomStatus,
+    };
+
+    const urlEncodedData = new URLSearchParams();
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        urlEncodedData.append(key, data[key]);
+      }
+    }
+
+    try {
+      await editRoom(roomIdToUpdate, data);
+      console.log("roomid", roomIdToUpdate);
+      console.log("data312", data);
+      handleCloseAddDialog();
+      setRoomCode("");
+      setRoomType("");
+      setRoomStatus("");
+      setSnackMsg("Cập nhật phòng thành công!");
+      setSnackOpen(true);
+    } catch (error) {
+      handleCloseAddDialog();
+      setSnackMsg("Lỗi: " + error);
+      setSnackOpen(true);
+      console.error("Error321:", error);
+    }
   };
 
   return (
@@ -219,7 +257,7 @@ export default function Room() {
           </TableHead>
           <TableBody>
             {!rooms ? (
-              <TableRowsLoader rowsNum={15} />
+              <TableRowsLoader rowsNum={10} />
             ) : (
               rooms.data.map((row) => (
                 <TableRow
@@ -337,7 +375,7 @@ export default function Room() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddDialog}>Hủy bỏ</Button>
-          <Button onClick={handleAddRoom}>
+          <Button onClick={isEditing ? _editRoom : handleAddRoom}>
             {isEditing ? "Cập nhật" : "Thêm"}
           </Button>
         </DialogActions>

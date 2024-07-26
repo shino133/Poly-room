@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Room;
 
 use App\Services\CRUDSVInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RoomService implements CRUDSVInterface
 {
@@ -30,9 +31,8 @@ class RoomService implements CRUDSVInterface
     }
     public function update($id, array $data)
     {
-        $room = Room::find($id);
+        $room = Room::findOrFail($id);
         $room->update($data);
-        $room->save();
         return $room;
     }
 
