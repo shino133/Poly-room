@@ -8,9 +8,16 @@ use App\Services\CRUDSVInterface;
 
 class RoomService implements CRUDSVInterface
 {
-    public function getAll($filters = [], $perPage = 20)
+    public function getAll($filters = [], $perPage)
     {
-        return Room::paginate($perPage);
+        $query = Room::query();
+
+        if (isset($filters['status'])) {
+            $search = $filters['status'];
+            $query->where('status', 'like', '%' . $search . '%');
+        }
+
+        return $query->orderBy('created_at', 'DESC')->paginate($perPage);
     }
 
     public function getById($id)

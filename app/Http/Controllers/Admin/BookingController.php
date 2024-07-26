@@ -28,8 +28,9 @@ class BookingController extends Controller
     public function index(Request $res)
     {
         $filters = $res->only(['status']);
+        $perPage = $res->input('perPage', 20);
 
-        $booking = $this->bookingService->getAll($filters);
+        $booking = $this->bookingService->getAll($filters, $perPage);
 
         $formattedRooms = BookingCrud::collection($booking->items());
 
