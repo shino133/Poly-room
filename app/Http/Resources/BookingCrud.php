@@ -16,6 +16,7 @@ class BookingCrud extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'room' => $this->room->code,
             'created_by' => [
                 'username' => $this->user->name,
