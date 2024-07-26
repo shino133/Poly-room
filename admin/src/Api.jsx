@@ -1,17 +1,32 @@
 import * as Api from "./services/api/ApiByAxios";
+import axios from "axios";
 
 // Get Data
 export const getRoomData = () => {
   return Api.getRequest("/room");
 };
+
 export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };
+
 export const getUserData = () => {
   return Api.getRequest("/user");
 };
+
 export const getMyData = () => {
   return Api.getRequest("/me");
+};
+
+export const getStatistics = () => {
+  return Api.getRequest("/statistic");
+};
+
+export const getWeather = async () => {
+  const response = await axios.get(
+    "https://api.openweathermap.org/data/2.5/weather?appid=f00c38e0279b7bc85480c3fe775d518c&q=Phu%20Ly&units=metric"
+  );
+  return response.data.main.temp;
 };
 
 // Authentication
