@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BookingCrud;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\BookRequest;
 use App\Http\Requests\BookingStatusRequest;
 use App\Services\ControlHelper;
 use Illuminate\Http\Request;
@@ -36,24 +34,6 @@ class BookingController extends Controller
         $formattedRooms = BookingCrud::collection($booking->items());
 
         return $this->formatResponse($formattedRooms, $booking);
-    }
-
-    public function book(BookRequest $res)
-    {
-        try {
-            $validated = $res->validated();
-
-            $validated['user_id'] = Auth::id();
-            $validated['status'] = BookingStatusEnum::PENDING;
-
-            $this->bookingService->create($validated);
-
-            $response = response()->json(['message' => 'Room booked Successfully'], 201);
-        } catch (\Exception $e) {
-            $response = ControlHelper::handleExc($e);
-        }
-
-        return $response;
     }
 
     public function status(BookingStatusRequest $res)

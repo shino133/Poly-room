@@ -11,11 +11,12 @@ import {
 } from "react-icons/fa";
 import { IoGrid } from "react-icons/io5";
 import { useSidebarContext } from "../contexts/Support";
+import { navigation } from "../views/Constants";
 
 // Container for the entire sidebar including the toggle button
 const SidebarContainer = styled.div`
   width: ${(props) =>
-    props.isOpen ? "250px" : "60px"}; // Width changes based on isOpen state
+    props.isOpen ? "250px" : "62px"}; // Width changes based on isOpen state
   transition: width 0.3s; // Smooth transition for width change
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -65,52 +66,16 @@ const IconContainer = styled.div`
 `;
 
 const Sidebar = () => {
-  const { isOpen, toggleSidebar } = useSidebarContext();
+  const { isOpen } = useSidebarContext();
 
   return (
     <SidebarContainer isOpen={isOpen}>
-      <MenuItem exact="true" to="/" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <IoGrid />
-        </IconContainer>
-        {isOpen && "Bảng điều khiển"}
-      </MenuItem>
-      <MenuItem to="/manage-rooms" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <FaCube />
-        </IconContainer>
-        {isOpen && "Quản lý phòng"}
-      </MenuItem>
-      <MenuItem to="/book-room" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <FaPlus />
-        </IconContainer>
-        {isOpen && "Đặt phòng"}
-      </MenuItem>
-      <MenuItem to="/schedule" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <FaCalendarAlt />
-        </IconContainer>
-        {isOpen && "Lịch trình"}
-      </MenuItem>
-      <MenuItem to="/history" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <FaHistory />
-        </IconContainer>
-        {isOpen && "Lịch sử"}
-      </MenuItem>
-      <MenuItem to="/statistics" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <FaChartLine />
-        </IconContainer>
-        {isOpen && "Thống kê"}
-      </MenuItem>
-      <MenuItem to="/users" isOpen={isOpen}>
-        <IconContainer isOpen={isOpen}>
-          <FaUsers />
-        </IconContainer>
-        {isOpen && "Người dùng"}
-      </MenuItem>
+      {navigation.map((item) => (
+        <MenuItem to={item.to} isOpen={isOpen}>
+          <IconContainer isOpen={isOpen}>{item.icon}</IconContainer>
+          {isOpen && item.name}
+        </MenuItem>
+      ))}
     </SidebarContainer>
   );
 };

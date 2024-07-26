@@ -5,27 +5,24 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Http\Resources\UserCrud;
-
+use App\Traits\Paginates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-
+    use Paginates;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $data = User::query()->paginate(10);
+        $user = User::query()->paginate(10);
 
-        $list = [
-            'users' => UserCrud::collection($data),
-            'success' => session('success')
-        ];
+        $formattedRooms = UserCrud::collection($user->items());
 
-        return response()->json($list);
+        return $this->formatResponse($formattedRooms, $user);
 
     }
 
@@ -34,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**

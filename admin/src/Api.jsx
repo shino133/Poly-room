@@ -1,17 +1,32 @@
 import * as Api from "./services/api/ApiByAxios";
+import axios from "axios";
 
 // Get Data
 export const getRoomData = () => {
   return Api.getRequest("/room");
 };
+
 export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };
+
 export const getUserData = () => {
   return Api.getRequest("/user");
 };
+
 export const getMyData = () => {
   return Api.getRequest("/me");
+};
+
+export const getStatistics = () => {
+  return Api.getRequest("/statistic");
+};
+
+export const getWeather = async () => {
+  const response = await axios.get(
+    `https://api.open-meteo.com/v1/forecast?latitude=20.5453&longitude=105.9122&current=temperature`
+  );
+  return response.data.current.temperature;
 };
 
 // Authentication
