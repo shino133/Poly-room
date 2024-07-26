@@ -30,34 +30,46 @@ export default function Booking() {
             />
           </div>
 
-          <div className="mb-4">
-            <label htmlFor="startTime" className="block font-medium">
-              Bắt đầu:
-            </label>
-            <input
-              type="time"
-              id="startTime"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="rounded border-gray-300 border p-2 w-full"
-              required
-            />
-          </div>
+          <div className="mb-4 flex gap-4">
+            <div className="flex-1">
+              <label htmlFor="startTime" className="block font-medium">
+                Bắt đầu:
+              </label>
+              <input
+                type="datetime-local"
+                id="startTime"
+                name="startTime"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="rounded border-gray-300 border p-2 w-full"
+                required
+              />
+            </div>
 
-          <div className="mb-4">
-            <label htmlFor="endTime" className="block font-medium">
-              Kết thúc:
+            <div className="flex-1">
+              <label htmlFor="endTime" className="block font-medium">
+                Kết thúc:
+              </label>
+              <input
+                type="datetime-local"
+                id="endTime"
+                name="endTime"
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                className="rounded border-gray-300 border p-2 w-full"
+                required
+              />
+            </div>
+          </div>
+          <div className="">
+            <label htmlFor="note" className=" font-medium">
+              Ghi chú:
             </label>
-            <input
-              type="time"
-              id="endTime"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="rounded border-gray-300 border p-2 w-full"
-              required
-            />
-            <label
-              htmlFor="date"
+            <textarea
+              id="note"
+              name="note"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
               className="rounded border-gray-300 border p-2 w-full"
             >
               Ngày:
