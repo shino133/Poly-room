@@ -8,7 +8,7 @@ class RoomChildService implements CRUDSVInterface
 {
     public function getAll($filters = [], $perPage = 20)
     {
-        return RoomChild::paginate(10);
+        return RoomChild::paginate($perPage);
     }
     public function getById($id)
     {

@@ -25,7 +25,7 @@ class RoomController extends Controller
     public function index(Request $res)
     {
         $filters = $res->only(['status']);
-        $perPage = $res->only(['perPage']);
+        $perPage = $res->input('perPage', 20);
 
         $rooms = $this->roomService->getAll($filters, $perPage);
 
