@@ -28,6 +28,13 @@ export const statusTranslations = {
   Cleaning: "Đang dọn dẹp",
 };
 
+export const roomType = {
+  "Conference Room": 1,
+  "Office Room": 2,
+  "Lecture Room": 4,
+  "Break Room": 5,
+};
+
 export const roomTypeTranslations = {
   "Conference Room": "Phòng họp",
   "Meeting Room": "Phòng họp",

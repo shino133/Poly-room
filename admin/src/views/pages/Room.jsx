@@ -9,7 +9,11 @@ import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { Skeleton } from "@mui/material";
-import { statusTranslations, roomTypeTranslations } from "../Constants";
+import {
+  statusTranslations,
+  roomTypeTranslations,
+  roomType,
+} from "../Constants";
 import TablePagination from "@mui/material/TablePagination";
 import { getRoomDataPerPage, addRoom, deleteRoom } from "../../Api";
 import Button from "@mui/material/Button";
@@ -39,6 +43,7 @@ export default function Room() {
   const [roomStatus, setRoomStatus] = React.useState("");
   const [roomCode, setRoomCode] = React.useState("");
   const [snackMsg, setSnackMsg] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleCloseSnack = (event, reason) => {
     if (reason === "clickaway") {
@@ -151,7 +156,7 @@ export default function Room() {
     data.append("status", roomStatus);
 
     try {
-      const response = await addRoom(data);
+      await addRoom(data);
       setSnackMsg("Thêm phòng thành công!");
       setSnackOpen(true);
       handleCloseAddDialog();
@@ -164,6 +169,14 @@ export default function Room() {
       setSnackOpen(true);
       console.error("Error:", error);
     }
+  };
+
+  const handleEditRoom = (room) => {
+    setRoomCode(room.code);
+    setRoomType(roomType[room.type]);
+    setRoomStatus(room.status);
+    setIsEditing(true);
+    handleOpenAddDialog();
   };
 
   const handleChangeRoomCode = (event) => {
@@ -224,7 +237,7 @@ export default function Room() {
                     {statusTranslations[row.status] || row.status}
                   </TableCell>
                   <TableCell>
-                    <IconButton>
+                    <IconButton onClick={() => handleEditRoom(row)}>
                       <Edit />
                     </IconButton>
                     <IconButton onClick={() => handleClickOpen(row.id)}>
@@ -278,7 +291,7 @@ export default function Room() {
         open={addDialogOpen}
         onClose={handleCloseAddDialog}
       >
-        <DialogTitle>Thêm phòng</DialogTitle>
+        <DialogTitle>{isEditing ? "Cập nhật phòng" : "Thêm phòng"}</DialogTitle>
         <DialogContent>
           <FormControl variant="outlined" fullWidth margin="normal">
             <TextField
@@ -324,7 +337,9 @@ export default function Room() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddDialog}>Hủy bỏ</Button>
-          <Button onClick={handleAddRoom}>Thêm</Button>
+          <Button onClick={handleAddRoom}>
+            {isEditing ? "Cập nhật" : "Thêm"}
+          </Button>
         </DialogActions>
       </Dialog>
 
