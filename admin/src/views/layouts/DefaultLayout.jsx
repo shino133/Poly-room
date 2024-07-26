@@ -8,7 +8,6 @@ import { AppLogo } from "../../assets";
 import SearchIcon from "@mui/icons-material/Search";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
