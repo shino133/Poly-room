@@ -22,7 +22,10 @@ class DashboardController extends Controller
                 'today' => $this->statisticService->countToday(),
                 'detail' => [
                     $this->statisticService->countStatus()
-                ]
+                ],
+                'previousMonth' => $this->statisticService->countPreviousMonth(),
+                'currentMonth' => $this->statisticService->countCurrentMonth(),
+                'booking_rate_by_month' => $this->statisticService->getRateByMonth()
             ];
             $res = response()->json($data);
         }catch(\Exception $e){
