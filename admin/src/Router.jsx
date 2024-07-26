@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { DefaultLayout , GuestLayout } from "./views/layouts";
-import { Dashboard, Login, Signup } from "./views/pages";
+import { Dashboard, Login } from "./views/pages";
+import { Signup } from "./views/pages";
 
 const router = createBrowserRouter([
   {
