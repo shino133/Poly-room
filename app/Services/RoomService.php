@@ -6,25 +6,31 @@ use App\Models\Room;
 
 use App\Services\CRUDSVInterface;
 
-class RoomService implements CRUDSVInterface{
-    public function getAll($filters = []){
-        return Room::paginate(20);
+class RoomService implements CRUDSVInterface
+{
+    public function getAll($filters = [], $perPage = 20)
+    {
+        return Room::paginate($perPage);
     }
 
-    public function getById($id){
+    public function getById($id)
+    {
         return Room::findOrFail($id);
     }
-    public function create(array $data){
+    public function create(array $data)
+    {
         return Room::create($data);
     }
-    public function update($id, array $data){
+    public function update($id, array $data)
+    {
         $room = Room::find($id);
         $room->update($data);
         $room->save();
         return $room;
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         return Room::destroy($id);
     }
 }

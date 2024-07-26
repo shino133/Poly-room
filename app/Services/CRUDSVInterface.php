@@ -4,7 +4,7 @@ namespace App\Services;
 
 interface CRUDSVInterface
 {
-    public function getAll($filters = []);
+    public function getAll($filters = [], $perPage = 20);
 
     public function getById($id);
 

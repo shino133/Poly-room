@@ -26,7 +26,7 @@ const SidebarContainer = styled.div`
   margin-left: 15px;
   position: sticky;
   top: 20px; /* Stick the sidebar to the top of the viewport */
-  height: 80vh; /* Full height */
+  height: 95vh; /* Full height */
   overflow-y: auto; /* Scrollable if content overflows */
   overflow-x: hidden;
   background-color: #fff;

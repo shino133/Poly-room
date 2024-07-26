@@ -21,6 +21,22 @@ export const navigation = [
   { name: "Người dùng", to: "/users", icon: <FaUsers /> },
 ];
 
+export const statusTranslations = {
+  Available: "Có sẵn",
+  Occupied: "Đã có người",
+  Maintenance: "Bảo trì",
+  Cleaning: "Đang dọn dẹp",
+};
+
+export const roomTypeTranslations = {
+  "Conference Room": "Phòng họp",
+  "Meeting Room": "Phòng họp",
+  "Office Room": "Văn phòng",
+  "Lecture Room": "Phòng học",
+  "Break Room": "Phòng tự học",
+  Other: "Khác",
+};
+
 const initialDashboardStats = [
   {
     name: "Lượt đặt hôm nay",
