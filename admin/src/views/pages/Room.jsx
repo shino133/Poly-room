@@ -1,4 +1,4 @@
-import { getRoomData } from "../../Api";
+import { deleteRoom } from "../../Api";
 import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -77,6 +77,22 @@ export default function Room() {
     setPage(0); // Reset to the first page
   };
 
+  const handleDelete = async (id, type) => {
+    try {
+      if (type == "dialog") {
+        setOpen(true);
+      } else {
+        await deleteRoom(id);
+        setRooms((prevRooms) => ({
+          ...prevRooms,
+          data: prevRooms.data.filter((room) => room.id !== id),
+        }));
+      }
+    } catch (error) {
+      console.error("Failed to delete room:", error);
+    }
+  };
+
   return (
     <div className="relative">
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
@@ -133,7 +149,7 @@ export default function Room() {
                     <IconButton>
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={handleClickOpen}>
+                    <IconButton onClick={() => handleDelete(row.id, "dialog")}>
                       <Delete />
                     </IconButton>
                   </TableCell>
@@ -168,7 +184,7 @@ export default function Room() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Hủy bỏ</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleDelete} autoFocus>
             Xóa
           </Button>
         </DialogActions>
