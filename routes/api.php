@@ -38,7 +38,12 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::prefix('client')->group(function () {
-    Route::post('/booking', [BookingController::class, 'book'])->name('booking.book');
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/booking', [BookingController::class, 'book'])->name('booking.book');
+    });
+    
+    Route::post('/signup', [AuthController::class, 'signup']);
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
 Route::get('/', function(){
