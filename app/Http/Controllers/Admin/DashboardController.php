@@ -18,14 +18,14 @@ class DashboardController extends Controller
     public function total(){
         try{
             $data = [
-                'total' => $this->statisticService->countTotal(),
-                'today' => $this->statisticService->countToday(),
+                'total' => $this->statisticService->getOverviewStats()['total_bookings'],
+                'today' => $this->statisticService->countBookingsToday(),
                 'detail' => [
-                    $this->statisticService->countStatus()
+                    $this->statisticService->getBookingStatusCount()
                 ],
-                'previousMonth' => $this->statisticService->countPreviousMonth(),
-                'currentMonth' => $this->statisticService->countCurrentMonth(),
-                'booking_rate_by_month' => $this->statisticService->getRateByMonth()
+                'booking_rate_by_month' => $this->statisticService->getPendingBookingRate(),
+                'confirmed_rate_by_month' => $this->statisticService->getConfirmedBookingRate(),
+                'cancelled_rate_by_month' => $this->statisticService->getCancelledBookingRate()
             ];
             $res = response()->json($data);
         }catch(\Exception $e){

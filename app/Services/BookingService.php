@@ -40,4 +40,9 @@ class BookingService implements CRUDSVInterface
     {
         return Booking::destroy($id);
     }
+
+    public function getBookingHistory($userId)
+    {
+        return Booking::where('user_id', $userId)->orderBy('created_at', 'DESC')->paginate(20);
+    }
 }

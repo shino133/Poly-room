@@ -8,9 +8,12 @@ use App\Services\ControlHelper;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\BookingStatusEnum;
 use App\Services\ServiceFactory;
+use App\Http\Resources\BookingCrud;
+use App\Traits\Paginates;
 
 class UserBookController extends Controller
 {
+    use Paginates;
     protected $bookingService;
 
     public function __construct(ServiceFactory $serviceFactory)
@@ -28,6 +31,19 @@ class UserBookController extends Controller
             $this->bookingService->create($validated);
 
             $response = response()->json(['message' => 'Room booked Successfully'], 201);
+        } catch (\Exception $e) {
+            $response = ControlHelper::handleExc($e);
+        }
+
+        return $response;
+    }
+
+    public function history(){
+        try {
+            
+            $data = $this->bookingService->getBookingHistory(Auth::id());
+            $formattedRooms = BookingCrud::collection($data->items());
+            $response = $this->formatResponse($formattedRooms, $data);
         } catch (\Exception $e) {
             $response = ControlHelper::handleExc($e);
         }
