@@ -5,6 +5,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#84a5fa",
     hoverColor: "#96b2fb",
+    timeRange: "Hôm qua",
   },
   {
     name: "Tổng số lượt đặt",
@@ -12,6 +13,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#5050b2",
     hoverColor: "#6d6db2",
+    timeRange: "30 ngày",
   },
   {
     name: "Lượt đặt thành công",
@@ -19,6 +21,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#7978e9",
     hoverColor: "#8b8eec",
+    timeRange: "30 ngày",
   },
   {
     name: "Lượt đặt thất bại",
@@ -26,6 +29,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#f3797e",
     hoverColor: "#ff8f7e",
+    timeRange: "30 ngày",
   },
 ];
 

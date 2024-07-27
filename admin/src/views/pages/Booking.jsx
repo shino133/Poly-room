@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import { getRoomData } from "../../Api";
 
 export default function Booking() {
@@ -13,6 +11,7 @@ export default function Booking() {
   const [note, setNote] = useState("");
   const [rooms, setRooms] = useState([]);
   const [options, setOptions] = useState([]);
+  const [singleSelections, setSingleSelections] = useState([]);
 
   useEffect(() => {
     getRoomData() // Convert to one-based index for API
@@ -50,21 +49,7 @@ export default function Booking() {
 
         <form>
           <div className="max-w-[500px] mx-auto mt-10">
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Chọn phòng</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                label="Chọn phòng"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <FormControl fullWidth></FormControl>
           </div>
         </form>
       </div>
