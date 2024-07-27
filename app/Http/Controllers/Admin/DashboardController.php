@@ -23,6 +23,7 @@ class DashboardController extends Controller
                 'detail' => [
                     $this->statisticService->getBookingStatusCount()
                 ],
+                'booking_rate_by_day' => $this->statisticService->getDailyBookingRate(),
                 'booking_rate_by_month' => $this->statisticService->getPendingBookingRate(),
                 'confirmed_rate_by_month' => $this->statisticService->getConfirmedBookingRate(),
                 'cancelled_rate_by_month' => $this->statisticService->getCancelledBookingRate()

@@ -52,6 +52,19 @@ class StatisticService
         return Booking::whereDate('created_at', Carbon::today())->count();
     }
 
+    public function countBookingsPreviousDay()
+    {
+        return Booking::whereDate('created_at', Carbon::yesterday())->count();
+    }
+
+    public function getDailyBookingRate()
+    {
+        $current = $this->countBookingsToday();
+        $previous = $this->countBookingsPreviousDay();
+
+        return $this->calculateRate($current, $previous);
+    }
+
     public function countBookingsCurrentMonth()
     {
         return $this->countBookingsByMonth(Carbon::now());
