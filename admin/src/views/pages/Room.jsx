@@ -387,6 +387,7 @@ export default function Room() {
         onClose={handleCloseSnack}
         message={snackMsg}
         action={action}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
     </div>
   );
