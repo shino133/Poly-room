@@ -12,26 +12,27 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
+
 class UserController extends Controller
 {
     use Paginates;
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    protected $userServive;
+ 
+    public function __construct(ServiceFactory $serviceFactory)
     {
-        //
-        $user = User::query()->paginate(10);
-
-        $formattedRooms = UserCrud::collection($user->items());
-
-        return $this->formatResponse($formattedRooms, $user);
+        $this->userServive = $serviceFactory->make('user');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    
+    public function index(Request $res)
+    {
+        
+        $perPage = $res->input('perPage', 20);
+        $child = $this->userServive->getAll($filters = [], $perPage);
+        $formattedRooms = UserCrud::collection($child->items());
+        return $this->formatResponse($formattedRooms, $child);
+    }
+    public function create()
     {
         //
         // Validate the request
@@ -63,9 +64,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $user = User::find($id);
@@ -76,9 +74,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
@@ -124,9 +119,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
