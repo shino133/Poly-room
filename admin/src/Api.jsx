@@ -6,12 +6,32 @@ export const getRoomData = () => {
   return Api.getRequest("/room");
 };
 
+export const getRoomDataPerPage = (perPage, page) => {
+  return Api.getRequest(`/room?perPage=${perPage}&page=${page}`);
+};
+
 export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };
 
-export const getUserData = () => {
-  return Api.getRequest("/user");
+export const getUserData = (perPage, page) => {
+  return Api.getRequest("/user?perPage=" + perPage + "&page=" + page);
+};
+
+export const findUser = (id) => {
+  return Api.getRequest(`/user/${id}`);
+};
+
+export const addUser = (params) => {
+  return Api.postRequest("/user", params);
+};
+
+export const editUser = (id, params) => {
+  return Api.putRequest(`/user/${id}`, params);
+};
+
+export const deleteUser = (id) => {
+  return Api.deleteRequest(`/user/${id}`);
 };
 
 export const getMyData = () => {
@@ -22,11 +42,23 @@ export const getStatistics = () => {
   return Api.getRequest("/statistic");
 };
 
+export const deleteRoom = (id) => {
+  return Api.deleteRequest(`/room/${id}`);
+};
+
+export const addRoom = (params) => {
+  return Api.postRequest("/room", params);
+};
+
+export const editRoom = (id, params) => {
+  return Api.putRequest(`/room/${id}`, params);
+};
+
 export const getWeather = async () => {
   const response = await axios.get(
-    "https://api.openweathermap.org/data/2.5/weather?appid=f00c38e0279b7bc85480c3fe775d518c&q=Phu%20Ly&units=metric"
+    `https://api.open-meteo.com/v1/forecast?latitude=20.5453&longitude=105.9122&current=temperature`
   );
-  return response.data.main.temp;
+  return response.data.current.temperature;
 };
 
 // Authentication

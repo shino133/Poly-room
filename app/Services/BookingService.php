@@ -4,8 +4,10 @@ namespace App\Services;
 
 use App\Models\Booking;
 
-class BookingService implements CRUDSVInterface{
-    public function getAll($filters = []){
+class BookingService implements CRUDSVInterface
+{
+    public function getAll($filters = [], $perPage)
+    {
 
         $query = Booking::query();
 
@@ -14,24 +16,33 @@ class BookingService implements CRUDSVInterface{
             $query->where('status', 'like', '%' . $search . '%');
         }
 
-        return $query->orderBy('created_at', 'DESC')->paginate(20);
+        return $query->orderBy('created_at', 'DESC')->paginate($perPage);
     }
 
-    public function getById($id){
+    public function getById($id)
+    {
         return Booking::find($id);
     }
 
-    public function create(array $data){
+    public function create(array $data)
+    {
         return Booking::create($data);
     }
 
-    public function update($id, array $data){
+    public function update($id, array $data)
+    {
         $booking = Booking::find($id);
         $booking->update($data);
         return $booking;
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         return Booking::destroy($id);
+    }
+
+    public function getBookingHistory($userId)
+    {
+        return Booking::where('user_id', $userId)->orderBy('created_at', 'DESC')->paginate(20);
     }
 }
