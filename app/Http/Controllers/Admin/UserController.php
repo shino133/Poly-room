@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Traits\Paginates;
 use Illuminate\Http\Request;
-use App\Services\ControlHelper;
 use App\Http\Resources\UserCrud;
+use App\Services\ServiceFactory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -18,21 +18,21 @@ class UserController extends Controller
     use Paginates;
 
     protected $userServive;
- 
+
     public function __construct(ServiceFactory $serviceFactory)
     {
         $this->userServive = $serviceFactory->make('user');
     }
-    
+
     public function index(Request $res)
     {
-        
-        $perPage = $res->input('perPage', 20);
+
+        $perPage = $res->input('perPage', 10);
         $child = $this->userServive->getAll($filters = [], $perPage);
         $formattedRooms = UserCrud::collection($child->items());
         return $this->formatResponse($formattedRooms, $child);
     }
-    public function create()
+    public function create(Request $request)
     {
         //
         // Validate the request
