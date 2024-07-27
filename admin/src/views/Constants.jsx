@@ -51,6 +51,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#84a5fa",
     hoverColor: "#96b2fb",
+    timeRange: "Hôm qua",
   },
   {
     name: "Tổng số lượt đặt",
@@ -58,6 +59,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#5050b2",
     hoverColor: "#6d6db2",
+    timeRange: "30 ngày",
   },
   {
     name: "Lượt đặt thành công",
@@ -65,6 +67,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#7978e9",
     hoverColor: "#8b8eec",
+    timeRange: "30 ngày",
   },
   {
     name: "Lượt đặt thất bại",
@@ -72,6 +75,7 @@ const initialDashboardStats = [
     percent: 0,
     color: "#f3797e",
     hoverColor: "#ff8f7e",
+    timeRange: "30 ngày",
   },
 ];
 
@@ -102,9 +106,10 @@ export const DashboardStats = () => {
         {
           name: "Lượt đặt hôm nay",
           value: stats.data.today,
-          percent: 24,
+          percent: stats.data.booking_rate_by_day,
           color: "#84a5fa",
           hoverColor: "#96b2fb",
+          timeRange: "Hôm qua",
         },
         {
           name: "Tổng số lượt đặt",
@@ -112,6 +117,7 @@ export const DashboardStats = () => {
           percent: stats.data.booking_rate_by_month,
           color: "#5050b2",
           hoverColor: "#6d6db2",
+          timeRange: "30 ngày",
         },
         {
           name: "Lượt đặt thành công",
@@ -119,6 +125,7 @@ export const DashboardStats = () => {
           percent: stats.data.confirmed_rate_by_month,
           color: "#7978e9",
           hoverColor: "#8b8eec",
+          timeRange: "30 ngày",
         },
         {
           name: "Lượt đặt thất bại",
@@ -126,6 +133,7 @@ export const DashboardStats = () => {
           percent: stats.data.cancelled_rate_by_month,
           color: "#f3797e",
           hoverColor: "#ff8f7e",
+          timeRange: "30 ngày",
         },
       ]);
     };
@@ -152,7 +160,7 @@ export const DashboardStats = () => {
           <CountUpComponent endValue={item.value} />
         </p>
         <p>
-          <CountUpComponent endValue={item.percent} />% (30 ngày)
+          <CountUpComponent endValue={item.percent} />% ({item.timeRange})
         </p>
       </div>
     </div>
