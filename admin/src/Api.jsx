@@ -14,8 +14,12 @@ export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };
 
-export const getUserData = () => {
-  return Api.getRequest("/user");
+export const getUserData = (perPage, page) => {
+  return Api.getRequest("/user?perPage=" + perPage + "&page=" + page);
+};
+
+export const findUser = (id) => {
+  return Api.getRequest(`/user/${id}`);
 };
 
 export const getMyData = () => {
