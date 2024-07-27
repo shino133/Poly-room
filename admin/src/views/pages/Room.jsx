@@ -1,62 +1,10 @@
-<<<<<<< HEAD
-import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { IconButton } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
-import { Skeleton } from "@mui/material";
-import {
-  statusTranslations,
-  roomTypeTranslations,
-  roomTypeMap,
-} from "../Constants";
-import TablePagination from "@mui/material/TablePagination";
-import { getRoomDataPerPage, addRoom, deleteRoom, editRoom } from "../../Api";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import AddIcon from "@mui/icons-material/Add";
-import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-
-=======
-<<<<<<< Updated upstream
-
-export default function Room(){
-    return (
-        <div>
-            <h2 className="">
-                Room Pages
-            </h2>
-        </div>
-    )
-}
-=======
 import React, { useEffect, useState } from "react";
 import {
   statusTranslations,
   roomTypeTranslations,
   roomTypeMap,
 } from "../../constants";
-import {
-  getRoomDataPerPage,
-  addRoom,
-  deleteRoom,
-  editRoom
-} from "../../Api";
+import { getRoomDataPerPage, addRoom, deleteRoom, editRoom } from "../../Api";
 import {
   Table,
   TableBody,
@@ -86,7 +34,6 @@ import {
   TextField,
 } from "../../constants/Mui";
 
->>>>>>> admin_page
 export default function Room() {
   const [rooms, setRooms] = useState(null);
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
@@ -254,11 +201,7 @@ export default function Room() {
 
     const urlEncodedData = new URLSearchParams();
     for (const key in data) {
-<<<<<<< HEAD
-      if (data.hasOwnProperty(key)) {
-=======
       if (Object.prototype.hasOwnProperty.call(data, key)) {
->>>>>>> admin_page
         urlEncodedData.append(key, data[key]);
       }
     }
@@ -447,15 +390,8 @@ export default function Room() {
         onClose={handleCloseSnack}
         message={snackMsg}
         action={action}
-<<<<<<< HEAD
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-=======
->>>>>>> admin_page
+        // anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
     </div>
   );
 }
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
->>>>>>> admin_page

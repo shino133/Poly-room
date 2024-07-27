@@ -7,6 +7,16 @@ export default function Booking() {
   const [endTime, setEndTime] = useState("");
   const [note, setNote] = useState("");
 
+  const handleSubmit = (e) => { 
+    e.preventDefault();
+    console.log({
+      room_id: roomCode,
+      start_at: startTime,
+      end_at: endTime,
+      note:note
+    });
+  }
+
   return (
     <>
       <div className="px-4">
