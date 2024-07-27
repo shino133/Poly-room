@@ -22,6 +22,11 @@ import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function User() {
   const [users, setUsers] = useState(null);
@@ -38,6 +43,15 @@ export default function User() {
   const [snackMsg, setSnackMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState(null);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword2, setShowPassword2] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const handleCloseSnack = (event, reason) => {
     if (reason === "clickaway") {
@@ -127,6 +141,10 @@ export default function User() {
   const handleOpenAddDialog = () => {
     setIsEditing(false);
     // empty the fields
+    setName("");
+    setEmail("");
+    setPassword("");
+    setPasswordConfirmation("");
     setAddDialogOpen(true);
   };
 
@@ -339,6 +357,7 @@ export default function User() {
               onChange={(e) => setName(e.target.value)}
               label="Tên"
               variant="outlined"
+              required
             />
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
@@ -347,22 +366,56 @@ export default function User() {
               onChange={(e) => setEmail(e.target.value)}
               label="Email"
               variant="outlined"
+              type="email"
+              required
             />
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
-            <TextField
+            <InputLabel htmlFor="outlined-adornment-password">
+              {isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
-              variant="outlined"
             />
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
-            <TextField
+            <InputLabel htmlFor="outlined-adornment-password">
+              Nhập lại mật khẩu
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword2 ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword2}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               label="Nhập lại mật khẩu"
-              variant="outlined"
             />
           </FormControl>
         </DialogContent>
