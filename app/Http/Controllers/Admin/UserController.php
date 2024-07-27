@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Http\Resources\UserCrud;
 use App\Traits\Paginates;
 use Illuminate\Http\Request;
+use App\Services\ControlHelper;
+use App\Http\Resources\UserCrud;
 use Illuminate\Support\Facades\DB;
-use App\Services\ServiceFactory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
+
 
 class UserController extends Controller
 {
@@ -28,11 +31,37 @@ class UserController extends Controller
         $child = $this->userServive->getAll($filters = [], $perPage);
         $formattedRooms = UserCrud::collection($child->items());
         return $this->formatResponse($formattedRooms, $child);
-
     }
     public function create()
     {
-        
+        //
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => [
+                'required',
+                'confirmed',
+                Password::min(8)->mixedCase()->numbers()->symbols()
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            // Create a new user
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+            ]);
+
+            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User creation failed', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function show(string $id)
@@ -56,9 +85,38 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
     {
-        //
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            // Find the user by ID
+            $user = User::findOrFail($id);
+
+            // Update user details
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+            $user->save();
+
+            return response()->json(['message' => 'User updated successfully', 'status' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User not found or update failed', 'status' => 'error'], 404);
+        }
     }
 
     public function destroy(string $id)
@@ -78,7 +136,6 @@ class UserController extends Controller
             DB::commit();
 
             return response()->json(['message' => 'User deleted successfully'], 200);
-
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);
