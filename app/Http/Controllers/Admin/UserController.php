@@ -24,9 +24,9 @@ class UserController extends Controller
     public function index(Request $res)
     {
         $perPage = $res->input('perPage', 10);
-        $child = $this->userServive->getAll($filters = [], $perPage);
-        $formattedRooms = UserCrud::collection($child->items());
-        return $this->formatResponse($formattedRooms, $child);
+        $user = $this->userServive->getAll($filters = [], $perPage);
+        $formattedRooms = UserCrud::collection($user->items());
+        return $this->formatResponse($formattedRooms, $user);
     }
   
 
