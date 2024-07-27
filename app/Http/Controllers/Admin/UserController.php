@@ -8,43 +8,33 @@ use App\Http\Resources\UserCrud;
 use App\Traits\Paginates;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\ServiceFactory;
 
 class UserController extends Controller
 {
     use Paginates;
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    protected $userServive;
+ 
+    public function __construct(ServiceFactory $serviceFactory)
     {
-        //
-        $user = User::query()->paginate(10);
-
-        $formattedRooms = UserCrud::collection($user->items());
-
-        return $this->formatResponse($formattedRooms, $user);
+        $this->userServive = $serviceFactory->make('user');
+    }
+    
+    public function index(Request $res)
+    {
+        
+        $perPage = $res->input('perPage', 20);
+        $child = $this->userServive->getAll($filters = [], $perPage);
+        $formattedRooms = UserCrud::collection($child->items());
+        return $this->formatResponse($formattedRooms, $child);
 
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $user = User::find($id);
@@ -55,9 +45,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
@@ -69,17 +56,11 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //

@@ -13,6 +13,8 @@ class ServiceFactory
                 return app(RoomChildService::class);
             case 'booking':
                 return app(BookingService::class);
+            case 'user':
+                return app(UserService::class);
             default:
                 throw new \Exception("Service not found.");
         }
