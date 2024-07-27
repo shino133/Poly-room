@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\User;
 use App\Traits\Paginates;
 use Illuminate\Http\Request;
 use App\Services\ControlHelper;
@@ -10,8 +9,6 @@ use App\Http\Resources\UserCrud;
 use App\Services\ServiceFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignupRequest;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -32,36 +29,16 @@ class UserController extends Controller
         return $this->formatResponse($formattedRooms, $user);
     }
 
-    public function store(Request $request)
+    public function store(SignupRequest $request)
     {
-        //
-        // Validate the request
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)->mixedCase()->numbers()->symbols()
-            ]
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         try {
-            // Create a new user
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => bcrypt($request->input('password')),
-            ]);
-
-            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+            $user = $this->userServive->create($request->validated());
+            $res =  response()->json(['message' => 'User created successfully', 'user' => $user], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'User creation failed', 'error' => $e->getMessage()], 500);
+            $res = ControlHelper::handleExc($e);
         }
+
+        return $res;
     }
 
 
@@ -69,10 +46,12 @@ class UserController extends Controller
     {
         try {
             $user = $this->userServive->getById($id);
-            return response()->json(new UserCrud($user));
+            $res = response()->json(new UserCrud($user));
         } catch (\Exception $e) {
-            return ControlHelper::handleExc($e);
+            $res = ControlHelper::handleExc($e);
         }
+
+        return $res;
     }
 
     public function update(SignupRequest $request, $id)

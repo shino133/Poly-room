@@ -7,7 +7,6 @@ use App\Services\ControlHelper;
 use App\Http\Resources\RoomCrud;
 use App\Services\ServiceFactory;
 use App\Http\Requests\RoomRequest;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

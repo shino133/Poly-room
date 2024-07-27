@@ -33,6 +33,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
 
         Route::get('/statistic', [DashboardController::class, 'total']);
+        Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
+
     });
 
 
@@ -42,7 +44,9 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('client')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/room', [RoomController::class, 'index'])->name('room.index');
         Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
+        Route::get('/history', [UserBookController::class, 'history'])->name('booking.history');
     });
     
     Route::post('/signup', [AuthController::class, 'signup']);
