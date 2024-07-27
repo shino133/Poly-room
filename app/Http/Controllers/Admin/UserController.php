@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Traits\Paginates;
 use Illuminate\Http\Request;
 use App\Services\ControlHelper;
@@ -9,6 +10,8 @@ use App\Http\Resources\UserCrud;
 use App\Services\ServiceFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignupRequest;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -54,23 +57,45 @@ class UserController extends Controller
         return $res;
     }
 
-    public function update(SignupRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        try {
-            $this->userServive->update($id, $request->validated());
-            $res = response()->json(['message' => 'Room Type updated successfully'], 200);
-        } catch (\Exception $e) {
-            $res = ControlHelper::handleExc($e);
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => [
+                'confirmed',
+                Password::min(8)->mixedCase()->numbers()->symbols()
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        return $res;
+        try {
+            // Find the user by ID
+            $user = User::findOrFail($id);
+
+            // Update user details
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+            $user->save();
+
+            return response()->json(['message' => 'User updated successfully', 'status' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User not found or update failed', 'status' => 'error'], 404);
+        }
     }
 
     public function destroy(string $id)
     {
         try {
             $this->userServive->delete($id);
-            $res = response()->json(['message' => 'Room Type deleted successfully'], 200);
+            $res = response()->json(['message' => 'User deleted successfully'], 200);
         } catch (\Exception $e) {
             $res = ControlHelper::handleExc($e);
         }
