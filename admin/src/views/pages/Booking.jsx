@@ -1,4 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import { getRoomData } from "../../Api";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
@@ -6,16 +11,35 @@ export default function Booking() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [note, setNote] = useState("");
+  const [rooms, setRooms] = useState([]);
+  const [options, setOptions] = useState([]);
 
-  const handleSubmit = (e) => { 
+  useEffect(() => {
+    getRoomData() // Convert to one-based index for API
+      .then(({ data }) => {
+        setRooms(data);
+        console.log("rooms", data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    const newOptions = [];
+    for (let i = 0; i < 10; i++) {
+      newOptions.push({ label: `This is option ${i}`, value: i });
+    }
+    setOptions(newOptions);
+  }, []);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log({
       room_id: roomCode,
       start_at: startTime,
       end_at: endTime,
-      note:note
+      note: note,
     });
-  }
+  };
 
   return (
     <>
@@ -24,73 +48,24 @@ export default function Booking() {
           Đặt phòng
         </h1>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="roomCode" className="block font-medium">
-              Mã phòng:
-            </label>
-            <input
-              type="text"
-              id="roomCode"
-              name="roomCode"
-              value={roomCode}
-              onChange={(e) => setRoomCode(e.target.value)}
-              placeholder="Vui lòng nhập mã"
-              className="rounded border-gray-300 border p-2 w-full"
-              required
-            />
+        <form>
+          <div className="max-w-[500px] mx-auto mt-10">
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Chọn phòng</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                label="Chọn phòng"
+                value={roomCode}
+                onChange={(e) => setRoomCode(e.target.value)}
+              >
+                {options.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
-          <div className="mb-4 flex gap-4">
-            <div className="flex-1">
-              <label htmlFor="startTime" className="block font-medium">
-                Bắt đầu:
-              </label>
-              <input
-                type="datetime-local"
-                id="startTime"
-                name="startTime"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="rounded border-gray-300 border p-2 w-full"
-                required
-              />
-            </div>
-
-            <div className="flex-1">
-              <label htmlFor="endTime" className="block font-medium">
-                Kết thúc:
-              </label>
-              <input
-                type="datetime-local"
-                id="endTime"
-                name="endTime"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                className="rounded border-gray-300 border p-2 w-full"
-                required
-              />
-            </div>
-          </div>
-          <div className="">
-            <label htmlFor="note" className=" font-medium">
-              Ghi chú:
-            </label>
-            <textarea
-              id="note"
-              name="note"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              className="rounded border-gray-300 border p-2 w-full"
-            >
-              Ngày:
-            </textarea>{" "}
-          </div>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Gửi
-          </button>
         </form>
       </div>
     </>
