@@ -34,7 +34,7 @@ export default function Booking() {
 
   return (
     <>
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+      <div  className="bg-white p-8 m-24 rounded-lg shadow-lg w-5/4">
         <h1 className="text-2xl font-bold mb-4">Book a Classroom</h1>
         <form
           onSubmit={onSubmit}
