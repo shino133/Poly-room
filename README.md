@@ -1,41 +1,46 @@
-# laravel-react-example
-1. Giới thiệu
-Tên dự án: FPoly Booking
-Mô tả ngắn gọn: Hệ thống đặt phòng dành cho giảng viên và sinh viên.
-Phiên bản: 1.0.0
-Tác giả: CLB IT - FPoly Hà Nam
-Ngày: 26/07/2024
-## Các tính năng chính:
-Đặt phòng theo ngày và giờ.
-Quản lý lịch sử đặt phòng.
-Tạo và quản lý tài khoản người dùng.
-Thông báo qua email về trạng thái đặt phòng.
+# FPoly Booking
 
-2. Cài đặt và triển khai
+## Giới thiệu  
+Tên dự án: FPoly Booking  
+Mô tả ngắn gọn: Hệ thống đặt phòng dành cho giảng viên và sinh viên.  
+Phiên bản: 1.0.0  
+Tác giả: CLB IT - FPoly Hà Nam  
+Ngày: 26/07/2024
+
+## Các tính năng chính:
+Đặt phòng theo ngày và giờ.  
+Quản lý lịch sử đặt phòng.  
+Tạo và quản lý tài khoản người dùng.  
+Thông báo qua email về trạng thái đặt phòng.  
+
+## Cài đặt và triển khai  
 Phần mềm: PHP 8.2+, MySQL 5.7+, Composer, Laravel 8.x.
-# Hướng dẫn cài đặt
-Clone repository từ GitHub:
-git clone https://github.com/example/product-management.git
-cd product-management
+
+## Hướng dẫn cài đặt
+Clone repository từ GitHub:  
+`git clone https://github.com/shino133/Poly-room.git`
+
+`cd Poly-room`
 
 ## Cài đặt các package cần thiết:
-composer install
+`composer install`
 
 ### Thiết lập admin
-1. cd admin
-2. npm install
-3. Tạo file .env
-4. Cấu hình file env (copy .env.example)
-5. npm run dev 
+1. `cd admin`  
+2. `npm install`  
+3. Tạo file .env  
+4. Cấu hình file env (copy .env.example)  
+5. `npm run dev`  
 
 ### Thiết lập client
-1. cd client
-2. npm install
-3. Tạo file .env
-4. Cấu hình file env (copy .env.example) 
-5. npm run dev 
+1. `cd client`  
+2. `npm install`  
+3. Tạo file .env  
+4. Cấu hình file env (copy .env.example)  
+5. `npm run dev`  
 
 ## Cấu hình tệp .env:
+```
 APP_NAME=ProductManagement
 APP_ENV=local
 APP_KEY=
@@ -55,16 +60,15 @@ SESSION_ENCRYPT=false
 SESSION_PATH=/
 SESSION_DOMAIN=http://127.0.0.1:3000
 SANCTUM_STATEFUL_DOMAINS=http://127.0.0.1:3000
+```
 ## Tạo app key 
-php artisan key:generate
+`php artisan key:generate`
 
 ## Chạy migrations và seed database:
-php artisan migrate --seed
+`php artisan migrate --seed`
 
 ## Khởi động server:
-php artisan serve
-
-
+`php artisan serve`
 
 ## Setup Mailtrap test  
 <pre>
