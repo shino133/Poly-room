@@ -8,6 +8,7 @@ use App\Http\Resources\UserCrud;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignupRequest;
 use App\Services\ServiceFactory;
+use App\Services\ControlHelper;
 
 class UserController extends Controller
 {
@@ -23,42 +24,11 @@ class UserController extends Controller
     public function index(Request $res)
     {
         $perPage = $res->input('perPage', 10);
-        $child = $this->userServive->getAll($filters = [], $perPage);
-        $formattedRooms = UserCrud::collection($child->items());
-        return $this->formatResponse($formattedRooms, $child);
+        $user = $this->userServive->getAll($filters = [], $perPage);
+        $formattedRooms = UserCrud::collection($user->items());
+        return $this->formatResponse($formattedRooms, $user);
     }
   
-    public function create(Request $request)
-    {
-        //
-        // Validate the request
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => [
-                'required',
-                'confirmed',
-                Password::min(8)->mixedCase()->numbers()->symbols()
-            ]
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        try {
-            // Create a new user
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => bcrypt($request->input('password')),
-            ]);
-
-            return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'User creation failed', 'error' => $e->getMessage()], 500);
-        }
-    }
 
     public function show(string $id)
     {
