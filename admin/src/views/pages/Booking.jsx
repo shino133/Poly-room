@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
-  const [userCode, setUserCode] = useState("");
+  // const [userCode, setUserCode] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [date, setDate] = useState("");

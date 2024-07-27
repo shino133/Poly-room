@@ -1,17 +1,7 @@
-import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import {
-  FaCube,
-  FaPlus,
-  FaCalendarAlt,
-  FaHistory,
-  FaChartLine,
-  FaUsers,
-} from "react-icons/fa";
-import { IoGrid } from "react-icons/io5";
 import { useSidebarContext } from "../contexts/Support";
-import { navigation } from "../views/Constants";
+import { navigation } from "../constants";
 
 // Container for the entire sidebar including the toggle button
 const SidebarContainer = styled.div`
@@ -65,19 +55,17 @@ const IconContainer = styled.div`
   font-size: 20px; // Size of icons
 `;
 
-const Sidebar = () => {
+export default function Sidebar() {
   const { isOpen } = useSidebarContext();
 
   return (
     <SidebarContainer isOpen={isOpen}>
-      {navigation.map((item) => (
-        <MenuItem to={item.to} isOpen={isOpen}>
+      {navigation.map((item, index) => (
+        <MenuItem to={item.to} isOpen={isOpen} key={item.name + index}>
           <IconContainer isOpen={isOpen}>{item.icon}</IconContainer>
           {isOpen && item.name}
         </MenuItem>
       ))}
     </SidebarContainer>
   );
-};
-
-export default Sidebar;
+}

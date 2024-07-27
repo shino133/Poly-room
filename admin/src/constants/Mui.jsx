@@ -1,0 +1,26 @@
+// mui.jsx
+export { default as Table } from "@mui/material/Table";
+export { default as TableBody } from "@mui/material/TableBody";
+export { default as TableCell } from "@mui/material/TableCell";
+export { default as TableContainer } from "@mui/material/TableContainer";
+export { default as TableHead } from "@mui/material/TableHead";
+export { default as TableRow } from "@mui/material/TableRow";
+export { default as Paper } from "@mui/material/Paper";
+export { IconButton } from "@mui/material";
+export { Delete, Edit } from "@mui/icons-material";
+export { default as Skeleton } from "@mui/material/Skeleton";
+export { default as TablePagination } from "@mui/material/TablePagination";
+export { default as Button } from "@mui/material/Button";
+export { default as Dialog } from "@mui/material/Dialog";
+export { default as DialogActions } from "@mui/material/DialogActions";
+export { default as DialogContent } from "@mui/material/DialogContent";
+export { default as DialogContentText } from "@mui/material/DialogContentText";
+export { default as DialogTitle } from "@mui/material/DialogTitle";
+export { default as AddIcon } from "@mui/icons-material/Add";
+export { default as Snackbar } from "@mui/material/Snackbar";
+export { default as CloseIcon } from "@mui/icons-material/Close";
+export { default as FormControl } from "@mui/material/FormControl";
+export { default as InputLabel } from "@mui/material/InputLabel";
+export { default as MenuItem } from "@mui/material/MenuItem";
+export { default as Select } from "@mui/material/Select";
+export { default as TextField } from "@mui/material/TextField";

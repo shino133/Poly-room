@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import people from "../../assets/people.svg";
-import { getWeather, getStatistics } from "../../Api";
+import { useState, useEffect } from "react";
 import { FiSun } from "react-icons/fi";
-import { DashboardStats } from "../Constants";
+import people from "../../assets/people.svg";
+import { getWeather } from "../../Api";
+import { DashboardStats } from "../../components";
 
 export default function Dashboard() {
   const [weather, setWeather] = useState(null);
