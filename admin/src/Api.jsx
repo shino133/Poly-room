@@ -22,6 +22,18 @@ export const findUser = (id) => {
   return Api.getRequest(`/user/${id}`);
 };
 
+export const addUser = (params) => {
+  return Api.postRequest("/user", params);
+};
+
+export const editUser = (id, params) => {
+  return Api.putRequest(`/user/${id}`, params);
+};
+
+export const deleteUser = (id) => {
+  return Api.deleteRequest(`/user/${id}`);
+};
+
 export const getMyData = () => {
   return Api.getRequest("/me");
 };

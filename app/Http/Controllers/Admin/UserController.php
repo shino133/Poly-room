@@ -32,7 +32,8 @@ class UserController extends Controller
         $formattedRooms = UserCrud::collection($child->items());
         return $this->formatResponse($formattedRooms, $child);
     }
-    public function create(Request $request)
+
+    public function store(Request $request)
     {
         //
         // Validate the request

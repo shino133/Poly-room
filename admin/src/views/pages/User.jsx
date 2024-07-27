@@ -9,9 +9,8 @@ import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { Skeleton } from "@mui/material";
-import { roomTypeTranslations, roomTypeMap } from "../Constants";
 import TablePagination from "@mui/material/TablePagination";
-import { getUserData, addRoom, deleteRoom, editRoom } from "../../Api";
+import { getUserData, addUser, deleteUser, editUser } from "../../Api";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -22,25 +21,23 @@ import AddIcon from "@mui/icons-material/Add";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 
 export default function User() {
-  const [rooms, setRooms] = useState(null);
+  const [users, setUsers] = useState(null);
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
-  const [roomIdToDelete, setRoomIdToDelete] = useState(null);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [addDialogOpen, setAddDialogOpen] = React.useState(false);
-  const [roomType, setRoomType] = React.useState("");
-  const [roomStatus, setRoomStatus] = React.useState("");
-  const [roomCode, setRoomCode] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
   const [snackMsg, setSnackMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [roomIdToUpdate, setRoomIdToUpdate] = useState(null);
+  const [userIdToUpdate, setUserIdToUpdate] = useState(null);
 
   const handleCloseSnack = (event, reason) => {
     if (reason === "clickaway") {
@@ -52,14 +49,14 @@ export default function User() {
 
   const handleClose = () => {
     setOpen(false);
-    setRoomIdToDelete(null);
+    setUserIdToDelete(null);
   };
 
   useEffect(() => {
     getUserData(rowsPerPage, page + 1)
       .then(({ data }) => {
-        setRooms(data);
-        console.log("rooms", data);
+        setUsers(data);
+        console.log("users", data);
       })
       .catch((error) => {
         console.log(error);
@@ -70,9 +67,6 @@ export default function User() {
     return [...Array(rowsNum)].map((row, index) => (
       <TableRow key={index}>
         <TableCell component="th" scope="row">
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
           <Skeleton animation="wave" variant="text" />
         </TableCell>
         <TableCell>
@@ -99,21 +93,21 @@ export default function User() {
 
   const handleDelete = async () => {
     try {
-      await deleteRoom(roomIdToDelete);
-      setRooms((prevRooms) => ({
-        ...prevRooms,
-        data: prevRooms.data.filter((room) => room.id !== roomIdToDelete),
+      await deleteUser(userIdToDelete);
+      setUsers((prevUsers) => ({
+        ...prevUsers,
+        data: prevUsers.data.filter((user) => user.id !== userIdToDelete),
       }));
       handleClose();
-      setSnackMsg("Xóa phòng thành công!");
+      setSnackMsg("Xóa người dùng thành công!");
       setSnackOpen(true);
     } catch (error) {
-      console.error("Failed to delete room:", error);
+      console.error("Failed to delete user:", error);
     }
   };
 
   const handleClickOpen = (id) => {
-    setRoomIdToDelete(id);
+    setUserIdToDelete(id);
     setOpen(true);
   };
 
@@ -132,9 +126,7 @@ export default function User() {
 
   const handleOpenAddDialog = () => {
     setIsEditing(false);
-    setRoomCode("");
-    setRoomType("");
-    setRoomStatus("");
+    // empty the fields
     setAddDialogOpen(true);
   };
 
@@ -142,54 +134,12 @@ export default function User() {
     setAddDialogOpen(false);
   };
 
-  const handleChangeRoomType = (event) => {
-    setRoomType(event.target.value);
-  };
-
-  const handleChangeRoomStatus = (event) => {
-    setRoomStatus(event.target.value);
-  };
-
-  const handleAddRoom = async () => {
-    const data = new FormData();
-    data.append("code", roomCode);
-    data.append("room_child_id", roomType);
-    data.append("status", roomStatus);
-
-    try {
-      await addRoom(data);
-      setSnackMsg("Thêm phòng thành công!");
-      setSnackOpen(true);
-      handleCloseAddDialog();
-      setRoomCode("");
-      setRoomType("");
-      setRoomStatus("");
-    } catch (error) {
-      handleCloseAddDialog();
-      setSnackMsg("Lỗi: " + error);
-      setSnackOpen(true);
-      console.error("Error:", error);
-    }
-  };
-
-  const handleEditRoom = (room) => {
-    setIsEditing(true);
-    setRoomCode(room.code);
-    setRoomType(roomTypeMap[room.type] || room.type);
-    setRoomStatus(room.status);
-    setRoomIdToUpdate(room.id);
-    setAddDialogOpen(true);
-  };
-
-  const handleChangeRoomCode = (event) => {
-    setRoomCode(event.target.value);
-  };
-
-  const _editRoom = async () => {
+  const handleAddUser = async () => {
     const data = {
-      code: roomCode,
-      room_child_id: roomType,
-      status: roomStatus,
+      name,
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
     };
 
     const urlEncodedData = new URLSearchParams();
@@ -200,18 +150,78 @@ export default function User() {
     }
 
     try {
-      await editRoom(roomIdToUpdate, data);
-      console.log("roomid", roomIdToUpdate);
+      await addUser(data);
+      setSnackMsg("Thêm người dùng thành công!");
+      setSnackOpen(true);
+      handleCloseAddDialog();
+      // empty the fields
+      setName("");
+      setEmail("");
+      setPassword("");
+      setPasswordConfirmation("");
+    } catch (error) {
+      handleCloseAddDialog();
+      if (error.response.status === 422) {
+        setSnackMsg(
+          "Lỗi: " +
+            error.response.data.errors[
+              Object.keys(error.response.data.errors)[0]
+            ]
+        );
+      } else {
+        setSnackMsg("Lỗi: " + error);
+      }
+      setSnackOpen(true);
+      console.error("Error:", error);
+    }
+  };
+
+  const handleEditUser = (user) => {
+    setIsEditing(true);
+    // set the fields
+    setName(user.name);
+    setEmail(user.email);
+    setPassword("");
+    setPasswordConfirmation("");
+    setUserIdToUpdate(user.id);
+    setAddDialogOpen(true);
+  };
+
+  const _editUser = async () => {
+    const data = {
+      name,
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
+    };
+
+    const urlEncodedData = new URLSearchParams();
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        urlEncodedData.append(key, data[key]);
+      }
+    }
+
+    try {
+      await editUser(userIdToUpdate, data);
+      console.log("userid", userIdToUpdate);
       console.log("data312", data);
       handleCloseAddDialog();
-      setRoomCode("");
-      setRoomType("");
-      setRoomStatus("");
-      setSnackMsg("Cập nhật phòng thành công!");
+      // empty the fields
+      setSnackMsg("Cập nhật người dùng thành công!");
       setSnackOpen(true);
     } catch (error) {
       handleCloseAddDialog();
-      setSnackMsg("Lỗi: " + error);
+      if (error.response.status === 422) {
+        setSnackMsg(
+          "Lỗi: " +
+            error.response.data.errors[
+              Object.keys(error.response.data.errors)[0]
+            ]
+        );
+      } else {
+        setSnackMsg("Lỗi: " + error);
+      }
       setSnackOpen(true);
       console.error("Error321:", error);
     }
@@ -251,10 +261,10 @@ export default function User() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {!rooms ? (
+            {!users ? (
               <TableRowsLoader rowsNum={10} />
             ) : (
-              rooms.data.map((row) => (
+              users.data.map((row) => (
                 <TableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -265,7 +275,7 @@ export default function User() {
                   <TableCell>{row.name}</TableCell>
                   <TableCell>{row.email}</TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleEditRoom(row)}>
+                    <IconButton onClick={() => handleEditUser(row)}>
                       <Edit />
                     </IconButton>
                     <IconButton onClick={() => handleClickOpen(row.id)}>
@@ -280,12 +290,12 @@ export default function User() {
       </TableContainer>
       <TablePagination
         component="div"
-        count={rooms?.pagination.total}
+        count={users?.pagination.total}
         page={page}
         onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={"Số phòng mỗi trang"}
+        labelRowsPerPage={"Số người dùng mỗi trang"}
         labelDisplayedRows={({ from, to, count }) => {
           return "" + from + "-" + to + " của " + count;
         }}
@@ -297,12 +307,12 @@ export default function User() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Xóa phòng khỏi hệ thống?"}
+          {"Xóa người dùng khỏi hệ thống?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Thao tác này sẽ xóa phòng khỏi hệ thống. Bạn có chắc chắn muốn tiếp
-            tục?
+            Thao tác này sẽ xóa người dùng khỏi hệ thống. Bạn có chắc chắn muốn
+            tiếp tục?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -319,53 +329,46 @@ export default function User() {
         open={addDialogOpen}
         onClose={handleCloseAddDialog}
       >
-        <DialogTitle>{isEditing ? "Cập nhật phòng" : "Thêm phòng"}</DialogTitle>
+        <DialogTitle>
+          {isEditing ? "Cập nhật người dùng" : "Thêm người dùng"}
+        </DialogTitle>
         <DialogContent>
           <FormControl variant="outlined" fullWidth margin="normal">
             <TextField
-              value={roomCode}
-              onChange={handleChangeRoomCode}
-              label="Mã phòng"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              label="Tên"
               variant="outlined"
             />
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
-            <InputLabel id="demo-simple-select-label">
-              Thể loại phòng
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={roomType}
-              label="Thể loại phòng"
-              onChange={handleChangeRoomType}
-            >
-              <MenuItem value={1}>Phòng họp</MenuItem>
-              <MenuItem value={2}>Văn phòng</MenuItem>
-              <MenuItem value={4}>Phòng học</MenuItem>
-              <MenuItem value={5}>Phòng tự học</MenuItem>
-              <MenuItem value={-1}>Khác</MenuItem>
-            </Select>
+            <TextField
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              label="Email"
+              variant="outlined"
+            />
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
-            <InputLabel id="demo-simple-select-label">Trạng thái</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={roomStatus}
-              label="Trạng thái"
-              onChange={handleChangeRoomStatus}
-            >
-              <MenuItem value={"Available"}>Có sẵn</MenuItem>
-              <MenuItem value={"Occupied"}>Đã có người</MenuItem>
-              <MenuItem value={"Maintenance"}>Bảo trì</MenuItem>
-              <MenuItem value={"Cleaning"}>Đang dọn dẹp</MenuItem>
-            </Select>
+            <TextField
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+              variant="outlined"
+            />
+          </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal">
+            <TextField
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              label="Nhập lại mật khẩu"
+              variant="outlined"
+            />
           </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddDialog}>Hủy bỏ</Button>
-          <Button onClick={isEditing ? _editRoom : handleAddRoom}>
+          <Button onClick={isEditing ? _editUser : handleAddUser}>
             {isEditing ? "Cập nhật" : "Thêm"}
           </Button>
         </DialogActions>
