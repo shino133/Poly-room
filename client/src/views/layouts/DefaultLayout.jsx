@@ -31,7 +31,6 @@ export default function DefaultLayout() {
 
   const onLogout = (ev) => {
     ev.preventDefault();
-
     logoutRequest().then(() => {
       setCurrentUser({});
       setUserToken(null);
@@ -45,7 +44,7 @@ export default function DefaultLayout() {
   return (
     <>
     <div className="bg-slate-100">
-    <Header/>
+    <Header onLogout={onLogout}/>
     <Outlet/>
     <Footer/>
     </div>

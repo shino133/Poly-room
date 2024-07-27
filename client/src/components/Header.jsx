@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/fpt-poly.png";
 
-function Header() {
+function Header({onLogout}) {
   const [scrolled, setScrolled] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,10 +43,7 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Link
-                to="/booking"
-                className="hover:text-blue-500 transition-colors"
-              >
+              <Link to="/booking" className="hover:text-blue-500 transition-colors">
                 Booking
               </Link>
             </li>
@@ -88,7 +86,7 @@ function Header() {
           >
             <span className="absolute inset-0 bg-gradient-to-r from-gray-200 to-transparent transform -translate-x-full group-hover:translate-x-1/2 transition-transform duration-300"></span>
             <span className="absolute inset-0 bg-gradient-to-l from-gray-200 to-transparent transform translate-x-full group-hover:-translate-x-1/2 transition-transform duration-300"></span>
-            <span className="relative z-10">Log Out</span>
+            <Link onClick={onLogout}><span className="relative z-10">Log Out</span></Link>
           </div>
         </div>
       </div>
