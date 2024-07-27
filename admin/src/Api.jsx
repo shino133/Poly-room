@@ -6,12 +6,32 @@ export const getRoomData = () => {
   return Api.getRequest("/room");
 };
 
+export const getRoomDataPerPage = (perPage, page) => {
+  return Api.getRequest(`/room?perPage=${perPage}&page=${page}`);
+};
+
 export const getDashboardData = () => {
   return Api.getRequest("/dashboard");
 };
 
-export const getUserData = () => {
-  return Api.getRequest("/user");
+export const getUserData = (perPage, page) => {
+  return Api.getRequest("/user?perPage=" + perPage + "&page=" + page);
+};
+
+export const findUser = (id) => {
+  return Api.getRequest(`/user/${id}`);
+};
+
+export const addUser = (params) => {
+  return Api.postRequest("/user", params);
+};
+
+export const editUser = (id, params) => {
+  return Api.putRequest(`/user/${id}`, params);
+};
+
+export const deleteUser = (id) => {
+  return Api.deleteRequest(`/user/${id}`);
 };
 
 export const getMyData = () => {
@@ -20,6 +40,18 @@ export const getMyData = () => {
 
 export const getStatistics = () => {
   return Api.getRequest("/statistic");
+};
+
+export const deleteRoom = (id) => {
+  return Api.deleteRequest(`/room/${id}`);
+};
+
+export const addRoom = (params) => {
+  return Api.postRequest("/room", params);
+};
+
+export const editRoom = (id, params) => {
+  return Api.putRequest(`/room/${id}`, params);
 };
 
 export const getWeather = async () => {

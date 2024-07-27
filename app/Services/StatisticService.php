@@ -9,74 +9,156 @@ use Carbon\Carbon;
 
 class StatisticService
 {
-    public function getStatistic()
+    public function getOverviewStats()
     {
         return [
-            'total_users' => 100,
-            'total_rooms' => 50,
-            'total_bookings' => 200,
+            'total_users' => User::count(),
+            'total_rooms' => Room::count(),
+            'total_bookings' => Booking::count(),
         ];
     }
 
-    public function getTopUsers()
+    public function getRecentUsers($limit = 5)
     {
-        return User::orderBy('created_at', 'desc')->limit(5)->get();
+        return User::latest()->limit($limit)->get();
     }
 
-    public function getTopRooms()
+    public function getRecentRooms($limit = 5)
     {
-        return Room::orderBy('created_at', 'desc')->limit(5)->get();
+        return Room::latest()->limit($limit)->get();
     }
 
-    public function getTopBookings()
+    public function getRecentBookings($limit = 5)
     {
-        return Booking::orderBy('created_at', 'desc')->limit(5)->get();
+        return Booking::latest()->limit($limit)->get();
     }
 
-    public function countStatus()
+    public function getBookingStatusCount()
     {
         return [
-            'total_pending' => Booking::where('status', '1')->count(),
-            'total_confirmed' => Booking::where('status', '2')->count(),
-            'total_cancelled' => Booking::where('status', '3')->count(),
+            'pending' => $this->countBookingsByStatus(1),
+            'confirmed' => $this->countBookingsByStatus(2),
+            'cancelled' => $this->countBookingsByStatus(3),
         ];
     }
 
-    public function countTotal()
+    public function countBookingsByStatus($status)
     {
-        return Booking::count();
+        return Booking::where('status', $status)->count();
     }
 
-    public function countToday()
+    public function countBookingsToday()
     {
         return Booking::whereDate('created_at', Carbon::today())->count();
     }
 
-    public function countCurrentMonth()
+    public function countBookingsPreviousDay()
     {
-        return Booking::whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
-            ->count();
+        return Booking::whereDate('created_at', Carbon::yesterday())->count();
     }
 
-    public function countPreviousMonth()
+    public function getDailyBookingRate()
     {
-        return Booking::whereMonth('created_at', Carbon::now()->subMonth()->month)
-            ->whereYear('created_at', Carbon::now()->subMonth()->year)
-            ->count();
+        $current = $this->countBookingsToday();
+        $previous = $this->countBookingsPreviousDay();
+
+        return $this->calculateRate($current, $previous);
     }
 
-    public function getRateByMonth()
+    public function countBookingsCurrentMonth()
     {
-        $current = $this->countCurrentMonth();
-        $previous = $this->countPreviousMonth();
+        return $this->countBookingsByMonth(Carbon::now());
+    }
 
+    public function countBookingsPreviousMonth()
+    {
+        return $this->countBookingsByMonth(Carbon::now()->subMonth());
+    }
+
+    private function countBookingsByMonth($date)
+    {
+        return Booking::whereMonth('created_at', $date->month)
+                      ->whereYear('created_at', $date->year)
+                      ->count();
+    }
+
+    public function getMonthlyBookingRate()
+    {
+        $current = $this->countBookingsCurrentMonth();
+        $previous = $this->countBookingsPreviousMonth();
+
+        return $this->calculateRate($current, $previous);
+    }
+
+    public function getBookingStatusRate()
+    {
+        $total = Booking::count();
+        $statusCount = $this->getBookingStatusCount();
+
+        return [
+            'confirmed' => $this->calculatePercentage($statusCount['confirmed'], $total),
+            'cancelled' => $this->calculatePercentage($statusCount['cancelled'], $total),
+            'pending' => $this->calculatePercentage($statusCount['pending'], $total),
+        ];
+    }
+
+    public function getStatusRateByMonth()
+    {
+        $confirmed = $this->countBookingsByStatusAndMonth(2, Carbon::now());
+        $cancelled = $this->countBookingsByStatusAndMonth(3, Carbon::now());
+        $pending = $this->countBookingsByStatusAndMonth(1, Carbon::now());
+
+        $total = $confirmed + $cancelled + $pending;
+
+        return [
+            'confirmed' => $this->calculatePercentage($confirmed, $total),
+            'cancelled' => $this->calculatePercentage($cancelled, $total),
+            'pending' => $this->calculatePercentage($pending, $total),
+        ];
+    }
+
+    public function getConfirmedBookingRate()
+    {
+        return $this->getBookingRateByStatus(2);
+    }
+
+    public function getCancelledBookingRate()
+    {
+        return $this->getBookingRateByStatus(3);
+    }
+
+    public function getPendingBookingRate()
+    {
+        return $this->getBookingRateByStatus(1);
+    }
+
+    private function getBookingRateByStatus($status)
+    {
+        $current = $this->countBookingsByStatusAndMonth($status, Carbon::now());
+        $previous = $this->countBookingsByStatusAndMonth($status, Carbon::now()->subMonth());
+
+        return $this->calculateRate($current, $previous);
+    }
+
+    private function countBookingsByStatusAndMonth($status, $date)
+    {
+        return Booking::where('status', $status)
+                      ->whereMonth('created_at', $date->month)
+                      ->whereYear('created_at', $date->year)
+                      ->count();
+    }
+
+    private function calculateRate($current, $previous)
+    {
         if ($previous == 0) {
             return $current > 0 ? 100 : 0;
         }
 
-        $rate = (($current - $previous) / $previous) * 100;
+        return (($current - $previous) / $previous) * 100;
+    }
 
-        return $rate;
+    private function calculatePercentage($count, $total)
+    {
+        return $total > 0 ? ($count / $total) * 100 : 0;
     }
 }

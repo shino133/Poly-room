@@ -21,34 +21,61 @@ export const navigation = [
   { name: "Người dùng", to: "/users", icon: <FaUsers /> },
 ];
 
+export const statusTranslations = {
+  Available: "Có sẵn",
+  Occupied: "Đã có người",
+  Maintenance: "Bảo trì",
+  Cleaning: "Đang dọn dẹp",
+};
+
+export const roomTypeMap = {
+  "Conference Room": 1,
+  "Office Room": 2,
+  "Lecture Room": 4,
+  "Break Room": 5,
+};
+
+export const roomTypeTranslations = {
+  "Conference Room": "Phòng họp",
+  "Meeting Room": "Phòng họp",
+  "Office Room": "Văn phòng",
+  "Lecture Room": "Phòng học",
+  "Break Room": "Phòng tự học",
+  Other: "Khác",
+};
+
 const initialDashboardStats = [
   {
     name: "Lượt đặt hôm nay",
     value: 0,
-    percent: "0% (30 ngày)",
+    percent: 0,
     color: "#84a5fa",
     hoverColor: "#96b2fb",
+    timeRange: "Hôm qua",
   },
   {
     name: "Tổng số lượt đặt",
     value: 0,
-    percent: "0% (30 ngày)",
+    percent: 0,
     color: "#5050b2",
     hoverColor: "#6d6db2",
+    timeRange: "30 ngày",
   },
   {
     name: "Lượt đặt thành công",
     value: 0,
-    percent: "0% (30 ngày)",
+    percent: 0,
     color: "#7978e9",
     hoverColor: "#8b8eec",
+    timeRange: "30 ngày",
   },
   {
     name: "Lượt đặt thất bại",
     value: 0,
-    percent: "0% (30 ngày)",
+    percent: 0,
     color: "#f3797e",
     hoverColor: "#ff8f7e",
+    timeRange: "30 ngày",
   },
 ];
 
@@ -79,9 +106,10 @@ export const DashboardStats = () => {
         {
           name: "Lượt đặt hôm nay",
           value: stats.data.today,
-          percent: 24,
+          percent: stats.data.booking_rate_by_day,
           color: "#84a5fa",
           hoverColor: "#96b2fb",
+          timeRange: "Hôm qua",
         },
         {
           name: "Tổng số lượt đặt",
@@ -89,20 +117,23 @@ export const DashboardStats = () => {
           percent: stats.data.booking_rate_by_month,
           color: "#5050b2",
           hoverColor: "#6d6db2",
+          timeRange: "30 ngày",
         },
         {
           name: "Lượt đặt thành công",
-          value: stats.data.detail[0].total_confirmed,
-          percent: 78,
+          value: stats.data.detail[0].confirmed,
+          percent: stats.data.confirmed_rate_by_month,
           color: "#7978e9",
           hoverColor: "#8b8eec",
+          timeRange: "30 ngày",
         },
         {
           name: "Lượt đặt thất bại",
-          value: stats.data.detail[0].total_cancelled,
-          percent: 38,
+          value: stats.data.detail[0].cancelled,
+          percent: stats.data.cancelled_rate_by_month,
           color: "#f3797e",
           hoverColor: "#ff8f7e",
+          timeRange: "30 ngày",
         },
       ]);
     };
@@ -129,7 +160,7 @@ export const DashboardStats = () => {
           <CountUpComponent endValue={item.value} />
         </p>
         <p>
-          <CountUpComponent endValue={item.percent} />% (30 ngày)
+          <CountUpComponent endValue={item.percent} />% ({item.timeRange})
         </p>
       </div>
     </div>

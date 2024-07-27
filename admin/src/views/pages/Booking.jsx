@@ -2,27 +2,25 @@ import { useState } from "react";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
-  const [userCode, setUserCode] = useState("");
+  // const [userCode, setUserCode] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [date, setDate] = useState("");
-  const [note, setNote] = useState(""); // Thêm trạng thái cho ghi chú
+  const [note, setNote] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Xử lý gửi biểu mẫu ở đây
-    console.log("Room Code:", roomCode);
-    console.log("User Code:", userCode);
-    console.log("Start Time:", startTime);
-    console.log("End Time:", endTime);
-    console.log("Date:", date);
-    console.log("Note:", note);
-  };
+  const handleSubmit = (e) => { 
+    e.preventDefault();
+    console.log({
+      room_id: roomCode,
+      start_at: startTime,
+      end_at: endTime,
+      note:note
+    });
+  }
 
   return (
     <>
-      <div className="w-4/5 mx-auto  p-4 rounded-md mt-10">
-        <h1 className="text-center font-sans font-semibold text-3xl pt-3 pb-3">
+      <div className="px-4">
+        <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
           Đặt phòng
         </h1>
 
@@ -42,14 +40,13 @@ export default function Booking() {
               required
             />
           </div>
-
           <div className="mb-4 flex gap-4">
             <div className="flex-1">
               <label htmlFor="startTime" className="block font-medium">
                 Bắt đầu:
               </label>
               <input
-                type="time"
+                type="datetime-local"
                 id="startTime"
                 name="startTime"
                 value={startTime}
@@ -64,7 +61,7 @@ export default function Booking() {
                 Kết thúc:
               </label>
               <input
-                type="time"
+                type="datetime-local"
                 id="endTime"
                 name="endTime"
                 value={endTime}
@@ -84,7 +81,9 @@ export default function Booking() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               className="rounded border-gray-300 border p-2 w-full"
-            />
+            >
+              Ngày:
+            </textarea>{" "}
           </div>
           <button
             type="submit"

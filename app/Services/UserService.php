@@ -1,32 +1,33 @@
 <?php
 
+
 namespace App\Services;
 
-use App\Models\RoomChild;
+use App\Models\User;
 
-class RoomChildService implements CRUDSVInterface
+class UserService implements CRUDSVInterface
 {
     public function getAll($filters = [], $perPage)
     {
-        return RoomChild::orderBy('created_at', 'DESC')->paginate($perPage);
+        return User::orderBy('created_at', 'DESC')->paginate($perPage);
     }
     public function getById($id)
     {
-        return RoomChild::findOrFail($id);
+        return User::findOrFail($id);
     }
     public function create(array $data)
     {
-        return RoomChild::create($data);
+        return User::create($data);
     }
     public function update($id, array $data)
     {
-        $roomChild = RoomChild::findOrFail($id);
+        $roomChild = User::findOrFail($id);
         $roomChild->update($data);
         $roomChild->save();
         return $roomChild;
     }
     public function delete($id)
     {
-        return RoomChild::destroy($id);
+        return User::destroy($id);
     }
 }
