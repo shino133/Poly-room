@@ -5,10 +5,11 @@ import AuthProvider from "./provider/AuthProvider";
 import SidebarProvider from "./provider/SidebarProvider";
 import StateProvider from "./provider/StateProvider";
 
+// Compare this snippet from admin/src/contexts
 export {
   AuthContext,
-  AuthProvider,
   SidebarContext,
+  AuthProvider,
   SidebarProvider,
   StateProvider,
 };

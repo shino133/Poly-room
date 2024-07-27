@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -31,6 +32,61 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 
+=======
+<<<<<<< Updated upstream
+
+export default function Room(){
+    return (
+        <div>
+            <h2 className="">
+                Room Pages
+            </h2>
+        </div>
+    )
+}
+=======
+import React, { useEffect, useState } from "react";
+import {
+  statusTranslations,
+  roomTypeTranslations,
+  roomTypeMap,
+} from "../../constants";
+import {
+  getRoomDataPerPage,
+  addRoom,
+  deleteRoom,
+  editRoom
+} from "../../Api";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Delete,
+  Edit,
+  Skeleton,
+  TablePagination,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  AddIcon,
+  Snackbar,
+  CloseIcon,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "../../constants/Mui";
+
+>>>>>>> admin_page
 export default function Room() {
   const [rooms, setRooms] = useState(null);
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
@@ -198,7 +254,11 @@ export default function Room() {
 
     const urlEncodedData = new URLSearchParams();
     for (const key in data) {
+<<<<<<< HEAD
       if (data.hasOwnProperty(key)) {
+=======
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+>>>>>>> admin_page
         urlEncodedData.append(key, data[key]);
       }
     }
@@ -387,8 +447,15 @@ export default function Room() {
         onClose={handleCloseSnack}
         message={snackMsg}
         action={action}
+<<<<<<< HEAD
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+=======
+>>>>>>> admin_page
       />
     </div>
   );
 }
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
+>>>>>>> admin_page

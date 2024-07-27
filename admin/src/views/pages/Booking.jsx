@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
-  const [userCode, setUserCode] = useState("");
+  // const [userCode, setUserCode] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [note, setNote] = useState("");
@@ -14,7 +14,7 @@ export default function Booking() {
           Đặt phòng
         </h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="roomCode" className="block font-medium">
               Mã phòng:
@@ -22,12 +22,12 @@ export default function Booking() {
             <input
               type="text"
               id="roomCode"
+              name="roomCode"
               value={roomCode}
               onChange={(e) => setRoomCode(e.target.value)}
               placeholder="Vui lòng nhập mã"
               className="rounded border-gray-300 border p-2 w-full"
               required
-              //   disabled
             />
           </div>
           <div className="mb-4 flex gap-4">
