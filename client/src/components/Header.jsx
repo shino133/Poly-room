@@ -24,10 +24,10 @@ function Header({onLogout}) {
   return (
     <div className="flex justify-center items-center">
       <div
-        className={`flex  z-50 rounded-lg fixed top-0 justify-between p-4 items-center transition-all duration-300 ${
+        className={`flex rounded-bl-md rounded-br-md z-50  fixed top-0 justify-between p-4 items-center transition-all duration-300 ${
           scrolled
-            ? "bg-white w-full text-black border-b-2 border-gray-300"
-            : "bg-black w-4/5 text-white shadow-md shadow-slate-50"
+            ? "bg-white w-full text-black  border-gray-300"
+            : "bg-black w-4/5 text-white  shadow-slate-50"
         }`}
       >
         <div className="cursor-pointer">
