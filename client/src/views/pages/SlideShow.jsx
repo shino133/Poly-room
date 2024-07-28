@@ -22,7 +22,7 @@ const Slideshow = () => {
 
   return (
     <div className="slide-container">
-      <Fade>
+      <Fade arrows={false} pauseOnHover={false}>
         {slideImages.map((slideImage, index) => (
           <div key={index}>
             <div style={{ ...divStyle, backgroundImage: `url(${slideImage.url})` }}>
