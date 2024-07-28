@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\RoomCrud;
-use App\Services\ControlHelper;
-use App\Http\Requests\RoomRequest;
-use App\Services\ServiceFactory;
-
 use App\Traits\Paginates;
+use App\Services\ControlHelper;
+use App\Http\Resources\RoomCrud;
+use App\Services\ServiceFactory;
+use App\Http\Requests\RoomRequest;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
@@ -21,16 +21,19 @@ class RoomController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $res)
     {
-        $rooms = $this->roomService->getAll();
+        $filters = $res->only(['status']);
+        $perPage = $res->input('perPage', 20);
+
+        $rooms = $this->roomService->getAll($filters, $perPage);
 
         $formattedRooms = RoomCrud::collection($rooms->items());
 
         return $this->formatResponse($formattedRooms, $rooms);
     }
 
-    
+
     public function store(RoomRequest $request)
     {
         try {
@@ -43,7 +46,7 @@ class RoomController extends Controller
         return $res;
     }
 
-   
+
     public function show(string $id)
     {
         try {
@@ -54,21 +57,20 @@ class RoomController extends Controller
         }
     }
 
-    
+
     public function update(RoomRequest $request, string $id)
     {
         try {
             $this->roomService->update($id, $request->validated());
             $res = response()->json(['message' => 'Room updated successfully', 'status' => 'success'], 200);
-        }
-        catch (\Exception $e) { 
+        } catch (\Exception $e) {
             $res = ControlHelper::handleExc($e);
         }
 
         return $res;
     }
 
-    
+
     public function destroy(string $id)
     {
         try {

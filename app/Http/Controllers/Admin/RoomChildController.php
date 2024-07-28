@@ -8,6 +8,7 @@ use App\Services\ControlHelper;
 use App\Services\ServiceFactory;
 use App\Http\Resources\RoomChildResource;
 use App\Traits\Paginates;
+use Illuminate\Http\Request;
 
 class RoomChildController extends Controller
 {
@@ -20,9 +21,10 @@ class RoomChildController extends Controller
     }
 
 
-    public function index()
+    public function index(Request $res)
     {
-        $child = $this->roomChildService->getAll();
+        $perPage = $res->input('perPage', 20);
+        $child = $this->roomChildService->getAll($filters = [], $perPage);
         $formattedRooms = RoomChildResource::collection($child->items());
         return $this->formatResponse($formattedRooms, $child);
     }

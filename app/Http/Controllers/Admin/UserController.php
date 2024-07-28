@@ -2,108 +2,104 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Http\Resources\UserCrud;
-
+use App\Traits\Paginates;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Services\ControlHelper;
+use App\Http\Resources\UserCrud;
+use App\Services\ServiceFactory;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\SignupRequest;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    use Paginates;
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $userServive;
+
+    public function __construct(ServiceFactory $serviceFactory)
     {
-        //
-        $data = User::query()->paginate(10);
-
-        $list = [
-            'users' => UserCrud::collection($data),
-            'success' => session('success')
-        ];
-
-        return response()->json($list);
-
+        $this->userServive = $serviceFactory->make('user');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index(Request $res)
     {
-        //
+        $perPage = $res->input('perPage', 10);
+        $user = $this->userServive->getAll($filters = [], $perPage);
+        $formattedRooms = UserCrud::collection($user->items());
+        return $this->formatResponse($formattedRooms, $user);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(SignupRequest $request)
     {
-        //
+        try {
+            $user = $this->userServive->create($request->validated());
+            $res =  response()->json(['message' => 'User created successfully', 'user' => $user], 201);
+        } catch (\Exception $e) {
+            $res = ControlHelper::handleExc($e);
+        }
+
+        return $res;
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
-        $user = User::find($id);
-        if ($user) {
-            return new UserCrud($user);
-        } else {
-            return response()->json(['error' => 'User not found'], 404);
+        try {
+            $user = $this->userServive->getById($id);
+            $res = response()->json(new UserCrud($user));
+        } catch (\Exception $e) {
+            $res = ControlHelper::handleExc($e);
+        }
+
+        return $res;
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => [
+                'confirmed',
+                Password::min(8)->mixedCase()->numbers()->symbols()
+            ]
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            // Find the user by ID
+            $user = User::findOrFail($id);
+
+            // Update user details
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            if ($request->filled('password')) {
+                $user->password = bcrypt($request->input('password'));
+            }
+            $user->save();
+
+            return response()->json(['message' => 'User updated successfully', 'status' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'User not found or update failed', 'status' => 'error'], 404);
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-        $user = User::find($id);
-        if ($user) {
-            return new UserCrud($user);
-        } else {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
-        DB::beginTransaction();
         try {
-
-            $user = User::find($id);
-
-            if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
-            }
-
-            $user->delete();
-
-            DB::commit();
-
-            return response()->json(['message' => 'User deleted successfully'], 200);
-
+            $this->userServive->delete($id);
+            $res = response()->json(['message' => 'User deleted successfully'], 200);
         } catch (\Exception $e) {
-            DB::rollback();
-            dd($e);
+            $res = ControlHelper::handleExc($e);
         }
+
+        return $res;
     }
 }
