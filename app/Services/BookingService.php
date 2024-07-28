@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Booking;
+use App\Models\Room;
+use App\Enums\RoomStatusEnum;
 
 class BookingService implements CRUDSVInterface
 {
@@ -21,7 +23,7 @@ class BookingService implements CRUDSVInterface
 
     public function getById($id)
     {
-        return Booking::find($id);
+        return Booking::findOrFail($id);
     }
 
     public function create(array $data)
@@ -31,8 +33,11 @@ class BookingService implements CRUDSVInterface
 
     public function update($id, array $data)
     {
-        $booking = Booking::find($id);
+        $booking = Booking::findOrFail($id);
         $booking->update($data);
+
+        $booking->room->update(['status' => RoomStatusEnum::Occupied]);
+
         return $booking;
     }
 

@@ -40,7 +40,7 @@ class BookingController extends Controller
     public function status(BookingStatusRequest $res)
     {
         try {
-            // switch status of booking
+            //switch status of booking & room
             $validated = $res->validated();
             $this->bookingService->update($validated['id'], $validated);
 
