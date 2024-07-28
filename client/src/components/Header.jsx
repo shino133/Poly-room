@@ -24,10 +24,10 @@ function Header({onLogout}) {
   return (
     <div className="flex justify-center items-center">
       <div
-        className={`flex rounded-bl-md rounded-br-md z-50  fixed top-0 justify-between p-4 items-center transition-all duration-300 ${
+        className={`flex rounded-bl-md rounded-br-md z-50 font-bold fixed top-0 justify-between p-4 items-center transition-all duration-300 ${
           scrolled
             ? "bg-white w-full text-black  border-gray-300"
-            : "bg-black w-4/5 text-white  shadow-slate-50"
+            : " w-4/5 bg-white  shadow-slate-50"
         }`}
       >
         <div className="cursor-pointer">
@@ -80,8 +80,8 @@ function Header({onLogout}) {
             </svg>
           </a>
           <div
-            className={`p-1.5 px-5 cursor-pointer font-medium rounded-xl relative overflow-hidden ${
-              scrolled ? "text-white bg-black" : "text-black bg-gray-50"
+            className={`p-1.5 px-5 cursor-pointer font-medium rounded-xl hover:text-black relative overflow-hidden ${
+              scrolled ? "text-white bg-black" : " bg-black text-white"
             } group`}
           >
             <span className="absolute inset-0 bg-gradient-to-r from-gray-200 to-transparent transform -translate-x-full group-hover:translate-x-1/2 transition-transform duration-300"></span>

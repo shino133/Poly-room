@@ -1,8 +1,10 @@
-import banner_bg from "../../assets/banner_bg.jpg"
+import Slideshow from "./SlideShow";
 export default function Dashboard() {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
-      <img
+
+    <div className="relative  w-full h-screen overflow-hidden">
+<Slideshow/>
+      {/* <img
         src={banner_bg}
         alt="banner_bg"
         className="absolute inset-0 object-cover w-full h-full"
@@ -22,6 +24,8 @@ export default function Dashboard() {
           Get Started
         </a>
       </div>
+
+       */}
     </div>
   );
 }
