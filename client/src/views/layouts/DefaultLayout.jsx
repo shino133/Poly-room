@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import { getMyData, logoutRequest } from "../../Api";
 import { Header } from "../../components";
 import { useSidebarContext } from "../../contexts/Support";
+import Slideshow from "../../components/SlideShow";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, setCurrentUser, setUserToken } = useAuthContext();
@@ -41,6 +42,7 @@ export default function DefaultLayout() {
   return (
     <div className="bg-slate-100">
       <Header onLogout={onLogout} />
+      <Slideshow/>
       <Outlet />
       <Footer />
     </div>
