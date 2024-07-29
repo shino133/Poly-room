@@ -3,7 +3,6 @@ import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { useAuthContext } from "../../contexts/Support";
 import { signupRequest } from "../../Api";
-// import { postRequest } from "../services/index.js";
 
 export default function Signup() {
   const { setCurrentUser, setUserToken } = useAuthContext();
@@ -50,15 +49,15 @@ export default function Signup() {
   return (
     <>
       <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-        Signup for free
+        Đăng ký tài khoản
       </h2>
       <p className="mt-2 text-center text-sm text-gray-600">
-        Or{" "}
+        Hoặc{" "}
         <Link
           to="/login"
-          className="font-medium text-indigo-600 hover:text-indigo-500"
+          className="font-medium text-orange-600 hover:text-orange-500"
         >
-          Login with your account
+          đăng nhập 
         </Link>
       </p>
 
@@ -79,7 +78,7 @@ export default function Signup() {
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
             <label htmlFor="full-name" className="sr-only">
-              Full Name
+              Họ và tên
             </label>
             <input
               id="full-name"
@@ -88,13 +87,13 @@ export default function Signup() {
               required
               value={fullName}
               onChange={(ev) => setFullName(ev.target.value)}
-              className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Full Name"
+              className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              placeholder="Họ và tên"
             />
           </div>
           <div>
             <label htmlFor="email-address" className="sr-only">
-              Email address
+              Địa chỉ email
             </label>
             <input
               id="email-address"
@@ -104,13 +103,13 @@ export default function Signup() {
               required
               value={emailInput}
               onChange={(ev) => setEmail(ev.target.value)}
-              className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Email address"
+              className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              placeholder="Địa chỉ email"
             />
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
-              Password
+              Mật khẩu
             </label>
             <input
               id="password"
@@ -120,14 +119,14 @@ export default function Signup() {
               required
               value={passwordInput}
               onChange={(ev) => setPassword(ev.target.value)}
-              className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Password"
+              className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              placeholder="Mật khẩu"
             />
           </div>
 
           <div>
             <label htmlFor="password-confirmation" className="sr-only">
-              Password Confirmation
+              Xác nhận mật khẩu
             </label>
             <input
               id="password-confirmation"
@@ -136,8 +135,8 @@ export default function Signup() {
               required
               value={passwordConfirmation}
               onChange={(ev) => setPasswordConfirmation(ev.target.value)}
-              className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Password Confirmation"
+              className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              placeholder="Xác nhận mật khẩu"
             />
           </div>
         </div>
@@ -145,15 +144,15 @@ export default function Signup() {
         <div>
           <button
             type="submit"
-            className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="group relative flex w-full justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <LockClosedIcon
-                className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                className="h-5 w-5 text-orange-500 group-hover:text-orange-400"
                 aria-hidden="true"
               />
             </span>
-            Signup
+            Đăng ký
           </button>
         </div>
       </form>

@@ -7,13 +7,9 @@ import logo from "../assets/logo/fpt-poly.png"; // Đảm bảo đường dẫn 
 
 function Header({ onLogout }) {
   const [scrolled, setScrolled] = useState(false);
-  const [dataUser, setDataUser] = useState({});
+  const { currentUser,userToken } = useAuthContext();
   const [showUserInfo, setShowUserInfo] = useState(false);
 
-  const { currentUser,userToken } = useAuthContext();
-  if(!userToken){
-   return <Navigate to="/login"/>
-  }
   const handleMouseOver = () => {
     setShowUserInfo(true);
   };
@@ -23,16 +19,6 @@ function Header({ onLogout }) {
   };
 
   useEffect(() => {
-     function getData() {
-      try {
-        setDataUser(currentUser);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-
-    getData();
-
     const handleScroll = () => {
       if (window.scrollY > 0) {
         setScrolled(true);
