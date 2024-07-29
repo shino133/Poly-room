@@ -10,6 +10,7 @@ use App\Http\Resources\UserCrud;
 use App\Services\ServiceFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignupRequest;
+use App\Http\Requests\RoleAndStatusUserRequest;
 
 class UserController extends Controller
 {
@@ -55,14 +56,10 @@ class UserController extends Controller
         return $res;
     }
 
-    public function update(Request $request, $id)
+    public function update(RoleAndStatusUserRequest $request, $id)
     {
         // Validate the request
-        $validator = $request->validate( [
-            'status' => 'required|string|in:1,0',
-            'role' => 'required|string|in:1,0',
-        ]);
-
+        $validator = $request->validated();
         try {
             // Find the user by ID
             $user = User::findOrFail($id);
