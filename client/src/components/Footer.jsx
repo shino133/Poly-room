@@ -3,13 +3,13 @@ import React from "react";
 function Footer() {
     return (
         <>
-            <footer className="bg-gray-900 text-gray-300 py-16">
+            <footer className="bg-black text-gray-300 py-16">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         <div className="col-span-1">
                             <div className="mb-6">
-                                <h6 className="text-white font-semibold mb-4">About Agency</h6>
-                                <p className="text-gray-400">The world has become so fast paced that people don’t want to stand by reading a page of information, they would much rather look at a presentation and understand the message. It has come to a point</p>
+                                <h6 className="text-white font-semibold mb-4">VỀ CHÚNG TÔI</h6>
+                                <p className="text-gray-400">Chào mừng bạn đến với FPT Booking Hà Nam! Chúng tôi tự hào là đơn vị hàng đầu với hệ thống đặt chỗ tiên tiến và đội ngũ hỗ trợ chuyên nghiệp, chúng tôi cam kết mang đến cho bạn trải nghiệm đặt chỗ nhanh chóng và tiện lợi.</p>
                             </div>
                         </div>
                         <div className="col-span-1">
