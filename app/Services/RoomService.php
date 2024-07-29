@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Room;
+use App\Enums\RoomStatusEnum;
 
 use App\Services\CRUDSVInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -38,6 +39,12 @@ class RoomService implements CRUDSVInterface
 
     public function delete($id)
     {
-        return Room::destroy($id);
+        $data = Room::findOrFail($id);
+
+        if ($data['status'] == RoomStatusEnum::Available) {
+            return Room::destroy($id);
+        } else {
+            throw new ModelNotFoundException('Room is using!');
+        }
     }
 }
