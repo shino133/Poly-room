@@ -82,7 +82,7 @@ export default function Booking() {
       })
       .catch((error) => {
         console.error("Error booking room:", error);
-        setSnackMsg("Đặt phòng thất bại. Lỗi: " + error.message);
+        setSnackMsg("Đặt phòng thất bại. Lỗi: " + error.response.data.message);
         setSnackOpen(true);
       });
   };
