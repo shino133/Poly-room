@@ -44,6 +44,9 @@ Route::prefix('admin')->group(function () {
 
 Route::prefix('client')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/me', [AuthController::class, 'me']);
+        
         Route::get('/room', [RoomController::class, 'index'])->name('room.index');
         Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
         Route::get('/history', [UserBookController::class, 'history'])->name('booking.history');
