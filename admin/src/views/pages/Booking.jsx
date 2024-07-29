@@ -7,6 +7,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import FormControl from "@mui/material/FormControl";
+import Button from "@mui/material/Button";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
@@ -80,6 +81,15 @@ export default function Booking() {
                 variant="outlined"
               />
             </FormControl>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#504b8e",
+                marginTop: "1rem",
+              }}
+            >
+              Đặt phòng
+            </Button>
           </div>
         </form>
       </div>
