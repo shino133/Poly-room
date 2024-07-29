@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import { getRoomData } from "../../Api";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import FormControl from "@mui/material/FormControl";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
@@ -11,35 +14,36 @@ export default function Booking() {
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [note, setNote] = useState("");
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = useState(null);
   const [options, setOptions] = useState([]);
+  const [singleSelections, setSingleSelections] = useState([]);
+
+  const fetchRoomData = async () => {
+    try {
+      const { data } = await getRoomData();
+      console.log("rooms", data);
+
+      // if options const is empty array then return;
+      if (options.length > 0) {
+        // options is an empty array
+        return;
+      }
+
+      // Ensure rooms is not null or undefined before mapping
+      const formattedOptions = data?.data.map((room) => ({
+        label: room.code,
+        value: room.id,
+      }));
+      console.log("formattedOptions", formattedOptions);
+      setOptions(formattedOptions);
+    } catch (error) {
+      console.error("Error fetching room data:", error);
+    }
+  };
 
   useEffect(() => {
-    getRoomData() // Convert to one-based index for API
-      .then(({ data }) => {
-        setRooms(data);
-        console.log("rooms", data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    const newOptions = [];
-    for (let i = 0; i < 10; i++) {
-      newOptions.push({ label: `This is option ${i}`, value: i });
-    }
-    setOptions(newOptions);
+    fetchRoomData();
   }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({
-      room_id: roomCode,
-      start_at: startTime,
-      end_at: endTime,
-      note: note,
-    });
-  };
 
   return (
     <>
@@ -50,20 +54,31 @@ export default function Booking() {
 
         <form>
           <div className="max-w-[500px] mx-auto mt-10">
+            <Autocomplete
+              disablePortal
+              options={options}
+              fullWidth={true}
+              renderInput={(params) => (
+                <TextField {...params} label="Mã phòng" />
+              )}
+              noOptionsText="Đang tải dữ liệu..."
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateTimePicker"]}>
+                <DateTimePicker label="Giờ bắt đầu" />
+              </DemoContainer>
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={["DateTimePicker"]}>
+                <DateTimePicker label="Giờ kết thúc" />
+              </DemoContainer>
+            </LocalizationProvider>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Chọn phòng</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                label="Chọn phòng"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
+              <TextField
+                label="Ghi chú"
+                style={{ marginTop: 8 }}
+                variant="outlined"
+              />
             </FormControl>
           </div>
         </form>

@@ -251,7 +251,7 @@ export default function Room() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>ID</TableCell>
+              <TableCell>STT</TableCell>
               <TableCell>Mã phòng</TableCell>
               <TableCell>Thể loại phòng</TableCell>
               <TableCell>Trạng thái</TableCell>
@@ -262,13 +262,13 @@ export default function Room() {
             {!rooms ? (
               <TableRowsLoader rowsNum={10} />
             ) : (
-              rooms.data.map((row) => (
+              rooms.data.map((row, index) => (
                 <TableRow
                   key={row.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.id}
+                    {index + 1}
                   </TableCell>
                   <TableCell>{row.code}</TableCell>
                   <TableCell>
