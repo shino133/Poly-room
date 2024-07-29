@@ -173,7 +173,10 @@ export default function Room() {
       setRoomStatus("");
     } catch (error) {
       handleCloseAddDialog();
-      setSnackMsg("Lỗi: " + error);
+      setSnackMsg(
+        "Lỗi: " +
+          error.response.data.errors[Object.keys(error.response.data.errors)[0]]
+      );
       setSnackOpen(true);
       console.error("Error:", error);
     }
@@ -390,7 +393,7 @@ export default function Room() {
         onClose={handleCloseSnack}
         message={snackMsg}
         action={action}
-        // anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       />
     </div>
   );

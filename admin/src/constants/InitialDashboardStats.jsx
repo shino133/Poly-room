@@ -19,8 +19,8 @@ const initialDashboardStats = [
     name: "Lượt đặt thành công",
     value: 0,
     percent: 0,
-    color: "#7978e9",
-    hoverColor: "#8b8eec",
+    color: "#74a67e",
+    hoverColor: "#83bc8e",
     timeRange: "30 ngày",
   },
   {

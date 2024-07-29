@@ -209,9 +209,15 @@ export default function User() {
     const data = {
       name,
       email,
-      password,
-      password_confirmation: passwordConfirmation,
     };
+
+    if (password) {
+      data.password = password;
+    }
+
+    if (passwordConfirmation) {
+      data.password_confirmation = passwordConfirmation;
+    }
 
     const urlEncodedData = new URLSearchParams();
     for (const key in data) {
@@ -372,7 +378,7 @@ export default function User() {
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
             <InputLabel htmlFor="outlined-adornment-password">
-              {isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+              {isEditing ? "Mật khẩu mới" : "Mật khẩu *"}
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
@@ -392,11 +398,12 @@ export default function User() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+              required={!isEditing}
             />
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
             <InputLabel htmlFor="outlined-adornment-password">
-              Nhập lại mật khẩu
+              {isEditing ? "Nhập lại mật khẩu" : "Nhập lại mật khẩu *"}
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
@@ -416,6 +423,7 @@ export default function User() {
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               label="Nhập lại mật khẩu"
+              required={!isEditing}
             />
           </FormControl>
         </DialogContent>

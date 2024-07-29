@@ -54,6 +54,10 @@ export const editRoom = (id, params) => {
   return Api.putRequest(`/room/${id}`, params);
 };
 
+export const bookRoom = (params) => {
+  return Api.postRequest("/booking", params);
+};
+
 export const getWeather = async () => {
   const response = await axios.get(
     `https://api.open-meteo.com/v1/forecast?latitude=20.5453&longitude=105.9122&current=temperature`

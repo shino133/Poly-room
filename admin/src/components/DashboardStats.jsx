@@ -32,8 +32,8 @@ export default function DashboardStats() {
           name: "Lượt đặt thành công",
           value: stats.data.detail[0].confirmed,
           percent: stats.data.confirmed_rate_by_month,
-          color: "#7978e9",
-          hoverColor: "#8b8eec",
+          color: "#74a67e",
+          hoverColor: "#83bc8e",
           timeRange: "30 ngày",
         },
         {
