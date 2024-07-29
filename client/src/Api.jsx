@@ -16,9 +16,9 @@ export const getMyData = () => {
 
 
 // postRequest
-export const bookingRequest=(params)=>{
+export const bookRoom = (params) => {
   return Api.postRequest("/booking", params);
-}
+};
 
 
 
