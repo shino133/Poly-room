@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,Navigate } from "react-router-dom";
 import { getMyData } from "../Api"; // Đảm bảo đường dẫn đúng
 import { useAuthContext } from "../contexts/Support"; // Đảm bảo đường dẫn đúng
 
@@ -10,8 +10,10 @@ function Header({ onLogout }) {
   const [dataUser, setDataUser] = useState({});
   const [showUserInfo, setShowUserInfo] = useState(false);
 
-  const { currentUser } = useAuthContext();
-
+  const { currentUser,userToken } = useAuthContext();
+  if(!userToken){
+   return <Navigate to="/login"/>
+  }
   const handleMouseOver = () => {
     setShowUserInfo(true);
   };
