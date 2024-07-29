@@ -5,7 +5,7 @@ import { loginRequest } from "../../Api";
 import { useAuthContext } from "../../contexts/Support";
 
 export default function Login() {
-  const { setCurrentUser, setUserToken } = useAuthContext();
+  const {currentUser, setCurrentUser, setUserToken } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ __html: "" });
@@ -20,6 +20,7 @@ export default function Login() {
       if (response.data && response.data.user && response.data.token) {
         setCurrentUser(response.data.user);
         setUserToken(response.data.token);
+        console.log(currentUser);
       } else {
         throw new Error("Invalid response format");
       }

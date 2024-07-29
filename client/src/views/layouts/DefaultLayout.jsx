@@ -31,7 +31,7 @@ export default function DefaultLayout() {
 
   const onLogout = (ev) => {
     ev.preventDefault();
-    localStorage.removeItem('TOKEN')
+    localStorage.removeItem('TOKEN');
 
     logoutRequest().then(() => {
       setCurrentUser({});
