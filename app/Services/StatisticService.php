@@ -78,8 +78,8 @@ class StatisticService
     private function countBookingsByMonth($date)
     {
         return Booking::whereMonth('created_at', $date->month)
-                      ->whereYear('created_at', $date->year)
-                      ->count();
+            ->whereYear('created_at', $date->year)
+            ->count();
     }
 
     public function getMonthlyBookingRate()
@@ -143,9 +143,9 @@ class StatisticService
     private function countBookingsByStatusAndMonth($status, $date)
     {
         return Booking::where('status', $status)
-                      ->whereMonth('created_at', $date->month)
-                      ->whereYear('created_at', $date->year)
-                      ->count();
+            ->whereMonth('created_at', $date->month)
+            ->whereYear('created_at', $date->year)
+            ->count();
     }
 
     private function calculateRate($current, $previous)
