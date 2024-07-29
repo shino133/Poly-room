@@ -15,9 +15,10 @@ export default function DashboardStats() {
         {
           name: "Lượt đặt hôm nay",
           value: stats.data.today,
-          percent: 24,
+          percent: stats.data.booking_rate_by_day,
           color: "#84a5fa",
           hoverColor: "#96b2fb",
+          timeRange: "Hôm qua",
         },
         {
           name: "Tổng số lượt đặt",
@@ -25,20 +26,23 @@ export default function DashboardStats() {
           percent: stats.data.booking_rate_by_month,
           color: "#5050b2",
           hoverColor: "#6d6db2",
+          timeRange: "30 ngày",
         },
         {
           name: "Lượt đặt thành công",
-          value: stats.data.detail[0].total_confirmed,
-          percent: 78,
+          value: stats.data.detail[0].confirmed,
+          percent: stats.data.confirmed_rate_by_month,
           color: "#7978e9",
           hoverColor: "#8b8eec",
+          timeRange: "30 ngày",
         },
         {
           name: "Lượt đặt thất bại",
-          value: stats.data.detail[0].total_cancelled,
-          percent: 38,
+          value: stats.data.detail[0].cancelled,
+          percent: stats.data.cancelled_rate_by_month,
           color: "#f3797e",
           hoverColor: "#ff8f7e",
+          timeRange: "30 ngày",
         },
       ]);
     };
@@ -47,7 +51,7 @@ export default function DashboardStats() {
   }, []);
 
   return dashboardStats.map((item, index) => (
-    <div className="px-4 w-1/2" key={item.name + index}>
+    <div className="px-4 w-1/2">
       <div
         className="p-5 rounded-3xl text-white mb-6 transition-all duration-300 ease-in-out"
         style={{
@@ -60,12 +64,12 @@ export default function DashboardStats() {
           (e.currentTarget.style.backgroundColor = item.color)
         }
       >
-        <p className="mb-4">{item.name}</p>
-        <p className="text-[30px]">
+        <p class="mb-4">{item.name}</p>
+        <p class="text-[30px]">
           <CountUpJS endValue={item.value} />
         </p>
         <p>
-          <CountUpJS endValue={item.percent} />% (30 ngày)
+          <CountUpJS endValue={item.percent} />% ({item.timeRange})
         </p>
       </div>
     </div>
