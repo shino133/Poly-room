@@ -16,8 +16,8 @@ class UpdateUserRoleAndStatusSeeder extends Seeder
         $users = DB::table('users')->get();
 
         foreach ($users as $user) {
-            $role = $user->id % 2 == 0 ? 'admin' : 'user';
-            $status = $user->id % 2 == 0 ? 'active' : 'inactive';
+            $role = $user->id % 2 == 0 ? 1 : 0;
+            $status = $user->id % 2 == 0 ? 1 : 0;
 
             DB::table('users')
                 ->where('id', $user->id)

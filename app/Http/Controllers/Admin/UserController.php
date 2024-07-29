@@ -59,16 +59,16 @@ class UserController extends Controller
     {
         // Validate the request
         $validator = $request->validate( [
-            'status' => 'required|string|in:active,inactive',
-            'role' => 'required|string|in:admin,user',
+            'status' => 'required|string|in:1,0',
+            'role' => 'required|string|in:1,0',
         ]);
 
         try {
             // Find the user by ID
             $user = User::findOrFail($id);
             // Update user details
-            $user->status = $request->status;
-            $user->role = $request->role;
+            $user->status = $validator['status'];
+            $user->role = $validator['role'];
             $user->save();
 
             return response()->json(['message' => 'User updated successfully', 'status' => 'success'], 200);
