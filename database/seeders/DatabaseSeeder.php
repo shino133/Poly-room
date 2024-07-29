@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(RoomChildSeeder::class);
 
+        $this->call(UpdateUserRoleAndStatusSeeder::class);
+
         // User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
