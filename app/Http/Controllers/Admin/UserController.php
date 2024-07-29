@@ -10,8 +10,6 @@ use App\Http\Resources\UserCrud;
 use App\Services\ServiceFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignupRequest;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -60,34 +58,22 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         // Validate the request
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'password' => [
-                'confirmed',
-                Password::min(8)->mixedCase()->numbers()->symbols()
-            ]
+        $validator = $request->validate( [
+            'status' => 'required|string|in:active,inactive',
+            'role' => 'required|string|in:admin,user',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
 
         try {
             // Find the user by ID
             $user = User::findOrFail($id);
-
             // Update user details
-            $user->name = $request->input('name');
-            $user->email = $request->input('email');
-            if ($request->filled('password')) {
-                $user->password = bcrypt($request->input('password'));
-            }
+            $user->status = $request->status;
+            $user->role = $request->role;
             $user->save();
 
             return response()->json(['message' => 'User updated successfully', 'status' => 'success'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'User not found or update failed', 'status' => 'error'], 404);
+            return ControlHelper::handleExc($e);
         }
     }
 
