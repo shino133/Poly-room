@@ -32,7 +32,7 @@ const SlideShow = ({ children, className }) => {
           ))}
         </Fade>
       </div>
-      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full text-center text-white p-8 overflow-auto">
+      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full text-center text-white  overflow-auto">
         {children}
       </div>
     </div>
