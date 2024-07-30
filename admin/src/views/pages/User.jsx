@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
 import { Skeleton } from "@mui/material";
-import TablePagination from "@mui/material/TablePagination";
 import { getUserData, addUser, deleteUser, editUser } from "../../Api";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -27,6 +18,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import GeneralTable from "../../components/GeneralTable";
 
 export default function User() {
   const [users, setUsers] = useState(null);
@@ -76,25 +68,6 @@ export default function User() {
         console.log(error);
       });
   }, [rowsPerPage, page, snackOpen]);
-
-  const TableRowsLoader = ({ rowsNum }) => {
-    return [...Array(rowsNum)].map((row, index) => (
-      <TableRow key={index}>
-        <TableCell component="th" scope="row">
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-      </TableRow>
-    ));
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -251,6 +224,8 @@ export default function User() {
     }
   };
 
+  const headers = ["ID", "Tên", "Email", "Thao tác"];
+
   return (
     <div className="relative">
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
@@ -274,55 +249,19 @@ export default function User() {
           <AddIcon />
         </Button>
       </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Tên</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Thao tác</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!users ? (
-              <TableRowsLoader rowsNum={10} />
-            ) : (
-              users.data.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.id}
-                  </TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleEditUser(row)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleClickOpen(row.id)}>
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={users?.pagination.total}
+      <GeneralTable
+        headers={headers}
+        data={users?.data}
+        paginationTotalCount={users?.pagination.total}
+        handleEditRow={handleEditUser}
+        handleClickOpen={handleClickOpen}
         page={page}
-        onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={"Số người dùng mỗi trang"}
-        labelDisplayedRows={({ from, to, count }) => {
-          return "" + from + "-" + to + " của " + count;
-        }}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        labelRowsPerPage="Số người dùng mỗi trang"
+        tableRowsLoaderRows={10}
+        tableRowsLoaderColumns={4}
       />
       <Dialog
         open={open}
