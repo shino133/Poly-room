@@ -1,35 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "../../contexts/Support";
 import Footer from "../../components/Footer";
 import { logoutRequest } from "../../Api";
-import { Header } from "../../components";
-import { useSidebarContext } from "../../contexts/Support";
+import Header from "../../components/Header";
 import SlideShow from "../../components/SlideShow";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, setCurrentUser, setUserToken } = useAuthContext();
-  
-  // Kiểm tra userToken và currentUser chỉ một lần khi component mount
-  if (!userToken ) {
+
+  useEffect(() => {
+    if (!currentUser || Object.keys(currentUser).length === 0) {
+      setUserToken(null);
+    }
+  }, [currentUser, setUserToken]);
+
+  if (!userToken) {
     return <Navigate to="/login" />;
   }
-  
-  console.log(localStorage.getItem('CURRENT_USER'))
-  if(localStorage.getItem('CURRENT_USER') === null){
-    console.log(1);
-  }
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const onLogout = async (ev) => {
     ev.preventDefault();
@@ -42,8 +30,6 @@ export default function DefaultLayout() {
       console.error("Logout failed:", error);
     }
   };
-
-  const { isOpen, toggleSidebar } = useSidebarContext();
 
   return (
     <div className="relative bg-slate-100 min-h-screen overflow-hidden">

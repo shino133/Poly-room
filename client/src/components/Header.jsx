@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link,Navigate } from "react-router-dom";
-import { useAuthContext } from "../contexts/Support"; 
-
+import { Link } from "react-router-dom";
+import { useAuthContext } from "../contexts/Support";
 import logo from "../assets/logo/fpt-poly.png";
 
 function Header({ onLogout }) {
   const [scrolled, setScrolled] = useState(false);
-  const { currentUser,userToken } = useAuthContext();
+  const { currentUser } = useAuthContext();
   const [showUserInfo, setShowUserInfo] = useState(false);
 
   const handleMouseOver = () => {
@@ -37,7 +36,7 @@ function Header({ onLogout }) {
       <div
         className={`flex rounded-bl-md rounded-br-md z-50 font-bold fixed top-0 justify-between p-4 items-center transition-all duration-300 ${
           scrolled
-            ? "bg-white w-full text-black  border-gray-300"
+            ? "bg-white w-full text-black border-gray-300"
             : "w-4/5 bg-white shadow-slate-50"
         }`}
       >
@@ -66,7 +65,6 @@ function Header({ onLogout }) {
           </ul>
         </div>
         <div className="flex items-center gap-3">
-        
           <button
             className="hover:text-gray-800 relative"
             aria-label="TikTok"
@@ -89,21 +87,20 @@ function Header({ onLogout }) {
               />
             </svg>
             {showUserInfo && currentUser && (
-            <div className="absolute top-7 right-0 bg-white  border-solid border-black border-[1px] p-[0.5] text-[5px] font-normal pl-3 pr-3  rounded ">
-            <p className="">{currentUser.name}</p>
-            </div>
-          )}
+              <div className="absolute top-7 right-0 bg-white border-solid border-black border-[1px] p-[0.5] text-[5px] font-normal pl-3 pr-3 rounded">
+                <p>{currentUser.name}</p>
+              </div>
+            )}
           </button>
           <div
             className={`p-1.5 px-5 cursor-pointer font-medium rounded-xl hover:opacity-75 hover:bg-red-600 relative overflow-hidden ${
-              scrolled ? "text-white bg-black" : " bg-black text-white"
+              scrolled ? "text-white bg-black" : "bg-black text-white"
             } group`}
           >
             <Link onClick={onLogout}>
-              <span className="relative z-10 ">Log Out</span>
+              <span className="relative z-10">Log Out</span>
             </Link>
           </div>
-          
         </div>
       </div>
     </div>

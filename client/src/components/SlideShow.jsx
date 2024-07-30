@@ -31,8 +31,10 @@ const SlideShow = ({ children, className }) => {
             </div>
           ))}
         </Fade>
+        {/* Dark overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 z-10"></div>
       </div>
-      <div className="relative z-10 flex flex-col items-center justify-center w-full h-full text-center text-white  overflow-auto">
+      <div className="relative z-20 flex flex-col items-center justify-center w-full h-full text-center text-white overflow-auto">
         {children}
       </div>
     </div>
