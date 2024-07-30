@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link,Navigate } from "react-router-dom";
-import { getMyData } from "../Api"; // Đảm bảo đường dẫn đúng
-import { useAuthContext } from "../contexts/Support"; // Đảm bảo đường dẫn đúng
+import { useAuthContext } from "../contexts/Support"; 
 
-import logo from "../assets/logo/fpt-poly.png"; // Đảm bảo đường dẫn đúng
+import logo from "../assets/logo/fpt-poly.png";
 
 function Header({ onLogout }) {
   const [scrolled, setScrolled] = useState(false);
@@ -69,7 +68,7 @@ function Header({ onLogout }) {
         <div className="flex items-center gap-3">
         
           <button
-            className="hover:text-gray-800"
+            className="hover:text-gray-800 relative"
             aria-label="TikTok"
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
@@ -89,6 +88,11 @@ function Header({ onLogout }) {
                 d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
               />
             </svg>
+            {showUserInfo && currentUser && (
+            <div className="absolute top-7 right-0 bg-white  border-solid border-black border-[1px] p-[0.5] text-[5px] font-normal pl-3 pr-3  rounded ">
+            <p className="">{currentUser.name}</p>
+            </div>
+          )}
           </button>
           <div
             className={`p-1.5 px-5 cursor-pointer font-medium rounded-xl hover:opacity-75 hover:bg-red-600 relative overflow-hidden ${
@@ -99,12 +103,7 @@ function Header({ onLogout }) {
               <span className="relative z-10 ">Log Out</span>
             </Link>
           </div>
-          {showUserInfo && currentUser && (
-            <div className="absolute top-24 right-0  p-4 rounded shadow-lg">
-              <p>Name: {currentUser.name}</p>
-              <p>Email: {currentUser.email}</p>
-            </div>
-          )}
+          
         </div>
       </div>
     </div>

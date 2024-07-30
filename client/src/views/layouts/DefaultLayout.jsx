@@ -9,8 +9,15 @@ import SlideShow from "../../components/SlideShow";
 
 export default function DefaultLayout() {
   const { currentUser, userToken, setCurrentUser, setUserToken } = useAuthContext();
-  if (!userToken || !currentUser) {
+  
+  // Kiểm tra userToken và currentUser chỉ một lần khi component mount
+  if (!userToken ) {
     return <Navigate to="/login" />;
+  }
+  
+  console.log(localStorage.getItem('CURRENT_USER'))
+  if(localStorage.getItem('CURRENT_USER') === null){
+    console.log(1);
   }
 
   const [anchorEl, setAnchorEl] = useState(null);

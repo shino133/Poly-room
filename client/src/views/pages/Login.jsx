@@ -20,7 +20,6 @@ export default function Login() {
       if (response.data && response.data.user && response.data.token) {
         setCurrentUser(response.data.user);
         setUserToken(response.data.token);
-        console.log(currentUser);
       } else {
         throw new Error("Định dạng phản hồi không hợp lệ");
       }
