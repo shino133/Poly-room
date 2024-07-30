@@ -39,16 +39,16 @@ export default function DefaultLayout() {
   const { isOpen, toggleSidebar } = useSidebarContext();
 
   return (
-    <div className="relative bg-slate-100 h-screen">
-      <SlideShow className="absolute inset-0 z-0" />
-
-      <div className="relative z-10 flex flex-col h-full">
-        <Header onLogout={onLogout} />
-        <main className="flex-1 relative z-20">
-          <Outlet />
-        </main>
-        <Footer />
+    <div className="relative bg-slate-100 min-h-screen overflow-hidden">
+      <Header onLogout={onLogout} />
+      <div className="flex flex-col min-h-screen">
+        <SlideShow className="flex-1">
+          <main className="relative z-10 flex-1 overflow-auto">
+            <Outlet />
+          </main>
+        </SlideShow>
       </div>
+      <Footer className="fixed bottom-0 left-0 w-full" />
     </div>
   );
 }
