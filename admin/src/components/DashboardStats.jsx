@@ -51,7 +51,8 @@ export default function DashboardStats() {
   }, []);
 
   return dashboardStats.map((item, index) => (
-    <div className="px-4 w-1/2">
+    // eslint-disable-next-line react/jsx-key
+    <div className="px-4 w-1/2"d>
       <div
         className="p-5 rounded-3xl text-white mb-6 transition-all duration-300 ease-in-out"
         style={{
