@@ -17,7 +17,7 @@ class CheckRole
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::user()->role !== 1) {
-            return response('Unauthorized', 401);
+            return response()->json(['message' => 'NOT HAVE ACCCESS!'], 401);
         }
 
         return $next($request);
