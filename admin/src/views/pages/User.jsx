@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { IconButton } from "@mui/material";
-import { Skeleton } from "@mui/material";
 import { getUserData, addUser, deleteUser, editUser } from "../../Api";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -19,6 +18,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import GeneralTable from "../../components/GeneralTable";
+import { defineRole, defineStatus } from "../../constants";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 
 export default function User() {
   const [users, setUsers] = useState(null);
@@ -37,6 +40,8 @@ export default function User() {
   const [userIdToUpdate, setUserIdToUpdate] = useState(null);
   const [showPassword, setShowPassword] = React.useState(false);
   const [showPassword2, setShowPassword2] = React.useState(false);
+  const [roleChecked, setRoleChecked] = React.useState(false);
+  const [statusChecked, setStatusChecked] = React.useState(true);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
@@ -118,6 +123,8 @@ export default function User() {
     setEmail("");
     setPassword("");
     setPasswordConfirmation("");
+    setRoleChecked(false);
+    setStatusChecked(true);
     setAddDialogOpen(true);
   };
 
@@ -131,6 +138,8 @@ export default function User() {
       email,
       password,
       password_confirmation: passwordConfirmation,
+      role: roleChecked ? "1" : "0",
+      status: statusChecked ? "1" : "0",
     };
 
     const urlEncodedData = new URLSearchParams();
@@ -150,6 +159,8 @@ export default function User() {
       setEmail("");
       setPassword("");
       setPasswordConfirmation("");
+      setRoleChecked(false);
+      setStatusChecked(true);
     } catch (error) {
       handleCloseAddDialog();
       if (error.response.status === 422) {
@@ -174,6 +185,8 @@ export default function User() {
     setEmail(user.email);
     setPassword("");
     setPasswordConfirmation("");
+    setRoleChecked(user.role === 1);
+    setStatusChecked(user.status === 1);
     setUserIdToUpdate(user.id);
     setAddDialogOpen(true);
   };
@@ -182,6 +195,8 @@ export default function User() {
     const data = {
       name,
       email,
+      role: roleChecked ? "1" : "0",
+      status: statusChecked ? "1" : "0",
     };
 
     if (password) {
@@ -224,7 +239,7 @@ export default function User() {
     }
   };
 
-  const headers = ["ID", "Tên", "Email", "Thao tác"];
+  const headers = ["ID", "Tên", "Email", "Quyền", "Trạng thái", "Thao tác"];
 
   return (
     <div className="relative">
@@ -261,7 +276,9 @@ export default function User() {
         handleChangeRowsPerPage={handleChangeRowsPerPage}
         labelRowsPerPage="Số người dùng mỗi trang"
         tableRowsLoaderRows={10}
-        tableRowsLoaderColumns={4}
+        tableRowsLoaderColumns={6}
+        defineRole={defineRole}
+        defineStatus={defineStatus}
       />
       <Dialog
         open={open}
@@ -365,6 +382,26 @@ export default function User() {
               required={!isEditing}
             />
           </FormControl>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={roleChecked}
+                  onChange={(e) => setRoleChecked(e.target.checked)}
+                />
+              }
+              label="Quản trị viên"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={statusChecked}
+                  onChange={(e) => setStatusChecked(e.target.checked)}
+                />
+              }
+              label="Hoạt động"
+            />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddDialog}>Hủy bỏ</Button>
