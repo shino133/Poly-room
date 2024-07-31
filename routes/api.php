@@ -24,17 +24,20 @@ Route::prefix('admin')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
 
-        Route::post('/booked', [BookingController::class, 'status'])->name('booking.status');
+        Route::middleware(['auth', 'admin'])->group(function () {
 
-        Route::apiResource('/user', UserController::class);
-        Route::apiResource('/room', RoomController::class);
-        Route::apiResource('/room-type', RoomChildController::class);
-        Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
-        Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
+            Route::post('/booked', [BookingController::class, 'status'])->name('booking.status');
 
-        Route::get('/statistic', [DashboardController::class, 'total']);
-        Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
+            Route::apiResource('/user', UserController::class);
+            Route::apiResource('/room', RoomController::class);
+            Route::apiResource('/room-type', RoomChildController::class);
+            Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+            Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
 
+            Route::get('/statistic', [DashboardController::class, 'total']);
+            Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
+        });
+        
     });
 
 
@@ -46,16 +49,16 @@ Route::prefix('client')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/me', [AuthController::class, 'me']);
-        
+
         Route::get('/room', [RoomController::class, 'index'])->name('room.index');
         Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
         Route::get('/history', [UserBookController::class, 'history'])->name('booking.history');
     });
-    
+
     Route::post('/signup', [AuthController::class, 'signup']);
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-Route::get('/', function(){
+Route::get('/', function () {
     return view('error');
 });
