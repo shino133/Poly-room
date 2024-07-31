@@ -33,6 +33,7 @@ import {
   Select,
   TextField,
 } from "../../constants/Mui";
+import GeneralTable from "../../components/GeneralTable";
 
 export default function Room() {
   const [rooms, setRooms] = useState(null);
@@ -72,28 +73,6 @@ export default function Room() {
         console.log(error);
       });
   }, [rowsPerPage, page, snackOpen]);
-
-  const TableRowsLoader = ({ rowsNum }) => {
-    return [...Array(rowsNum)].map((row, index) => (
-      <TableRow key={index}>
-        <TableCell component="th" scope="row">
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-        <TableCell>
-          <Skeleton animation="wave" variant="text" />
-        </TableCell>
-      </TableRow>
-    ));
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -227,6 +206,14 @@ export default function Room() {
     }
   };
 
+  const headers = [
+    "ID",
+    "Mã phòng",
+    "Thể loại phòng",
+    "Trạng thái",
+    "Thao tác",
+  ];
+
   return (
     <div className="relative">
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
@@ -250,61 +237,21 @@ export default function Room() {
           <AddIcon />
         </Button>
       </div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>STT</TableCell>
-              <TableCell>Mã phòng</TableCell>
-              <TableCell>Thể loại phòng</TableCell>
-              <TableCell>Trạng thái</TableCell>
-              <TableCell>Thao tác</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {!rooms ? (
-              <TableRowsLoader rowsNum={10} />
-            ) : (
-              rooms.data.map((row, index) => (
-                <TableRow
-                  key={row.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {index + 1}
-                  </TableCell>
-                  <TableCell>{row.code}</TableCell>
-                  <TableCell>
-                    {roomTypeTranslations[row.type] || row.type}
-                  </TableCell>
-                  <TableCell>
-                    {statusTranslations[row.status] || row.status}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleEditRoom(row)}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleClickOpen(row.id)}>
-                      <Delete />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        count={rooms?.pagination.total}
+      <GeneralTable
+        headers={headers}
+        data={rooms?.data}
+        paginationTotalCount={rooms?.pagination.total}
+        handleEditRow={handleEditRoom}
+        handleClickOpen={handleClickOpen}
         page={page}
-        onPageChange={handleChangePage}
         rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={"Số phòng mỗi trang"}
-        labelDisplayedRows={({ from, to, count }) => {
-          return "" + from + "-" + to + " của " + count;
-        }}
+        handleChangePage={handleChangePage}
+        handleChangeRowsPerPage={handleChangeRowsPerPage}
+        labelRowsPerPage="Số phòng mỗi trang"
+        tableRowsLoaderRows={10}
+        tableRowsLoaderColumns={5}
+        roomTypeTranslations={roomTypeTranslations}
+        statusTranslations={statusTranslations}
       />
       <Dialog
         open={open}

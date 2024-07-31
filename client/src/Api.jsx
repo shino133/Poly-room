@@ -39,7 +39,7 @@ export const loginRequest = async (params) => {
     ) {
       throw new Error(error.response.data.message);
     } else {
-      throw new Error("An unexpected error occurred.");
+      throw new Error("Lỗi không mong muốn!!");
     }
   }
 };

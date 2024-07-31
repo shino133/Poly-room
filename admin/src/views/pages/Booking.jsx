@@ -69,7 +69,7 @@ export default function Booking() {
   const handleBookRoom = () => {
     // create formdata
     const formData = new FormData();
-    formData.append("room_id", roomCode.value);
+    formData.append("room_id", roomCode?.value);
     formData.append("start_at", startTime);
     formData.append("end_at", endTime);
     formData.append("note", note);
