@@ -24,14 +24,19 @@ class BookRequest extends ValidationRequest
         return [
             'room_id' => 'required|exists:rooms,id',
             'start_at' => [
-                'required|date',
+                'required',
+                'date',
                 function ($attribute, $value, $fail) {
                     if (Carbon::parse($value)->lt(Carbon::now())) {
                         $fail('The ' . $attribute . ' must be a date after or equal to today.');
                     }
                 }
             ],
-            'end_at' => 'required|date|after:time_start',
+            'end_at' => [
+                'required',
+                'date',
+                'after:start_at' // So sánh với start_at
+            ],
             'note' => 'nullable|string|max:255',
         ];
     }
