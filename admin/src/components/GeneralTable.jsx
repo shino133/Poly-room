@@ -26,8 +26,10 @@ const GeneralTable = ({
   tableRowsLoaderRows,
   tableRowsLoaderColumns,
   paginationTotalCount,
-  roomTypeTranslations,
-  statusTranslations,
+  roomTypeTranslations = {},
+  statusTranslations = {},
+  defineRole = {},
+  defineStatus = {},
 }) => {
   return (
     <>
@@ -57,9 +59,13 @@ const GeneralTable = ({
                   {Object.keys(row).map((key, cellIndex) => (
                     <TableCell key={cellIndex}>
                       {key === "type"
-                        ? roomTypeTranslations[row[key]]
+                        ? roomTypeTranslations[row[key]] || row[key]
                         : key === "status"
-                        ? statusTranslations[row[key]]
+                        ? statusTranslations[row[key]] ||
+                          defineStatus[row[key]] ||
+                          row[key]
+                        : key === "role"
+                        ? defineRole[row[key]] || row[key]
                         : row[key]}
                     </TableCell>
                   ))}

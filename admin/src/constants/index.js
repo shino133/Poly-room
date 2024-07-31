@@ -3,6 +3,8 @@ import statusTranslations from "./StatusTranslations";
 import roomTypeMap from "./RoomTypeMap";
 import roomTypeTranslations from "./RoomTypeTranslations";
 import initialDashboardStats from "./InitialDashboardStats";
+import defineRole from "./DefineRole";
+import defineStatus from "./DefineStatus";
 
 // Compare this snippet from admin/src/constants
 export {
@@ -11,4 +13,6 @@ export {
   roomTypeMap,
   roomTypeTranslations,
   initialDashboardStats,
+  defineRole,
+  defineStatus,
 };
