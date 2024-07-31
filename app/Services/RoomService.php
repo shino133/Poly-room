@@ -41,7 +41,7 @@ class RoomService implements CRUDSVInterface
     {
         $data = Room::findOrFail($id);
 
-        if ($data['status'] == RoomStatusEnum::Available) {
+        if ($data['status'] == RoomStatusEnum::Available->value) {
             return Room::destroy($id);
         } else {
             throw new ModelNotFoundException('Room is using!');
