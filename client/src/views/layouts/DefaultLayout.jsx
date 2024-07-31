@@ -7,8 +7,7 @@ import Header from "../../components/Header";
 import SlideShow from "../../components/SlideShow";
 
 export default function DefaultLayout() {
-  const { currentUser, userToken, setCurrentUser, setUserToken } = useAuthContext();
-
+  const { currentUser, userToken, setCurrentUser, setUserToken } = useAuthContext();  
   useEffect(() => {
     if (!currentUser || Object.keys(currentUser).length === 0) {
       setUserToken(null);

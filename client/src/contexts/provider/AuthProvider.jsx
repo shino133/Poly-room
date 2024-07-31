@@ -3,7 +3,9 @@ import PropTypes from "prop-types";
 import { AuthContext } from "..";
 
 const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("CURRENT_USER")) || {}
+  );
   const [userToken, _setUserToken] = useState(
     localStorage.getItem("TOKEN") || ""
   );
@@ -24,14 +26,9 @@ const AuthProvider = ({ children }) => {
     }, 5000);
   };
 
-  // Set CURRENT_USER in localStorage only once
+  // Save CURRENT_USER in localStorage whenever currentUser changes
   useEffect(() => {
-    if (
-      localStorage.getItem("CURRENT_USER") == "{}" ||
-      !localStorage.getItem("CURRENT_USER")
-    ) {
-      localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
-    }
+    localStorage.setItem("CURRENT_USER", JSON.stringify(currentUser));
   }, [currentUser]);
 
   return (
