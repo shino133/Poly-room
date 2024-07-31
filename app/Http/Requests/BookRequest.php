@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
+
 class BookRequest extends ValidationRequest
 {
     /**
@@ -21,11 +23,16 @@ class BookRequest extends ValidationRequest
     {
         return [
             'room_id' => 'required|exists:rooms,id',
-            'start_at' => 'required|date',
+            'start_at' => [
+                'required|date',
+                function ($attribute, $value, $fail) {
+                    if (Carbon::parse($value)->lt(Carbon::now())) {
+                        $fail('The ' . $attribute . ' must be a date after or equal to today.');
+                    }
+                }
+            ],
             'end_at' => 'required|date|after:time_start',
             'note' => 'nullable|string|max:255',
         ];
     }
-
-    
 }
