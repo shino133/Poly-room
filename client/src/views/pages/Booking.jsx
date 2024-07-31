@@ -107,12 +107,12 @@ export default function Booking() {
 
   return (
     <>
-      <div className="px-4">
+      <div className="max-w-[500px] mx-auto rounded-tl-md rounded-tr-md p-4 mt-24 border-2 border-black-600">
         <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
           Đặt phòng
         </h1>
 
-        <form>
+        <form class="max-w-[500px] mx-auto">
           <div className="max-w-[500px] mx-auto mt-10">
             <Autocomplete
               disablePortal
@@ -162,6 +162,7 @@ export default function Booking() {
               style={{
                 backgroundColor: "#504b8e",
                 marginTop: "1rem",
+                marginBottom: "1.5rem",
               }}
               onClick={handleBookRoom}
             >
