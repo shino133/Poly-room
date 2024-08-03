@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../contexts/Support";
 import logo from "../assets/logo/fpt-poly.png";
+import {menu} from "../assets"; // Đổi tên biến import để tránh xung đột
 
 function Header({ onLogout }) {
   const [scrolled, setScrolled] = useState(false);
   const { currentUser } = useAuthContext();
   const [showUserInfo, setShowUserInfo] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleMouseOver = () => {
     setShowUserInfo(true);
@@ -14,6 +16,10 @@ function Header({ onLogout }) {
 
   const handleMouseOut = () => {
     setShowUserInfo(false);
+  };
+
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
   useEffect(() => {
@@ -40,12 +46,17 @@ function Header({ onLogout }) {
             : "w-4/5 bg-white shadow-slate-50"
         }`}
       >
+        <div className="md:hidden">
+          <button onClick={handleMenuToggle}>
+            <img className="w-12" src={menu} alt="Menu" />
+          </button>
+        </div>
         <div className="cursor-pointer">
           <Link to="/">
             <img className="max-w-36" src={logo} alt="Logo" />
           </Link>
         </div>
-        <div className="flex">
+        <div className="hidden md:flex">
           <ul className="flex gap-5 font-medium cursor-pointer">
             <li>
               <Link to="/" className="hover:text-blue-500 transition-colors">
@@ -67,7 +78,7 @@ function Header({ onLogout }) {
         <div className="flex items-center gap-3">
           <button
             className="hover:text-gray-800 relative"
-            aria-label="TikTok"
+            aria-label="User"
             onMouseOver={handleMouseOver}
             onMouseOut={handleMouseOut}
           >
@@ -87,7 +98,7 @@ function Header({ onLogout }) {
               />
             </svg>
             {showUserInfo && currentUser && (
-              <div className="absolute top-7 right-0 bg-white border-solid border-black border-[1px] p-[0.5] text-[5px] font-normal pl-3 pr-3 rounded">
+              <div className="absolute top-7 right-0 bg-white border-solid border-black border-[1px] p-[0.5] text-[10px] font-normal pl-3 pr-3 rounded">
                 <p>{currentUser.name}</p>
               </div>
             )}
@@ -102,6 +113,41 @@ function Header({ onLogout }) {
             </Link>
           </div>
         </div>
+      </div>
+
+      {/* Tab menu cho thiết bị di động */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 bg-white shadow md:hidden z-50 transition-transform duration-300 ${
+          isMenuOpen ? "transform translate-y-0" : "transform translate-y-full"
+        }`}
+      >
+        <ul className="flex justify-around py-2">
+          <li>
+            <Link to="/" className="text-black">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/booking" className="text-black">
+              Booking
+            </Link>
+          </li>
+          <li>
+            <Link to="/contact" className="text-black">
+              Contact
+            </Link>
+          </li>
+          <li>
+            <Link to="/blog" className="text-black">
+              Blog
+            </Link>
+          </li>
+          <li>
+            <Link onClick={onLogout} className="text-black">
+              Log Out
+            </Link>
+          </li>
+        </ul>
       </div>
     </div>
   );
