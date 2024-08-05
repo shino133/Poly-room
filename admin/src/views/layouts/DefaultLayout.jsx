@@ -109,20 +109,20 @@ export default function DefaultLayout() {
             <a href="#">CLB IT FPOLY HÀ NAM</a>
           </div>
           <div className="flex flex-col ml-4">
-            <h3 className="font-bold">Phòng</h3>
+            <h3 className="font-bold text-orange-500">Phòng</h3>
             <div className="line"></div>
             <a href="#">Phòng họp</a>
             <a href="#">Phòng học</a>
             <a href="#">Phòng chức năng</a>
           </div>
           <div className="flex flex-col ml-4">
-            <h3 className="font-bold">Điều khoản sử dụng</h3>
+            <h3 className="font-bold text-orange-500">Điều khoản sử dụng</h3>
             <div className="line"></div>
             <a href="#">Điều khoản và Điều kiện</a>
             <a href="#">Chính sách quyền riêng tư và cookie</a>
           </div>
           <div className="flex flex-col mr-4">
-            <h3 className="font-bold">Liên hệ</h3>
+            <h3 className="font-bold text-orange-500">Liên hệ</h3>
             <div className="line"></div>
             <a href="#" className="flex flex-row items-center gap-2">
               <FaPhoneAlt /> 091 196 82 13
