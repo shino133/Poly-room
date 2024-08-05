@@ -39,7 +39,6 @@ export default function DefaultLayout() {
 
   const onLogout = (ev) => {
     ev.preventDefault();
-
     logoutRequest().then(() => {
       setCurrentUser({});
       setUserToken(null);
@@ -132,7 +131,7 @@ export default function DefaultLayout() {
               caodangfpt.hanam@fpt.edu.vn
             </a>
             <a href="#" className="flex flex-row items-center gap-2">
-              <FaLocationDot /> FPT Hà Nam .
+              <FaLocationDot /> FPT Hà Nam
             </a>
             <a href="#" className="flex flex-row items-center gap-2">
               <FaLocationDot /> Tổ hợp giáo dục FPT Unischool .

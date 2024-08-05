@@ -21,33 +21,25 @@ export default function Login() {
         setCurrentUser(response.data.user);
         setUserToken(response.data.token);
       } else {
-        throw new Error("Invalid response format");
+        throw new Error("Phản hồi không hợp lệ!");
       }
     } catch (error) {
-      setError({ __html: error.message });
+      if (error.message === "The Provided credentials are not correct") {
+        setError({ __html: "Thông tin đăng nhập không chính xác!" });
+      } else {
+        setError({ __html: error.message });
+      }
     }
   };
 
   return (
     <div>
       <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-        Hello My Admin
+        Xin chào 👋!
       </h2>
       <p className="text-center text- text-gray-600">
-        {import.meta.env.VITE_APP_NAME}
+        Vui lòng đăng nhập để tiếp tục
       </p>
-
-      {/* DevMode Only  */}
-      <p className="mt-2 text-center text-sm text-gray-600">
-        Or{" "}
-        <Link
-          to="/signup"
-          className="font-medium text-indigo-600 hover:text-indigo-500"
-        >
-          signup for free
-        </Link>
-      </p>
-      {/* DevMode Only  */}
 
       {error.__html && (
         <div
@@ -66,7 +58,7 @@ export default function Login() {
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
             <label htmlFor="email-address" className="sr-only">
-              Email address
+              Địa chỉ Email
             </label>
             <input
               id="email-address"
@@ -77,12 +69,12 @@ export default function Login() {
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
               className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Email address"
+              placeholder="Địa chỉ email"
             />
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
-              Password
+              Mật khẩu
             </label>
             <input
               id="password"
@@ -93,7 +85,7 @@ export default function Login() {
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
               className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Password"
+              placeholder="Mật khẩu"
             />
           </div>
         </div>
@@ -110,7 +102,7 @@ export default function Login() {
               htmlFor="remember-me"
               className="ml-2 block text-sm text-gray-900"
             >
-              Remember me
+              Ghi nhớ tôi
             </label>
           </div>
         </div>
@@ -126,7 +118,7 @@ export default function Login() {
                 aria-hidden="true"
               />
             </span>
-            Sign in
+            Đăng nhập
           </button>
         </div>
       </form>

@@ -88,6 +88,7 @@ export const loginRequest = async (params) => {
 export const logoutRequest = () => {
   return Api.postRequest("/logout");
 };
+
 export const signupRequest = (params) => {
   return Api.postRequest("/signup", params);
 };

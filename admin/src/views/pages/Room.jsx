@@ -1,23 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import {
   statusTranslations,
   roomTypeTranslations,
   roomTypeMap,
+  errorTranslations,
 } from "../../constants";
 import { getRoomDataPerPage, addRoom, deleteRoom, editRoom } from "../../Api";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   IconButton,
-  Delete,
-  Edit,
-  Skeleton,
-  TablePagination,
   Button,
   Dialog,
   DialogActions,
@@ -25,8 +15,6 @@ import {
   DialogContentText,
   DialogTitle,
   AddIcon,
-  Snackbar,
-  CloseIcon,
   FormControl,
   InputLabel,
   MenuItem,
@@ -35,6 +23,7 @@ import {
 } from "../../constants/Mui";
 import GeneralTable from "../../components/GeneralTable";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { useSnackbar } from "notistack";
 
 export default function Room() {
   const [rooms, setRooms] = useState(null);
@@ -42,22 +31,15 @@ export default function Room() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const [roomIdToDelete, setRoomIdToDelete] = useState(null);
-  const [snackOpen, setSnackOpen] = React.useState(false);
   const [addDialogOpen, setAddDialogOpen] = React.useState(false);
   const [roomType, setRoomType] = React.useState("");
   const [roomStatus, setRoomStatus] = React.useState("");
   const [roomCode, setRoomCode] = React.useState("");
-  const [snackMsg, setSnackMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [roomIdToUpdate, setRoomIdToUpdate] = useState(null);
+  const [update, forceUpdate] = useReducer((x) => x + 1, 0);
 
-  const handleCloseSnack = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackOpen(false);
-  };
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleClose = () => {
     setOpen(false);
@@ -77,7 +59,7 @@ export default function Room() {
 
   useEffect(() => {
     getData();
-  }, [rowsPerPage, page, snackOpen]);
+  }, [rowsPerPage, page, update]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -96,23 +78,32 @@ export default function Room() {
         data: prevRooms.data.filter((room) => room.id !== roomIdToDelete),
       }));
       handleClose();
-      setSnackMsg("Xóa phòng thành công!");
-      setSnackOpen(true);
+      enqueueSnackbar("Xóa phòng thành công!", { variant: "success" });
+      forceUpdate();
     } catch (error) {
       console.error("Failed to delete room:", error);
       if (error.response.data.errors) {
         handleClose();
-        setSnackMsg(
+        enqueueSnackbar(
           "Xóa phòng thất bại. Lỗi: " +
+            errorTranslations[
+              error.response.data.errors[
+                Object.keys(error.response.data.errors)[0]
+              ]
+            ] ||
             error.response.data.errors[
               Object.keys(error.response.data.errors)[0]
-            ]
+            ],
+          { variant: "error" }
         );
-        setSnackOpen(true);
       } else {
         handleClose();
-        setSnackMsg("Xóa phòng thất bại. Lỗi: " + error.response.data.error);
-        setSnackOpen(true);
+        enqueueSnackbar(
+          "Xóa phòng thất bại. Lỗi: " +
+            errorTranslations[error.response.data.error] ||
+            error.response.data.error,
+          { variant: "error" }
+        );
       }
     }
   };
@@ -121,19 +112,6 @@ export default function Room() {
     setRoomIdToDelete(id);
     setOpen(true);
   };
-
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseSnack}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   const handleOpenAddDialog = () => {
     setIsEditing(false);
@@ -163,19 +141,26 @@ export default function Room() {
 
     try {
       await addRoom(data);
-      setSnackMsg("Thêm phòng thành công!");
-      setSnackOpen(true);
+      enqueueSnackbar("Thêm phòng thành công!", { variant: "success" });
+      forceUpdate();
       handleCloseAddDialog();
       setRoomCode("");
       setRoomType("");
       setRoomStatus("");
     } catch (error) {
       handleCloseAddDialog();
-      setSnackMsg(
+      enqueueSnackbar(
         "Lỗi: " +
-          error.response.data.errors[Object.keys(error.response.data.errors)[0]]
+          errorTranslations[
+            error.response.data.errors[
+              Object.keys(error.response.data.errors)[0]
+            ]
+          ] ||
+          error.response.data.errors[
+            Object.keys(error.response.data.errors)[0]
+          ],
+        { variant: "error" }
       );
-      setSnackOpen(true);
       console.error("Error:", error);
     }
   };
@@ -215,12 +200,13 @@ export default function Room() {
       setRoomCode("");
       setRoomType("");
       setRoomStatus("");
-      setSnackMsg("Cập nhật phòng thành công!");
-      setSnackOpen(true);
+      enqueueSnackbar("Cập nhật phòng thành công!", { variant: "success" });
+      forceUpdate();
     } catch (error) {
       handleCloseAddDialog();
-      setSnackMsg("Lỗi: " + error);
-      setSnackOpen(true);
+      enqueueSnackbar("Lỗi: " + errorTranslations[error] || error, {
+        variant: "error",
+      });
       console.error("Error321:", error);
     }
   };
@@ -331,7 +317,7 @@ export default function Room() {
               <MenuItem value={2}>Văn phòng</MenuItem>
               <MenuItem value={4}>Phòng học</MenuItem>
               <MenuItem value={5}>Phòng tự học</MenuItem>
-              <MenuItem value={-1}>Khác</MenuItem>
+              <MenuItem value={3}>Khác</MenuItem>
             </Select>
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal">
@@ -357,15 +343,6 @@ export default function Room() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={snackOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnack}
-        message={snackMsg}
-        action={action}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
     </div>
   );
 }
