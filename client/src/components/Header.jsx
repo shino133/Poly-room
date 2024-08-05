@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../contexts/Support";
 import logo from "../assets/logo/fpt-poly.png";
-import {menu} from "../assets"; // Đổi tên biến import để tránh xung đột
+import { menu } from "../assets"; // Đổi tên biến import để tránh xung đột
 
 function Header({ onLogout }) {
   const [scrolled, setScrolled] = useState(false);
@@ -115,35 +115,56 @@ function Header({ onLogout }) {
         </div>
       </div>
 
-      {/* Tab menu cho thiết bị di động */}
+
+{/* menu của mobile */}
       <div
-        className={`fixed bottom-0 left-0 right-0 bg-white shadow md:hidden z-50 transition-transform duration-300 ${
-          isMenuOpen ? "transform translate-y-0" : "transform translate-y-full"
-        }`}
+        className={`fixed top-0 left-0 h-full z-50 transition-transform duration-300 ${
+          isMenuOpen ? "transform translate-x-0" : "transform -translate-x-full"
+        } w-1/2 bg-white shadow-lg`}
       >
-        <ul className="flex justify-around py-2">
-          <li>
-            <Link to="/" className="text-black">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="text-lg font-bold">Menu</h2>
+          <button onClick={handleMenuToggle} aria-label="Close menu">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <ul className="flex flex-col items-start py-5 px-4">
+          <li className="py-2 w-full">
+            <Link to="/" className="text-black w-full" onClick={handleMenuToggle}>
               Home
             </Link>
           </li>
-          <li>
-            <Link to="/booking" className="text-black">
+          <li className="py-2 w-full">
+            <Link to="/booking" className="text-black w-full" onClick={handleMenuToggle}>
               Booking
             </Link>
           </li>
-          <li>
-            <Link to="/contact" className="text-black">
+          <li className="py-2 w-full">
+            <Link to="/contact" className="text-black w-full" onClick={handleMenuToggle}>
               Contact
             </Link>
           </li>
-          <li>
-            <Link to="/blog" className="text-black">
+          <li className="py-2 w-full">
+            <Link to="/blog" className="text-black w-full" onClick={handleMenuToggle}>
               Blog
             </Link>
           </li>
-          <li>
-            <Link onClick={onLogout} className="text-black">
+          <li className="py-2 w-full">
+            <Link onClick={() => {handleMenuToggle(); onLogout();}} className="text-black w-full">
               Log Out
             </Link>
           </li>
