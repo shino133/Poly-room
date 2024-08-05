@@ -22,6 +22,7 @@ import { defineRole, defineStatus } from "../../constants";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function User() {
   const [users, setUsers] = useState(null);
@@ -63,7 +64,7 @@ export default function User() {
     setUserIdToDelete(null);
   };
 
-  useEffect(() => {
+  const getData = () => {
     getUserData(rowsPerPage, page + 1)
       .then(({ data }) => {
         setUsers(data);
@@ -72,6 +73,10 @@ export default function User() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    getData();
   }, [rowsPerPage, page, snackOpen]);
 
   const handleChangePage = (event, newPage) => {
@@ -246,6 +251,11 @@ export default function User() {
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
         Quản lý người dùng
       </h1>
+      <div className="absolute left-4 top-0">
+        <IconButton onClick={getData} style={{ backgroundColor: "#f5f5f5" }}>
+          <RefreshIcon />
+        </IconButton>
+      </div>
       <div className="absolute right-4 top-0">
         <Button
           variant="contained"

@@ -34,6 +34,7 @@ import {
   TextField,
 } from "../../constants/Mui";
 import GeneralTable from "../../components/GeneralTable";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function Room() {
   const [rooms, setRooms] = useState(null);
@@ -63,7 +64,7 @@ export default function Room() {
     setRoomIdToDelete(null);
   };
 
-  useEffect(() => {
+  const getData = () => {
     getRoomDataPerPage(rowsPerPage, page + 1) // Convert to one-based index for API
       .then(({ data }) => {
         setRooms(data);
@@ -72,6 +73,10 @@ export default function Room() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  useEffect(() => {
+    getData();
   }, [rowsPerPage, page, snackOpen]);
 
   const handleChangePage = (event, newPage) => {
@@ -95,6 +100,20 @@ export default function Room() {
       setSnackOpen(true);
     } catch (error) {
       console.error("Failed to delete room:", error);
+      if (error.response.data.errors) {
+        handleClose();
+        setSnackMsg(
+          "Xóa phòng thất bại. Lỗi: " +
+            error.response.data.errors[
+              Object.keys(error.response.data.errors)[0]
+            ]
+        );
+        setSnackOpen(true);
+      } else {
+        handleClose();
+        setSnackMsg("Xóa phòng thất bại. Lỗi: " + error.response.data.error);
+        setSnackOpen(true);
+      }
     }
   };
 
@@ -219,6 +238,11 @@ export default function Room() {
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
         Quản lý phòng
       </h1>
+      <div className="absolute left-4 top-0">
+        <IconButton onClick={getData} style={{ backgroundColor: "#f5f5f5" }}>
+          <RefreshIcon />
+        </IconButton>
+      </div>
       <div className="absolute right-4 top-0">
         <Button
           variant="contained"
