@@ -9,9 +9,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import FormControl from "@mui/material/FormControl";
 import Button from "@mui/material/Button";
 import dayjs from "dayjs";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import { useSnackbar } from "notistack";
+import { errorTranslations } from "../../constants";
 
 export default function Booking() {
   const [roomCode, setRoomCode] = useState("");
@@ -19,16 +18,8 @@ export default function Booking() {
   const [endTime, setEndTime] = useState(null);
   const [note, setNote] = useState("");
   const [options, setOptions] = useState([]);
-  const [snackOpen, setSnackOpen] = React.useState(false);
-  const [snackMsg, setSnackMsg] = useState("");
 
-  const handleCloseSnack = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackOpen(false);
-  };
+  const { enqueueSnackbar } = useSnackbar();
 
   const fetchRoomData = async () => {
     try {
@@ -77,37 +68,34 @@ export default function Booking() {
     // call bookRoom API
     bookRoom(formData)
       .then(() => {
-        setSnackMsg("Đặt phòng thành công");
-        setSnackOpen(true);
+        enqueueSnackbar("Đặt phòng thành công!", { variant: "success" });
       })
       .catch((error) => {
         console.error("Error booking room:", error);
         if (error.response.data.errors) {
-          setSnackMsg(
+          enqueueSnackbar(
             "Đặt phòng thất bại. Lỗi: " +
+              errorTranslations[
+                error.response.data.errors[
+                  Object.keys(error.response.data.errors)[0]
+                ]
+              ] ||
               error.response.data.errors[
                 Object.keys(error.response.data.errors)[0]
-              ]
+              ],
+            { variant: "error" }
           );
         } else {
-          setSnackMsg("Đặt phòng thất bại. Lỗi: " + error.response.data.error);
+          enqueueSnackbar(
+            "Đặt phòng thất bại. Lỗi: " +
+              errorTranslations[error.response.data.error] ||
+              error.response.data.error,
+            { variant: "error" }
+          );
         }
         setSnackOpen(true);
       });
   };
-
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseSnack}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   return (
     <>
@@ -173,14 +161,6 @@ export default function Booking() {
             </Button>
           </div>
         </form>
-        <Snackbar
-          open={snackOpen}
-          autoHideDuration={6000}
-          onClose={handleCloseSnack}
-          message={snackMsg}
-          action={action}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        />
       </div>
     </>
   );

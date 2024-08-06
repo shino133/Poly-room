@@ -9,6 +9,9 @@ const errorTranslations = {
   "The email has already been taken.": "Email đã tồn tại!",
   "The password field confirmation does not match.": "Mật khẩu không khớp!",
   "The password field is required.": "Mật khẩu không được để trống!",
+  // Booking
+  "The end at field must be a date after start at.":
+    "Thời gian kết thúc phải sau thời gian bắt đầu!",
 };
 
 export default errorTranslations;
