@@ -142,8 +142,8 @@ function Header({ onLogout }) {
             </svg>
           </button>
         </div>
-        <ul className="flex flex-col items-start py-5 px-4">
-          <li className="py-2 w-full">
+        <ul className="flex flex-col items-start ">
+          <li className="py-2 w-full hover:bg-gray-400">
             <Link to="/" className="text-black w-full" onClick={handleMenuToggle}>
               Home
             </Link>

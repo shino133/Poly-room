@@ -9,10 +9,40 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ __html: "" });
+  const [passwordError, setPasswordError] = useState("");
+
+  const validatePassword = (password) => {
+    const errors = [];
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Mật khẩu phải chứa ít nhất một chữ cái viết hoa.");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("Mật khẩu phải chứa ít nhất một ký tự đặc biệt.");
+    }
+    if (!/\d/.test(password)) {
+      errors.push("Mật khẩu phải chứa ít nhất một chữ số.");
+    }
+    return errors.length === 0 ? null : errors;
+  };
+
+  const handlePasswordBlur = () => {
+    const errors = validatePassword(password);
+    if (errors) {
+      setPasswordError(errors.join(" "));
+    } else {
+      setPasswordError("");
+    }
+  };
 
   const onSubmit = async (ev) => {
     ev.preventDefault();
     setError({ __html: "" });
+
+    const errors = validatePassword(password);
+    if (errors) {
+      setError({ __html: errors.join(" ") });
+      return;
+    }
 
     try {
       const response = await loginRequest({ email, password });
@@ -37,7 +67,7 @@ export default function Login() {
         Đăng nhập để tiếp tục
       </p>
 
-      {/* DevMode Only  */}
+      {/* DevMode Only */}
       <p className="mt-2 text-center text-sm text-gray-600">
         Hoặc{" "}
         <Link
@@ -47,7 +77,7 @@ export default function Login() {
           đăng ký
         </Link>
       </p>
-      {/* DevMode Only  */}
+      {/* DevMode Only */}
 
       {error.__html && (
         <div
@@ -92,9 +122,15 @@ export default function Login() {
               required
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
+              onBlur={handlePasswordBlur}
               className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
               placeholder="Mật khẩu"
             />
+            {passwordError && (
+              <div className="text-red-500 text-sm mt-1">
+                {passwordError}
+              </div>
+            )}
           </div>
         </div>
 
@@ -110,7 +146,7 @@ export default function Login() {
               htmlFor="remember-me"
               className="ml-2 block text-sm text-gray-900"
             >
-              Lưu mật khẩu
+              Lưu mật khẩu
             </label>
           </div>
         </div>
@@ -119,6 +155,7 @@ export default function Login() {
           <button
             type="submit"
             className="group relative flex w-full justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            disabled={!!passwordError}
           >
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <LockClosedIcon
