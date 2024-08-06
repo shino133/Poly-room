@@ -1,31 +1,22 @@
-import Slideshow from "./SlideShow";
+import React from "react";
+import { Link } from "react-router-dom";
 export default function Dashboard() {
   return (
-
-    <div className="relative  w-full h-screen overflow-hidden">
-<Slideshow/>
-      {/* <img
-        src={banner_bg}
-        alt="banner_bg"
-        className="absolute inset-0 object-cover w-full h-full"
-      />
-      <div className="relative z-10 flex flex-col items-center justify-center h-full text-center text-white bg-black bg-opacity-50 p-8">
-        <h6 className="text-lg font-semibold mb-2">Away from monotonous life</h6>
-        <h2 className="text-4xl font-bold mb-4">Relax Your Mind</h2>
-        <p className="mb-6">
-          If you are looking at blank cassettes on the web, you may be very confused at the
-          <br />
-          difference in price. You may see some for as low as $.17 each.
+    <div className="relative w-full h-screen flex items-center justify-center text-center z-10">
+      <div className="p-8 max-w-4xl w-full bg-opacity-60  rounded-lg">
+       
+        <h2 className="text-4xl font-extrabold mb-4 text-white">
+        Chào mừng đến với FPOLY Booking
+        </h2>
+        <p className="mb-6 text-md text-white">
+          Sử dụng nền tảng của chúng tôi để đặt phòng học một cách nhanh chóng và hiệu quả. Đăng nhập để bắt đầu ngay hôm nay.
         </p>
-        <a
-          href="#"
-          className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition-colors"
-        >
-          Get Started
-        </a>
-      </div>
+        <Link to="booking" className="bg-orange-500 text-white py-2 px-6 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+        Đặt Phòng Ngay
 
-       */}
+        </Link>
+          
+      </div>
     </div>
   );
 }

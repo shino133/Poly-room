@@ -5,7 +5,7 @@ import { loginRequest } from "../../Api";
 import { useAuthContext } from "../../contexts/Support";
 
 export default function Login() {
-  const {currentUser, setCurrentUser, setUserToken } = useAuthContext();
+  const { currentUser, setCurrentUser, setUserToken } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ __html: "" });
@@ -20,9 +20,8 @@ export default function Login() {
       if (response.data && response.data.user && response.data.token) {
         setCurrentUser(response.data.user);
         setUserToken(response.data.token);
-        console.log(currentUser);
       } else {
-        throw new Error("Invalid response format");
+        throw new Error("Định dạng phản hồi không hợp lệ");
       }
     } catch (error) {
       setError({ __html: error.message });
@@ -32,20 +31,20 @@ export default function Login() {
   return (
     <div>
       <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-        Hello My Admin
+        FPT Polytechnic
       </h2>
-      <p className="text-center text- text-gray-600">
-        {import.meta.env.VITE_APP_NAME}
+      <p className="text-center text-gray-600">
+        Đăng nhập để tiếp tục
       </p>
 
       {/* DevMode Only  */}
       <p className="mt-2 text-center text-sm text-gray-600">
-        Or{" "}
+        Hoặc{" "}
         <Link
           to="/signup"
-          className="font-medium text-indigo-600 hover:text-indigo-500"
+          className="font-medium text-orange-600 hover:text-orange-500"
         >
-          signup for free
+          đăng ký
         </Link>
       </p>
       {/* DevMode Only  */}
@@ -67,7 +66,7 @@ export default function Login() {
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
             <label htmlFor="email-address" className="sr-only">
-              Email address
+              Địa chỉ email
             </label>
             <input
               id="email-address"
@@ -77,13 +76,13 @@ export default function Login() {
               required
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
-              className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Email address"
+              className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              placeholder="Địa chỉ email"
             />
           </div>
           <div>
             <label htmlFor="password" className="sr-only">
-              Password
+              Mật khẩu
             </label>
             <input
               id="password"
@@ -93,8 +92,8 @@ export default function Login() {
               required
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
-              className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-              placeholder="Password"
+              className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm"
+              placeholder="Mật khẩu"
             />
           </div>
         </div>
@@ -105,13 +104,13 @@ export default function Login() {
               id="remember-me"
               name="remember-me"
               type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
             />
             <label
               htmlFor="remember-me"
               className="ml-2 block text-sm text-gray-900"
             >
-              Remember me
+              Lưu mật khẩu
             </label>
           </div>
         </div>
@@ -119,15 +118,15 @@ export default function Login() {
         <div>
           <button
             type="submit"
-            className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            className="group relative flex w-full justify-center rounded-md border border-transparent bg-orange-600 py-2 px-4 text-sm font-medium text-white hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
               <LockClosedIcon
-                className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                className="h-5 w-5 text-orange-500 group-hover:text-orange-400"
                 aria-hidden="true"
               />
             </span>
-            Sign in
+            Đăng nhập
           </button>
         </div>
       </form>

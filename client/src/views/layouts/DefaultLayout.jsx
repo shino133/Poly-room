@@ -1,55 +1,46 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "../../contexts/Support";
-import Footer from "../../components/Footer"
-import Content from "../pages/Content";
-import { getMyData, logoutRequest } from "../../Api";
-import { Toast } from "../../components";
-
-import { Header } from "../../components";
-import { useSidebarContext } from "../../contexts/Support";
-
+import Footer from "../../components/Footer";
+import { logoutRequest } from "../../Api";
+import Header from "../../components/Header";
+import SlideShow from "../../components/SlideShow";
 
 export default function DefaultLayout() {
-  const { currentUser, userToken, setCurrentUser, setUserToken } =
-    useAuthContext();
+  const { currentUser, userToken, setCurrentUser, setUserToken } = useAuthContext();  
+  useEffect(() => {
+    if (!currentUser || Object.keys(currentUser).length === 0) {
+      setUserToken(null);
+    }
+  }, [currentUser, setUserToken]);
 
-  //WHEN: Don't have Token and is not Admin => go Login
   if (!userToken) {
-    return <Navigate to="login" />;
+    return <Navigate to="/login" />;
   }
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const onLogout = (ev) => {
+  const onLogout =  (ev) => {
     ev.preventDefault();
-    localStorage.removeItem('TOKEN');
-
-    logoutRequest().then(() => {
-      setCurrentUser({});
+    try {
+      setCurrentUser(null);
       setUserToken(null);
+       logoutRequest();
       localStorage.clear();
-    });
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
-
-  const { isOpen, toggleSidebar } = useSidebarContext();
- 
 
   return (
-    <>
-    <div className="bg-slate-100">
-    <Header onLogout={onLogout}/>
-    <Outlet/>
-    <Footer/>
+    <div className="relative bg-slate-100 min-h-screen overflow-hidden">
+      <Header onLogout={onLogout} />
+      <div className="flex flex-col min-h-screen">
+        <SlideShow className="flex-1">
+          <main className="relative z-10 flex-1 overflow-auto">
+            <Outlet />
+          </main>
+        </SlideShow>
+      </div>
+      <Footer className="fixed bottom-0 left-0 w-full" />
     </div>
-    </>
   );
 }
