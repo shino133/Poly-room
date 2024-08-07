@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import { IconButton } from "@mui/material";
 import { getUserData, addUser, deleteUser, editUser } from "../../Api";
 import Button from "@mui/material/Button";
@@ -8,8 +8,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
-import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -18,30 +16,34 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import GeneralTable from "../../components/GeneralTable";
-import { defineRole, defineStatus } from "../../constants";
+import { defineRole, defineStatus, errorTranslations } from "../../constants";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { useSnackbar } from "notistack";
+import { useUserContext } from "../../contexts/Support";
 
 export default function User() {
-  const [users, setUsers] = useState(null);
+  const { users, setUsers } = useUserContext();
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-  const [snackOpen, setSnackOpen] = React.useState(false);
   const [addDialogOpen, setAddDialogOpen] = React.useState(false);
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordConfirmation, setPasswordConfirmation] = React.useState("");
-  const [snackMsg, setSnackMsg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [userIdToUpdate, setUserIdToUpdate] = useState(null);
   const [showPassword, setShowPassword] = React.useState(false);
   const [showPassword2, setShowPassword2] = React.useState(false);
   const [roleChecked, setRoleChecked] = React.useState(false);
-  const [statusChecked, setStatusChecked] = React.useState(true);
+  const [statusChecked, setStatusChecked] = React.useState(false);
+  const [update, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
@@ -50,20 +52,12 @@ export default function User() {
     event.preventDefault();
   };
 
-  const handleCloseSnack = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackOpen(false);
-  };
-
   const handleClose = () => {
     setOpen(false);
     setUserIdToDelete(null);
   };
 
-  useEffect(() => {
+  const getData = () => {
     getUserData(rowsPerPage, page + 1)
       .then(({ data }) => {
         setUsers(data);
@@ -72,7 +66,13 @@ export default function User() {
       .catch((error) => {
         console.log(error);
       });
-  }, [rowsPerPage, page, snackOpen]);
+  };
+
+  useEffect(() => {
+    if (!users) {
+      getData();
+    }
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -91,8 +91,8 @@ export default function User() {
         data: prevUsers.data.filter((user) => user.id !== userIdToDelete),
       }));
       handleClose();
-      setSnackMsg("Xóa người dùng thành công!");
-      setSnackOpen(true);
+      enqueueSnackbar("Xóa người dùng thành công", { variant: "success" });
+      forceUpdate();
     } catch (error) {
       console.error("Failed to delete user:", error);
     }
@@ -103,19 +103,6 @@ export default function User() {
     setOpen(true);
   };
 
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={handleCloseSnack}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
-
   const handleOpenAddDialog = () => {
     setIsEditing(false);
     // empty the fields
@@ -124,7 +111,7 @@ export default function User() {
     setPassword("");
     setPasswordConfirmation("");
     setRoleChecked(false);
-    setStatusChecked(true);
+    setStatusChecked(false);
     setAddDialogOpen(true);
   };
 
@@ -151,8 +138,8 @@ export default function User() {
 
     try {
       await addUser(data);
-      setSnackMsg("Thêm người dùng thành công!");
-      setSnackOpen(true);
+      enqueueSnackbar("Thêm người dùng thành công", { variant: "success" });
+      forceUpdate();
       handleCloseAddDialog();
       // empty the fields
       setName("");
@@ -164,16 +151,23 @@ export default function User() {
     } catch (error) {
       handleCloseAddDialog();
       if (error.response.status === 422) {
-        setSnackMsg(
+        enqueueSnackbar(
           "Lỗi: " +
+            errorTranslations[
+              error.response.data.errors[
+                Object.keys(error.response.data.errors)[0]
+              ]
+            ] ||
             error.response.data.errors[
               Object.keys(error.response.data.errors)[0]
-            ]
+            ],
+          { variant: "error" }
         );
       } else {
-        setSnackMsg("Lỗi: " + error);
+        enqueueSnackbar("Lỗi: " + errorTranslations[error] || error, {
+          variant: "error",
+        });
       }
-      setSnackOpen(true);
       console.error("Error:", error);
     }
   };
@@ -220,21 +214,28 @@ export default function User() {
       console.log("data312", data);
       handleCloseAddDialog();
       // empty the fields
-      setSnackMsg("Cập nhật người dùng thành công!");
-      setSnackOpen(true);
+      enqueueSnackbar("Cập nhật người dùng thành công", { variant: "success" });
+      forceUpdate();
     } catch (error) {
       handleCloseAddDialog();
       if (error.response.status === 422) {
-        setSnackMsg(
+        enqueueSnackbar(
           "Lỗi: " +
+            errorTranslations[
+              error.response.data.errors[
+                Object.keys(error.response.data.errors)[0]
+              ]
+            ] ||
             error.response.data.errors[
               Object.keys(error.response.data.errors)[0]
-            ]
+            ],
+          { variant: "error" }
         );
       } else {
-        setSnackMsg("Lỗi: " + error);
+        enqueueSnackbar("Lỗi: " + errorTranslations[error] || error, {
+          variant: "error",
+        });
       }
-      setSnackOpen(true);
       console.error("Error321:", error);
     }
   };
@@ -246,6 +247,11 @@ export default function User() {
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
         Quản lý người dùng
       </h1>
+      <div className="absolute left-4 top-0">
+        <IconButton onClick={getData} style={{ backgroundColor: "#f5f5f5" }}>
+          <RefreshIcon />
+        </IconButton>
+      </div>
       <div className="absolute right-4 top-0">
         <Button
           variant="contained"
@@ -410,15 +416,6 @@ export default function User() {
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={snackOpen}
-        autoHideDuration={6000}
-        onClose={handleCloseSnack}
-        message={snackMsg}
-        action={action}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      />
     </div>
   );
 }

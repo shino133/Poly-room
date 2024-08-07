@@ -5,6 +5,7 @@ import roomTypeTranslations from "./RoomTypeTranslations";
 import initialDashboardStats from "./InitialDashboardStats";
 import defineRole from "./DefineRole";
 import defineStatus from "./DefineStatus";
+import errorTranslations from "./ErrorTranslations";
 
 // Compare this snippet from admin/src/constants
 export {
@@ -15,4 +16,5 @@ export {
   initialDashboardStats,
   defineRole,
   defineStatus,
+  errorTranslations,
 };
