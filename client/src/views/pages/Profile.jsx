@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
-function User() {
+function Profile() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,16 +23,16 @@ function User() {
   };
 
   return (
-    <div className="max-w-[500px] mx-auto rounded-tl-md rounded-tr-md p-4 mt-24 border-2 border-black-600">
+    <div className="min-w-[800px] mx-auto rounded-lg p-4 mt-24 border-2 border-white-600 bg-white">
       <h1 className="text-center font-bold text-blue-950 text-3xl mb-4">
-        User Form
+      Profile Form
       </h1>
       <form
         className="flex flex-col gap-4 text-black"
         onSubmit={onSubmit}
       >
         <TextField
-          label="Name"
+          label="Tên"
           variant="outlined"
           fullWidth
           value={name}
@@ -47,7 +47,7 @@ function User() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          label="Password"
+          label="Mật khẩu"
           variant="outlined"
           type="password"
           fullWidth
@@ -55,7 +55,7 @@ function User() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
-          label="Re-enter Password"
+          label="Nhập lại mật khẩu"
           variant="outlined"
           type="password"
           fullWidth
@@ -66,7 +66,7 @@ function User() {
           type="submit"
           variant="contained"
           color="primary"
-          className="mt-4"
+          className="w-12 text-center font-bold text-blue-950 text-3xl m-4"
         >
           Gửi
         </Button>
@@ -75,4 +75,4 @@ function User() {
   );
 }
 
-export default User;
+export default Profile;

@@ -3,7 +3,7 @@ import Room from "./Room";
 import Booking from "./Booking";
 import Login from "./Login";
 import Signup from "./Signup";
-import User from "./User";
+import Profile from "./Profile";
 
 export {
   Dashboard,
@@ -11,5 +11,5 @@ export {
   Room,
   Login,
   Signup,
-  User,
+  Profile,
 };

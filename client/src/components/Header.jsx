@@ -72,10 +72,10 @@ function Header({ onLogout }) {
             </li>
             <li>
               <Link
-                to="/user"
+                to="/profile"
                 className="hover:text-blue-500 transition-colors"
               >
-                User
+                Profile
               </Link>
             </li>
             <li className="hover:text-blue-500 transition-colors">Blog</li>
