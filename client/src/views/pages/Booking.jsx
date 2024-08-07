@@ -1,129 +1,145 @@
-import { bookingRequest } from "../../Api";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getRoomData, bookRoom } from "../../Api";
+import dayjs from "dayjs";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import FormBooking from "../../components/FormBooking";
 
 export default function Booking() {
-  const [roomId, setRoomId] = useState();
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
-  const [note, setNote] = useState();
+  const [roomCode, setRoomCode] = useState("");
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [note, setNote] = useState("");
+  const [options, setOptions] = useState([]);
+  const [snackOpen, setSnackOpen] = React.useState(false);
+  const [snackMsg, setSnackMsg] = useState("");
 
-  const onSubmit = (ev) => {
-    ev.preventDefault();
-    const dataList = {
-        room_id: roomId,
-        start_at: startTime,
-        end_at:endTime,
-        note : note,
-    };
+  const handleCloseSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
-    console.log({
-        room_id: roomId,
-        start_at: startTime,
-        end_at:endTime,
-        note : note,
-    })
-
-    bookingRequest(dataList).then(
-        (data) => {
-            console.log('Success:', data);
-        }
-    )
+    setSnackOpen(false);
   };
 
+  const fetchRoomData = async () => {
+    try {
+      const { data } = await getRoomData();
+      console.log("rooms", data);
 
+      // if options const is empty array then return;
+      if (options.length > 0) {
+        // options is an empty array
+        return;
+      }
+
+      // Ensure rooms is not null or undefined before mapping
+      const formattedOptions = data?.data.map((room) => ({
+        label: room.code,
+        value: room.id,
+        key: room.id,
+      }));
+      console.log("formattedOptions", formattedOptions);
+      setOptions(formattedOptions);
+    } catch (error) {
+      console.error("Error fetching room data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchRoomData();
+  }, []);
+
+  const handleStartTimeChange = (newValue) => {
+    setStartTime(newValue ? dayjs(newValue).format("YYYY-MM-DDTHH:mm") : null);
+  };
+
+  const handleEndTimeChange = (newValue) => {
+    setEndTime(newValue ? dayjs(newValue).format("YYYY-MM-DDTHH:mm") : null);
+  };
+
+  const handleNoteChange = (e) => {
+    setNote(e.target.value);
+  };
+  const handleRoomIdChange = (event, newValue) => {
+    setRoomCode(newValue);
+  };
+
+  const handleBookRoom = () => {
+    // create formdata
+    const formData = new FormData();
+    formData.append("room_id", roomCode.value);
+    formData.append("start_at", startTime);
+    formData.append("end_at", endTime);
+    formData.append("note", note);
+
+    // call bookRoom API
+    bookRoom(formData)
+      .then(() => {
+        setSnackMsg("Đặt phòng thành công");
+        setSnackOpen(true);
+      })
+      .catch((error) => {
+        console.error("Error booking room:", error);
+        if(error.response.data.errors){
+          setSnackMsg(
+            "Đặt phòng thất bại. Lỗi: " +
+              error.response.data.errors[
+                Object.keys(error.response.data.errors)[0]
+              ]
+          );
+          setSnackOpen(true);
+        }else{
+          setSnackMsg(
+            "Đặt phòng thất bại. Lỗi: " +
+              error.response.data.error
+          );
+          setSnackOpen(true);
+        }
+        
+      });
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseSnack}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   return (
     <>
-      <div  className="bg-white p-8 m-24 rounded-lg shadow-lg w-5/4">
-        <h1 className="text-2xl font-bold mb-4">Book a Classroom</h1>
-        <form
-          onSubmit={onSubmit}
-          className="mt-8 space-y-6"
-          action="#"
-          method="POST"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700">
-                Your Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="w-full p-2 border rounded-lg"
-                placeholder="Enter your name"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="room-id" className="block text-gray-700">
-                Room ID
-              </label>
-              <input
-                type="text"
-                id="room-id"
-                name="room-id"
-                onChange={(ev) => setRoomId(ev.target.value)}
-                className="w-full p-2 border rounded-lg"
-                placeholder="Enter the room ID"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="date" className="block text-gray-700">
-                Date
-              </label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="time-start" className="block text-gray-700">
-                Start Time
-              </label>
-              <input
-                type="time"
-                id="time-start"
-                name="time-start"
-                onChange={(ev) => setStartTime(ev.target.value)}
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="time-end" className="block text-gray-700">
-                End Time
-              </label>
-              <input
-                type="time"
-                id="time-end"
-                name="time-end"
-                onChange={(ev) => setEndTime(ev.target.value)}
-                className="w-full p-2 border rounded-lg"
-              />
-            </div>
-            <div className="md:col-span-2 mb-4">
-              <label htmlFor="note" className="block text-gray-700">
-                Note
-              </label>
-              <textarea
-                id="note"
-                name="note"
-                onChange={(ev) => setNote(ev.target.value)}
-                className="w-full p-2 border rounded-lg"
-                placeholder="Enter any notes or special requests"
-                defaultValue={""}
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-lg"
-          >
-            Book Now
-          </button>
-        </form>
+      <div className="min-w-[800px] mx-auto rounded-lg p-4 mt-24 border-2 border-white-600 bg-white">
+        <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
+          Đặt phòng
+        </h1>
+        <FormBooking
+          options={options}
+          roomCode={roomCode}
+          startTime={startTime}
+          endTime={endTime}
+          note={note}
+          handleStartTimeChange={handleStartTimeChange}
+          handleEndTimeChange={handleEndTimeChange}
+          handleBookRoom={handleBookRoom}
+          handleNoteChange={handleNoteChange}
+          handleRoomIdChange={handleRoomIdChange}
+        />
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
+          onClose={handleCloseSnack}
+          message={snackMsg}
+          action={action}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        />
       </div>
     </>
   );

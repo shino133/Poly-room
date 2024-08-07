@@ -22,9 +22,10 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useSnackbar } from "notistack";
+import { useUserContext } from "../../contexts/Support";
 
 export default function User() {
-  const [users, setUsers] = useState(null);
+  const { users, setUsers } = useUserContext();
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
@@ -72,8 +73,10 @@ export default function User() {
   };
 
   useEffect(() => {
-    getData();
-  }, [rowsPerPage, page, update]);
+    if (!users) {
+      getData();
+    }
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
