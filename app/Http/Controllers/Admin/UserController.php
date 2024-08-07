@@ -11,6 +11,11 @@ use App\Services\ServiceFactory;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\SignupRequest;
 use App\Http\Requests\RoleAndStatusUserRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Validator;
+
 
 class UserController extends Controller
 {
@@ -78,11 +83,47 @@ class UserController extends Controller
     {
         try {
             $this->userServive->delete($id);
-            $res = response()->json(['message' => 'User deleted successfully'], 200);
+            $res = response()->json(['message' => 'User deleted successfully', 'status' => 'success'], 200);
         } catch (\Exception $e) {
             $res = ControlHelper::handleExc($e);
         }
 
+        return $res;
+    }
+
+    public function changePass(Request $req)
+    {
+        try {
+
+            $validator = Validator::make($req->all(), [
+                'current_password' => ['required'],
+                'new_password' => [
+                    'required',
+                    Password::min(8)->mixedCase()->numbers()->symbols()
+                ],
+            ]);
+    
+            if ($validator->fails()) {
+                throw new \Exception($validator->errors()->first(), 400);
+            }
+    
+            $validatedData = $validator->validated();
+            $currentPass = $validatedData['current_password'];
+            $newPass = $validatedData['new_password'];
+
+            if (!Hash::check($currentPass, Auth::user()->password)) {
+                throw new \Exception('Current password is incorrect', 400);
+            }
+
+            $user = User::findOrFail(Auth::user()->id);
+            $user->password = Hash::make($newPass);
+            $user->save();
+
+            $res = response()->json(['message' => 'Password changed successfully', 'status' => 'success'], 200);
+
+        } catch (\Exception $e) {
+            $res = ControlHelper::handleExc($e);
+        }
         return $res;
     }
 }
