@@ -53,6 +53,8 @@ Route::prefix('client')->group(function () {
         Route::get('/room', [RoomController::class, 'index'])->name('room.index');
         Route::post('/booking', [UserBookController::class, 'book'])->name('booking.book');
         Route::get('/history', [UserBookController::class, 'history'])->name('booking.history');
+
+        Route::post('/change-password', [UserController::class, 'changePass']);
     });
 
     Route::post('/signup', [AuthController::class, 'signup']);
