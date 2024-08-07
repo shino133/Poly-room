@@ -22,8 +22,8 @@ class BookingCrud extends JsonResource
                 'username' => $this->user->name,
                 'email' => $this->user->email
             ],
-            'start_at' => (new Carbon($this->time_start))->format('Y-m-d H:i:s'),
-            'end_at' => (new Carbon($this->time_end))->format('Y-m-d H:i:s'),
+            'start_at' => (new Carbon($this->start_at))->format('Y-m-d H:i:s'),
+            'end_at' => (new Carbon($this->end_at))->format('Y-m-d H:i:s'),
             'status' => $this->status,
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d H:i:s'),
             'note' => $this->note,
