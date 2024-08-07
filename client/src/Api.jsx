@@ -51,3 +51,7 @@ export const logoutRequest = () => {
 export const signupRequest = (params) => {
   return Api.postRequest("/signup", params);
 };
+
+export const changePassRequest = (params) => {
+  return Api.postRequest("/signup", params);
+};

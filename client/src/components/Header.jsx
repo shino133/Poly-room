@@ -9,7 +9,6 @@ function Header({ onLogout }) {
   const { currentUser } = useAuthContext();
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const handleMouseOver = () => {
     setShowUserInfo(true);
   };
@@ -71,7 +70,14 @@ function Header({ onLogout }) {
                 Booking
               </Link>
             </li>
-            <li className="hover:text-blue-500 transition-colors">Contact</li>
+            <li>
+              <Link
+                to="/profile"
+                className="hover:text-blue-500 transition-colors"
+              >
+                Profile
+              </Link>
+            </li>
             <li className="hover:text-blue-500 transition-colors">Blog</li>
           </ul>
         </div>
@@ -149,22 +155,25 @@ function Header({ onLogout }) {
             </Link>
           </li>
           <li className="py-2 w-full">
-            <Link to="/booking" className="text-black w-full" onClick={handleMenuToggle}>
+            <Link to="/booking" className="hover:text-blue-500 transition-colors" onClick={handleMenuToggle}>
               Booking
             </Link>
           </li>
+          <li>
+              <Link
+                to="/profile"
+                className="hover:text-blue-500 transition-colors"
+              >
+                Profile
+              </Link>
+            </li>
           <li className="py-2 w-full">
-            <Link to="/contact" className="text-black w-full" onClick={handleMenuToggle}>
-              Contact
-            </Link>
-          </li>
-          <li className="py-2 w-full">
-            <Link to="/blog" className="text-black w-full" onClick={handleMenuToggle}>
+            <Link to="/blog" className="hover:text-blue-500 transition-colors" onClick={handleMenuToggle}>
               Blog
             </Link>
           </li>
           <li className="py-2 w-full">
-            <Link onClick={() => {handleMenuToggle(); onLogout();}} className="text-black w-full">
+            <Link onClick={() => {handleMenuToggle(); onLogout();}} className="hover:text-blue-500 transition-colors">
               Log Out
             </Link>
           </li>
