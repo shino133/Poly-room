@@ -39,7 +39,6 @@ export default function DefaultLayout() {
 
   const onLogout = (ev) => {
     ev.preventDefault();
-
     logoutRequest().then(() => {
       setCurrentUser({});
       setUserToken(null);
@@ -106,33 +105,36 @@ export default function DefaultLayout() {
             <img src={FPTLogo} alt="FPT Polytechnic" />
             <div className="line"></div>
             <a href="#">Về chúng tôi</a>
-            <a href="#">Blog</a>
-            <a href="#">Việc làm</a>
+            <a href="#">CLB IT FPOLY HÀ NAM</a>
           </div>
           <div className="flex flex-col ml-4">
-            <h3 className="font-bold">Phòng</h3>
+            <h3 className="font-bold text-orange-500">Phòng</h3>
             <div className="line"></div>
             <a href="#">Phòng họp</a>
             <a href="#">Phòng học</a>
             <a href="#">Phòng chức năng</a>
           </div>
           <div className="flex flex-col ml-4">
-            <h3 className="font-bold">Link</h3>
+            <h3 className="font-bold text-orange-500">Điều khoản sử dụng</h3>
             <div className="line"></div>
-            <a href="#">Tài khoản</a>
-            <a href="#">Trợ giúp</a>
+            <a href="#">Điều khoản và Điều kiện</a>
+            <a href="#">Chính sách quyền riêng tư và cookie</a>
           </div>
           <div className="flex flex-col mr-4">
-            <h3 className="font-bold">Liên hệ</h3>
+            <h3 className="font-bold text-orange-500">Liên hệ</h3>
             <div className="line"></div>
             <a href="#" className="flex flex-row items-center gap-2">
-              <FaPhoneAlt /> +84 1900xxx
+              <FaPhoneAlt /> 091 196 82 13
             </a>
             <a href="#" className="flex flex-row items-center gap-2">
-              <CiMail /> example@edu.vn
+              <CiMail />
+              caodangfpt.hanam@fpt.edu.vn
             </a>
             <a href="#" className="flex flex-row items-center gap-2">
               <FaLocationDot /> FPT Hà Nam
+            </a>
+            <a href="#" className="flex flex-row items-center gap-2">
+              <FaLocationDot /> Tổ hợp giáo dục FPT Unischool .
             </a>
           </div>
         </div>

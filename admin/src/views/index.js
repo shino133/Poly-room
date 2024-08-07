@@ -6,7 +6,6 @@ import History from "./pages/History";
 import Schedule from "./pages/Schedule";
 import Statistic from "./pages/Statistic";
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 
 import DefaultLayout from "./layouts/DefaultLayout";
 import GuestLayout from "./layouts/GuestLayout";
@@ -21,7 +20,6 @@ export {
   Schedule,
   Statistic,
   Login,
-  Signup,
   DefaultLayout,
   GuestLayout,
 };

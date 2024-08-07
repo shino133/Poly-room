@@ -7,7 +7,6 @@ import {
   History,
   Schedule,
   Login,
-  Signup,
   Statistic,
   DefaultLayout,
   GuestLayout,
@@ -59,10 +58,6 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
       },
     ],
   },

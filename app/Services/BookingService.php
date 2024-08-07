@@ -36,7 +36,7 @@ class BookingService implements CRUDSVInterface
         $booking = Booking::findOrFail($id);
         $booking->update($data);
 
-        $booking->room->update(['status' => RoomStatusEnum::Occupied]);
+        $booking->room->update(['status' => RoomStatusEnum::Occupied->value]);
 
         return $booking;
     }
