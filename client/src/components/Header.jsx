@@ -9,7 +9,6 @@ function Header({ onLogout }) {
   const { currentUser } = useAuthContext();
   const [showUserInfo, setShowUserInfo] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const handleMouseOver = () => {
     setShowUserInfo(true);
   };
@@ -71,7 +70,14 @@ function Header({ onLogout }) {
                 Booking
               </Link>
             </li>
-            <li className="hover:text-blue-500 transition-colors">Contact</li>
+            <li>
+              <Link
+                to="/user"
+                className="hover:text-blue-500 transition-colors"
+              >
+                User
+              </Link>
+            </li>
             <li className="hover:text-blue-500 transition-colors">Blog</li>
           </ul>
         </div>
