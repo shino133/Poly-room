@@ -1,31 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { changePassRequest } from "../../Api";
 
 function Profile() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
-  const [data, setData] = useState({});
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
-    const formData = {
-      name,
-      email,
-      password,
-      rePassword,
-    };
-
-    console.log(formData);
+    try {
+      const res = await changePassRequest({
+        password,
+        rePassword,
+      });
+      console.log(res);
+      const formData = {
+        name,
+        email,
+        password,
+        rePassword,
+      };
+      console.log(formData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
     <div className="min-w-[800px] mx-auto rounded-lg p-4 mt-24 border-2 border-white-600 bg-white">
       <h1 className="text-center font-bold text-blue-950 text-3xl mb-4">
-      Profile Form
+        Form Hồ Sơ
       </h1>
       <form
         className="flex flex-col gap-4 text-black"
@@ -47,7 +54,7 @@ function Profile() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          label="Mật khẩu"
+          label="Mật khẩu"
           variant="outlined"
           type="password"
           fullWidth
@@ -55,7 +62,7 @@ function Profile() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
-          label="Nhập lại mật khẩu"
+          label="Nhập lại mật khẩu"
           variant="outlined"
           type="password"
           fullWidth

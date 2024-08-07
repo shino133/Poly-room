@@ -53,5 +53,5 @@ export const signupRequest = (params) => {
 };
 
 export const changePassRequest = (params) => {
-  return Api.postRequest("/signup", params);
+  return Api.postRequest("/change-password", params);
 };
