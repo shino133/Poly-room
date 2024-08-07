@@ -18,12 +18,12 @@ export default function DefaultLayout() {
     return <Navigate to="/login" />;
   }
 
-  const onLogout = async (ev) => {
+  const onLogout =  (ev) => {
     ev.preventDefault();
     try {
-      await logoutRequest();
       setCurrentUser(null);
       setUserToken(null);
+       logoutRequest();
       localStorage.clear();
     } catch (error) {
       console.error("Logout failed:", error);
