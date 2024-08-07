@@ -24,9 +24,10 @@ import {
 import GeneralTable from "../../components/GeneralTable";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useSnackbar } from "notistack";
+import { useRoomContext } from "../../contexts/Support";
 
 export default function Room() {
-  const [rooms, setRooms] = useState(null);
+  const {rooms , setRooms} = useRoomContext();
   const [page, setPage] = React.useState(0); // Zero-based index for TablePagination
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
@@ -58,8 +59,11 @@ export default function Room() {
   };
 
   useEffect(() => {
-    getData();
-  }, [rowsPerPage, page, update]);
+    if (!rooms){
+      getData();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
