@@ -30,6 +30,7 @@ const GeneralTable = ({
   statusTranslations = {},
   defineRole = {},
   defineStatus = {},
+  loading = false,
 }) => {
   return (
     <>
@@ -45,7 +46,7 @@ const GeneralTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {!data ? (
+            {!data || loading ? (
               <TableRowsLoader
                 rowsNum={tableRowsLoaderRows}
                 columns={tableRowsLoaderColumns}

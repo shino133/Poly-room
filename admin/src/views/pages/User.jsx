@@ -41,6 +41,7 @@ export default function User() {
   const [roleChecked, setRoleChecked] = React.useState(false);
   const [statusChecked, setStatusChecked] = React.useState(false);
   const [update, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [loading, setLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -57,12 +58,15 @@ export default function User() {
   };
 
   const getData = () => {
+    setLoading(true);
     getUserData(rowsPerPage, page + 1)
       .then(({ data }) => {
         setUsers(data);
         console.log("users", data);
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
   };
@@ -282,6 +286,7 @@ export default function User() {
         tableRowsLoaderColumns={6}
         defineRole={defineRole}
         defineStatus={defineStatus}
+        loading={loading}
       />
       <Dialog
         open={open}

@@ -134,7 +134,7 @@ export default function DefaultLayout() {
               <FaLocationDot /> FPT Hà Nam
             </a>
             <a href="#" className="flex flex-row items-center gap-2">
-              <FaLocationDot /> Tổ hợp giáo dục FPT Unischool .
+              <FaLocationDot /> Tổ hợp giáo dục FPT Unischool
             </a>
           </div>
         </div>

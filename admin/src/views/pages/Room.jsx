@@ -38,6 +38,7 @@ export default function Room() {
   const [isEditing, setIsEditing] = useState(false);
   const [roomIdToUpdate, setRoomIdToUpdate] = useState(null);
   const [update, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [loading, setLoading] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -47,13 +48,16 @@ export default function Room() {
   };
 
   const getData = () => {
+    setLoading(true);
     getRoomDataPerPage(rowsPerPage, page + 1) // Convert to one-based index for API
       .then(({ data }) => {
         setRooms(data);
         console.log("rooms", data);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   };
 
@@ -221,6 +225,7 @@ export default function Room() {
 
   return (
     <div className="relative">
+      {/* <LoadingBackdrop open={loading} /> */}
       <h1 className="text-center font-bold text-blue-950 text-3xl m-4">
         Quản lý phòng
       </h1>
@@ -262,6 +267,7 @@ export default function Room() {
         tableRowsLoaderColumns={5}
         roomTypeTranslations={roomTypeTranslations}
         statusTranslations={statusTranslations}
+        loading={loading}
       />
       <Dialog
         open={open}
